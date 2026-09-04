@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Automation Audit — Kynetica</title>
+<meta name="description" content="A complete sample of the Kynetica Automation Audit: seven ranked processes, hours and dollars recovered, a 30-day plan, and every assumption stated. This is exactly what you get for $249.">
+<meta property="og:title" content="Sample Automation Audit — Kynetica">
+<meta property="og:description" content="What an AI-run automation audit actually looks like. Full worked example for a two-location dental clinic: ~31 hours/week recoverable, ~$2,900/month.">
+<meta property="og:url" content="https://kynetica.one/sample">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@kyneticahq">
+<style>
+  :root{--bg:#0b0d12;--fg:#e8eaf0;--muted:#9aa3b2;--accent:#5ee1a2;--card:#141824;--line:#232a3a}
+  *{box-sizing:border-box}
+  body{margin:0;font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+  a{color:var(--accent)}
+  .wrap{max-width:760px;margin:0 auto;padding:56px 24px}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}
+  .logo{font-weight:700;letter-spacing:.04em;color:var(--fg);text-decoration:none}
+  .tag{font-size:13px;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+  h1{font-size:clamp(30px,5vw,44px);line-height:1.15;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:15px;margin:0 0 32px}
+  .notice{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:16px 20px;color:var(--muted);font-size:15px}
+  h2{font-size:24px;margin:56px 0 16px}
+  h3{font-size:19px;margin:32px 0 8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-top:16px}
+  ul,ol{padding-left:20px;margin:0}
+  li{margin:8px 0}
+  table{width:100%;border-collapse:collapse;font-size:15px;margin-top:16px}
+  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+  td.n{text-align:right;white-space:nowrap}
+  th.n{text-align:right}
+  .now{color:var(--accent);font-weight:700}
+  .btn{display:inline-block;background:var(--accent);color:#06130c;font-weight:700;padding:16px 28px;border-radius:10px;text-decoration:none;font-size:18px}
+  .btn:hover{filter:brightness(1.08)}
+  .sub{font-size:14px;color:var(--muted);margin-top:12px}
+  .kv{color:var(--muted);font-size:15px}
+  footer{margin-top:80px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:24px}
+  @media (max-width:600px){table{font-size:13px}th,td{padding:8px 4px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="logo" href="/">KYNETICA</a>
+    <div class="tag">Sample audit · Run by AI</div>
+  </header>
+
+  <h1>Automation Audit: Example Dental Clinic</h1>
+  <p class="meta">Prepared for Jordan Rivera · example-dental-clinic.com · September 2026 · Kynetica LLC (AI-run)</p>
+
+  <div class="notice">
+    <strong style="color:var(--fg)">What this is.</strong> A complete, unabridged sample of the report you receive for $249. The clinic is illustrative — a composite of a typical two-location US dental practice — so the numbers show the method, not a real client's data. Your audit is researched against <em>your</em> website and the bottleneck you describe at checkout.
+  </div>
+
+  <h2>1. Executive summary</h2>
+  <p>Example Dental Clinic runs a two-location practice with roughly six front-desk staff. The stated bottleneck — <strong>3 hours a day on appointment reminders and insurance verification</strong> — is real, and it is the second-largest recoverable cost we found. The largest is the manual re-entry of intake forms into the practice management system.</p>
+  <p>Across the seven processes below we estimate <strong>~31 staff-hours per week</strong> are recoverable, worth roughly <strong>$2,900/month</strong> at the loaded wage rate stated in section 5. Three of the seven can be live within 30 days with off-the-shelf tools costing under $400/month combined.</p>
+
+  <table>
+    <thead><tr><th>#</th><th>Process</th><th class="n">Hrs/wk</th><th class="n">$/month</th><th>Effort</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Intake form re-entry</td><td class="n">9</td><td class="n">$840</td><td>Low</td><td class="now">Now</td></tr>
+      <tr><td>2</td><td>Appointment reminders</td><td class="n">8</td><td class="n">$750</td><td>Low</td><td class="now">Now</td></tr>
+      <tr><td>3</td><td>Insurance eligibility checks</td><td class="n">7</td><td class="n">$650</td><td>Medium</td><td class="now">Now</td></tr>
+      <tr><td>4</td><td>Recall / reactivation outreach</td><td class="n">4</td><td class="n">$370</td><td>Low</td><td>Next</td></tr>
+      <tr><td>5</td><td>Review requests</td><td class="n">1.5</td><td class="n">$140</td><td>Low</td><td>Next</td></tr>
+      <tr><td>6</td><td>Supply reordering</td><td class="n">1</td><td class="n">$90</td><td>Medium</td><td>Later</td></tr>
+      <tr><td>7</td><td>End-of-day reconciliation</td><td class="n">0.5</td><td class="n">$50</td><td>Medium</td><td>Later</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. How we looked</h2>
+  <p>We reviewed the public website, booking flow, listed services and hours, and the bottleneck description supplied at checkout. We did <strong>not</strong> have access to internal systems; every estimate below states its assumption so you can correct it. Reply to the delivery email with corrections and we revise at no charge.</p>
+
+  <h2>3. Findings, ranked</h2>
+
+  <h3>3.1 Intake form re-entry — 9 hrs/wk</h3>
+  <div class="card">
+    <p style="margin:0 0 12px"><strong>What happens now.</strong> New patients fill a PDF or paper form; the front desk types it into the PMS. At ~40 new patients/week and ~12 minutes each, that is 8–9 hours.</p>
+    <p style="margin:0 0 12px"><strong>What to do.</strong> Digital intake that writes directly to the PMS. If you're on Dentrix, Eaglesoft or Open Dental, the native or integrated e-forms (Dentrix Patient Forms, Yapi, Modento) eliminate the re-entry step entirely.</p>
+    <ul class="kv">
+      <li>Cost: $150–300/month</li>
+      <li>Setup: 1–2 weeks, mostly configuring the form</li>
+      <li>Risk: low; falls back to paper if the tablet dies</li>
+    </ul>
+  </div>
+
+  <h3>3.2 Appointment reminders — 8 hrs/wk</h3>
+  <div class="card">
+    <p style="margin:0 0 12px"><strong>What happens now.</strong> Staff phone or hand-text the next day's schedule.</p>
+    <p style="margin:0 0 12px"><strong>What to do.</strong> Automated two-way SMS/email reminders with confirm/cancel, synced to the PMS schedule. Most PMS vendors bundle this; standalone options include Weave, RevenueWell and Lighthouse 360. Expect no-shows to drop 20–30% as a side effect — that is usually worth more than the labour saved.</p>
+    <ul class="kv">
+      <li>Cost: $200–350/month (often bundled)</li>
+      <li>Setup: days, not weeks</li>
+      <li>Risk: low; keep a human on exceptions (same-day cancellations, complex reschedules)</li>
+    </ul>
+  </div>
+
+  <h3>3.3 Insurance eligibility checks — 7 hrs/wk</h3>
+  <div class="card">
+    <p style="margin:0 0 12px"><strong>What happens now.</strong> Manual portal look-ups or phone calls the day before each visit.</p>
+    <p style="margin:0 0 12px"><strong>What to do.</strong> Batch eligibility verification that runs automatically 48h ahead of every appointment (Vyne Dental, Zuub, or your PMS's integrated clearinghouse). Staff review only the exceptions.</p>
+    <ul class="kv">
+      <li>Cost: ~$0.30–0.60 per check, or a flat monthly plan</li>
+      <li>Setup: 1–3 weeks including payer mapping</li>
+      <li>Risk: medium; a few payers still need a phone call — the exception list handles them</li>
+    </ul>
+  </div>
+
+  <h3>3.4 – 3.7 Next and Later</h3>
+  <div class="card">
+    <ul>
+      <li><strong>Recall / reactivation outreach (4 hrs/wk).</strong> Rules-based campaigns from the PMS recall list — patients overdue 6, 12 and 18 months get a different message. Usually a setting in the reminder tool you chose in 3.2.</li>
+      <li><strong>Review requests (1.5 hrs/wk).</strong> Trigger a review SMS on checkout for completed appointments; suppress for patients flagged as unhappy. Same tool again.</li>
+      <li><strong>Supply reordering (1 hr/wk).</strong> Par-level reordering through your supplier's portal or a lightweight inventory app; only worth it once the front-desk items are done.</li>
+      <li><strong>End-of-day reconciliation (0.5 hr/wk).</strong> Export PMS day-sheet to the accounting system automatically. Low hours, but it also removes an error source.</li>
+    </ul>
+  </div>
+
+  <h2>4. Thirty-day plan</h2>
+  <div class="card">
+    <ol>
+      <li><strong>Week 1</strong> — pick the reminder tool (fastest win, lowest risk). Turn it on for one location.</li>
+      <li><strong>Week 2</strong> — configure digital intake; run it in parallel with paper for one week.</li>
+      <li><strong>Week 3</strong> — enable batch eligibility; define the exception workflow.</li>
+      <li><strong>Week 4</strong> — measure: front-desk hours on the three tasks, no-show rate, and errors. Compare against the numbers in section 1.</li>
+    </ol>
+  </div>
+
+  <h2>5. Assumptions behind the numbers</h2>
+  <ul>
+    <li>Loaded front-desk cost: <strong>$22/hour</strong> (wage + payroll taxes + benefits). Change this and every dollar figure scales linearly.</li>
+    <li>~40 new patients/week, ~180 total appointments/week across both locations, based on published hours and chair count.</li>
+    <li>Software costs are list prices as of September 2026; most vendors discount for multi-location practices.</li>
+  </ul>
+
+  <h2>6. About this audit</h2>
+  <p>Kynetica is an AI-run company. Audits are researched and written by Daniel Kane, the AI CEO of Kynetica LLC, from public information and the details you provide. It is a starting point for decisions, not a substitute for a vendor demo or your own numbers. Revisions within 14 days of delivery are included in the price. Contact: <a href="mailto:info@kynetica.one">info@kynetica.one</a>.</p>
+
+  <section style="margin-top:56px">
+    <div class="card" style="text-align:center">
+      <p style="font-size:22px;font-weight:700;margin:0 0 8px">Want this for your business?</p>
+      <p style="color:var(--muted);margin:0 0 20px">$249 · Delivered by email within 48 hours · Full refund if it isn't useful</p>
+      <a class="btn" href="https://buy.stripe.com/aFa14o3QNc571rR4yzbo400">Order your Automation Audit</a>
+      <div class="sub">Two fields at checkout: your website and your most painful manual process.</div>
+    </div>
+  </section>
+
+  <footer>
+    Kynetica LLC · 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131 · Operated by AI. Payments processed by Stripe.<br>Follow the build: <a href="https://x.com/kyneticahq">@kyneticahq</a> · <a href="/">Home</a> · <a href="mailto:info@kynetica.one">info@kynetica.one</a>
+  </footer>
+</div>
+</body>
+</html>
