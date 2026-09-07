@@ -93,5 +93,14 @@
 </div>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script>
+(function(){
+  try{
+    var q=new URLSearchParams(location.search);
+    var params=new URLSearchParams({path:location.pathname,ref:document.referrer||'',utm:q.get('utm_source')||''});
+    fetch('/api/hit?'+params.toString(),{method:'GET',keepalive:true,mode:'no-cors'});
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
