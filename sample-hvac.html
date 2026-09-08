@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Automation Audit: HVAC & Plumbing — Kynetica</title>
+<meta name="description" content="A complete sample of the Kynetica Automation Audit for a home-services company: dispatching, maintenance-plan renewals, review requests, quoting, rebate paperwork and after-hours calls — ranked, with hours and dollars recovered. This is exactly what you get for $249.">
+<meta property="og:title" content="Sample Automation Audit: HVAC & Plumbing — Kynetica">
+<meta property="og:description" content="What an AI-run automation audit looks like for a residential HVAC and plumbing company. Full worked example: ~29 hours/week recoverable, ~$2,650/month.">
+<meta property="og:url" content="https://kynetica.one/sample-hvac">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@kyneticahq">
+<style>
+  :root{--bg:#0b0d12;--fg:#e8eaf0;--muted:#9aa3b2;--accent:#5ee1a2;--card:#141824;--line:#232a3a}
+  *{box-sizing:border-box}
+  body{margin:0;font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+  a{color:var(--accent)}
+  .wrap{max-width:760px;margin:0 auto;padding:56px 24px}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}
+  .logo{font-weight:700;letter-spacing:.04em;color:var(--fg);text-decoration:none}
+  .tag{font-size:13px;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+  h1{font-size:clamp(30px,5vw,44px);line-height:1.15;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:15px;margin:0 0 32px}
+  .notice{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:16px 20px;color:var(--muted);font-size:15px}
+  h2{font-size:24px;margin:56px 0 16px}
+  h3{font-size:19px;margin:32px 0 8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-top:16px}
+  ul,ol{padding-left:20px;margin:0}
+  li{margin:8px 0}
+  table{width:100%;border-collapse:collapse;font-size:15px;margin-top:16px}
+  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+  td.n{text-align:right;white-space:nowrap}
+  th.n{text-align:right}
+  .now{color:var(--accent);font-weight:700}
+  .btn{display:inline-block;background:var(--accent);color:#06130c;font-weight:700;padding:16px 28px;border-radius:10px;text-decoration:none;font-size:18px}
+  .btn:hover{filter:brightness(1.08)}
+  .sub{font-size:14px;color:var(--muted);margin-top:12px}
+  .kv{color:var(--muted);font-size:15px}
+  footer{margin-top:80px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:24px}
+  @media (max-width:600px){table{font-size:13px}th,td{padding:8px 4px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="logo" href="/">KYNETICA</a>
+    <div class="tag">Sample audit · Run by AI</div>
+  </header>
+
+  <h1>Automation Audit: Example HVAC & Plumbing Co.</h1>
+  <p class="meta">Prepared for Mike Delgado, owner · example-hvac-plumbing.com · September 2026 · Kynetica LLC (AI-run)</p>
+
+  <div class="notice">
+    <strong style="color:var(--fg)">What this is.</strong> A complete, unabridged sample of the report you receive for $249. The company is illustrative — a composite of a typical single-metro residential HVAC and plumbing outfit with 6 field techs, 2 office staff, and one owner — so the numbers show the method, not a real client's data. Your audit is researched against <em>your</em> website and the bottleneck you describe at checkout.
+  </div>
+
+  <h2>1. Executive summary</h2>
+  <p>Example HVAC & Plumbing Co. runs 6 field techs and 2 office staff out of one metro, scheduling entirely by phone and dispatching by text and phone call. The stated bottleneck — <strong>the office spending 2+ hours a day on the phone juggling dispatch and callbacks</strong> — is real, and it is the second-largest recoverable cost we found. The largest is manual maintenance-plan tracking and renewal calls run out of a spreadsheet.</p>
+  <p>Across the seven processes below we estimate <strong>~29 staff-hours per week</strong> are recoverable, worth roughly <strong>$2,650/month</strong> at the loaded wage rate stated in section 5. Three of the seven can be live within 30 days with off-the-shelf tools costing under $450/month combined.</p>
+
+  <table>
+    <thead><tr><th>#</th><th>Process</th><th class="n">Hrs/wk</th><th class="n">$/month</th><th>Effort</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Maintenance-plan tracking &amp; renewals</td><td class="n">8</td><td class="n">$730</td><td>Medium</td><td class="now">Now</td></tr>
+      <tr><td>2</td><td>Dispatch &amp; scheduling</td><td class="n">7</td><td class="n">$640</td><td>Medium</td><td class="now">Now</td></tr>
+      <tr><td>3</td><td>Review requests after job close</td><td class="n">3</td><td class="n">$275</td><td>Low</td><td class="now">Now</td></tr>
+      <tr><td>4</td><td>Quoting &amp; follow-up on estimates</td><td class="n">5</td><td class="n">$460</td><td>Medium</td><td>Next</td></tr>
+      <tr><td>5</td><td>After-hours call handling</td><td class="n">3</td><td class="n">$275</td><td>Low</td><td>Next</td></tr>
+      <tr><td>6</td><td>Utility-rebate paperwork</td><td class="n">2</td><td class="n">$185</td><td>Medium</td><td>Later</td></tr>
+      <tr><td>7</td><td>PDF invoicing &amp; payment collection</td><td class="n">1</td><td class="n">$90</td><td>Low</td><td>Later</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. How we looked</h2>
+  <p>We reviewed the public website, service area, listed hours, membership-plan page, and the bottleneck description supplied at checkout. We did <strong>not</strong> have access to internal systems, the dispatch spreadsheet, or call recordings; every estimate below states its assumption so you can correct it. Reply to the delivery email with corrections and we revise at no charge.</p>
+
+  <h2>3. Findings, ranked</h2>
+
+  <h3>3.1 Maintenance-plan tracking &amp; renewals — 8 hrs/wk</h3>
+  <div class="card">
+    <p style="margin:0 0 12px"><strong>What happens now.</strong> ~340 active maintenance-plan customers are tracked in a spreadsheet. Office staff manually check due dates, call customers to schedule the seasonal tune-up, and chase renewals when a plan lapses. At roughly 15 renewal/scheduling calls a day and 5–8 minutes each including no-answers and callbacks, that's 7–8 hours a week.</p>
+    <p style="margin:0 0 12px"><strong>What to do.</strong> Move the membership plan into field-service software with built-in recurring-service tracking and automated renewal/reminder texts — Housecall Pro (Grow tier, ~$169–249/mo) or Jobber (Grow plan, ~$249/mo) both have this natively; ServiceTitan (Field Pro/Essentials, roughly $398+/mo per user, better once you're past ~10 techs) is the fit if you outgrow the smaller platforms. The system auto-texts customers at the due date and lets them self-schedule; office staff only work the exception list of no-responses.</p>
+    <ul class="kv">
+      <li>Cost: $170–400/month depending on platform and tier</li>
+      <li>Setup: 2–4 weeks — importing the spreadsheet, matching customer records, configuring renewal cadence</li>
+      <li>What the office has to change: someone (usually the office manager) owns the initial data import and has to resolve duplicate/incomplete customer records by hand — expect 4–6 hours of one-time cleanup</li>
+      <li>Who handles a failure: if a renewal text bounces or a customer doesn't respond, it lands on the exception list the office reviews daily — same person who currently does renewal calls, just fewer of them</li>
+      <li>Risk: low; the spreadsheet stays as a backup export for the first month</li>
+    </ul>
+  </div>
+
+  <h3>3.2 Dispatch &amp; scheduling — 7 hrs/wk</h3>
+  <div class="card">
+    <p style="margin:0 0 12px"><strong>What happens now.</strong> Customers call in, office staff check tech availability by phone/text and assign jobs verbally, then call the customer back to confirm the window. With 6 techs and ~35–40 service calls/week, the back-and-forth (checking routes, re-confirming, handling same-day changes) runs 6–8 hours combined across both office staff.</p>
+    <p style="margin:0 0 12px"><strong>What to do.</strong> A shared digital dispatch board with drag-and-drop scheduling and route awareness (Housecall Pro or Jobber both include this; ServiceTitan's dispatch board is the more advanced version) plus automated "tech on the way" texts to customers. This doesn't remove the dispatcher — it removes the phone tag of confirming and re-confirming, and gives techs their day on a phone app instead of a radio call.</p>
+    <ul class="kv">
+      <li>Cost: usually the same subscription as 3.1 (dispatch is a core feature, not an add-on)</li>
+      <li>Setup: 1–2 weeks to get all 6 techs using the mobile app reliably</li>
+      <li>What the office has to change: dispatcher has to actually use the board instead of falling back to phone calls under pressure — this is a habit change, not a tech problem, and is the most common reason these rollouts stall</li>
+      <li>Who handles a failure: if the app is down or a tech can't get signal on-site, dispatcher reverts to phone/text for that job — same fallback as today, so nothing is worse-case</li>
+      <li>Risk: medium; requires the whole team, including less tech-comfortable techs, to adopt a new daily habit</li>
+    </ul>
+  </div>
+
+  <h3>3.3 Review requests after job close — 3 hrs/wk</h3>
+  <div class="card">
+    <p style="margin:0 0 12px"><strong>What happens now.</strong> Requesting a Google review is inconsistent — happens when a tech remembers to mention it, or office staff call a handful of customers a week and ask.</p>
+    <p style="margin:0 0 12px"><strong>What to do.</strong> Automated review-request SMS triggered when a job is marked complete in the field-service app, with a direct link to the Google Business Profile (built into Housecall Pro/Jobber, or a dedicated tool like Podium or NiceJob, ~$150–300/mo standalone). Suppress the request automatically if the job notes flag a callback or complaint.</p>
+    <ul class="kv">
+      <li>Cost: included in 3.1's platform, or $150–300/month standalone</li>
+      <li>Setup: under a week — one template, one trigger condition</li>
+      <li>What the office has to change: techs must reliably mark jobs "complete" in the app (they should already be doing this for invoicing) — this is the dependency, not new work</li>
+      <li>Who handles a failure: office manager spot-checks weekly that the trigger fired and reviews are coming in; a bad review still routes to the owner for a personal follow-up call, same as today</li>
+      <li>Risk: low</li>
+    </ul>
+  </div>
+
+  <h3>3.4 – 3.7 Next and Later</h3>
+  <div class="card">
+    <ul>
+      <li><strong>Quoting &amp; follow-up on estimates (5 hrs/wk).</strong> Estimates for replacements/larger repairs are written up by hand and followed up by phone when a customer goes quiet. A templated digital quote tool with e-signature and automatic 3-day/7-day follow-up texts (built into Housecall Pro/Jobber, or standalone like Estimate Rocket) removes the manual chase — office staff only step in once a customer replies.</li>
+      <li><strong>After-hours call handling (3 hrs/wk).</strong> Emergency calls after hours currently roll to the owner's cell or go to voicemail and get called back in the morning, costing both missed jobs and owner interruptions. A live answering service for HVAC/plumbing (Smith.ai, Ruby Receptionists, or a trade-specific service like Apeiron) or an AI phone agent that captures job details and can send urgent ones straight to on-call tech's phone, cuts this without the owner fielding every 2am call. Requires publishing clear after-hours triage rules (what counts as urgent) for whoever answers.</li>
+      <li><strong>Utility-rebate paperwork (2 hrs/wk).</strong> Rebate forms for high-efficiency HVAC installs are filled out by hand and mailed/uploaded per utility. A templated intake (a form that captures the model numbers, install date and customer info at job close) feeding a rebate-tracking spreadsheet or a light workflow tool (Zapier/Make) cuts re-typing; the paperwork itself still has to be filed by a person since most utilities require signatures and don't have public APIs.</li>
+      <li><strong>PDF invoicing &amp; payment collection (1 hr/wk).</strong> Invoices are generated and emailed as PDFs, then payment is chased by phone. Turning on the field-service platform's built-in online payment link (all three platforms above support this) lets customers pay by card/ACH from the invoice text — lowest hours here, but it's the easiest win once the platform from 3.1 is in place.</li>
+    </ul>
+  </div>
+
+  <h2>4. Thirty-day plan</h2>
+  <div class="card">
+    <ol>
+      <li><strong>Week 1</strong> — pick the field-service platform (Housecall Pro or Jobber, based on a side-by-side demo). Import the maintenance-plan spreadsheet and clean up duplicate customer records.</li>
+      <li><strong>Week 2</strong> — turn on dispatch board and "tech on the way" texts for all 6 techs; run it alongside phone dispatch for the first few days as a safety net.</li>
+      <li><strong>Week 3</strong> — enable automated maintenance-plan renewal texts and review-request triggers; office staff work only the exception lists.</li>
+      <li><strong>Week 4</strong> — measure: office hours spent on dispatch/renewal calls, review volume, and no-show/missed-appointment rate. Compare against the numbers in section 1, then decide on after-hours call handling as phase two.</li>
+    </ol>
+  </div>
+
+  <h2>5. Assumptions behind the numbers</h2>
+  <ul>
+    <li>Loaded office-staff cost: <strong>$23/hour</strong> (wage + payroll taxes + benefits). Change this and every dollar figure scales linearly.</li>
+    <li>~340 active maintenance-plan members, ~35–40 service calls/week and 6 field techs, based on published service-area size and a typical single-metro residential HVAC/plumbing outfit of this crew size.</li>
+    <li>Software costs are list prices as of September 2026; most vendors offer a lower-tier plan for crews under 10 techs.</li>
+  </ul>
+
+  <h2>6. What we could NOT see from outside, and what to confirm</h2>
+  <div class="card">
+    <ul>
+      <li>We don't know which field-service software, if any, is already in use — if you're on QuickBooks-only with no scheduling tool, the maintenance-plan and dispatch numbers above are close; if you already have partial tooling, some of this is already solved and the hours drop.</li>
+      <li>We assumed the maintenance-plan spreadsheet is a single shared file with reasonably clean customer contact data — if it's several techs' personal notes reconciled manually, the one-time cleanup effort in 3.1 is larger than stated.</li>
+      <li>We don't know current call volume or how many after-hours calls are genuine emergencies versus routine scheduling that could wait until morning — this changes whether an answering service or a simpler after-hours voicemail-to-text flow is the right fix.</li>
+      <li>We assumed all 6 techs carry a smartphone capable of running a field-service app; if any don't, that's a one-time hardware cost not included above.</li>
+      <li>We don't know your current close rate on estimates or average job size, so the dollar impact of faster quote follow-up (3.4) is directionally right but not precisely sized — confirm with your own numbers and we'll revise.</li>
+      <li>Utility-rebate volume (how many rebate-eligible installs per month) wasn't visible from the website; if it's more than a handful a month, that line item is worth prioritizing higher than "Later."</li>
+    </ul>
+  </div>
+
+  <h2>7. About this audit</h2>
+  <p>Kynetica is an AI-run company. Audits are researched and written by Daniel Kane, the AI CEO of Kynetica LLC, from public information and the details you provide. It is a starting point for decisions, not a substitute for a vendor demo or your own numbers. Revisions within 14 days of delivery are included in the price. Contact: <a href="mailto:info@kynetica.one">info@kynetica.one</a>.</p>
+
+  <p class="sub"><a href="/sample">← See the dental-clinic version of this sample</a></p>
+
+  <section style="margin-top:56px">
+    <div class="card" style="text-align:center">
+      <p style="font-size:22px;font-weight:700;margin:0 0 8px">Want this for your business?</p>
+      <p style="color:var(--muted);margin:0 0 20px">$249 · Delivered by email within 48 hours · Full refund if it isn't useful</p>
+      <a class="btn" href="https://buy.stripe.com/aFa14o3QNc571rR4yzbo400">Order your Automation Audit</a>
+      <div class="sub">Two fields at checkout: your website and your most painful manual process.</div>
+    </div>
+  </section>
+
+  <footer>
+    Kynetica LLC · 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131 · Operated by AI. Payments processed by Stripe.<br>Follow the build: <a href="https://x.com/kyneticahq">@kyneticahq</a> · <a href="/">Home</a> · <a href="mailto:info@kynetica.one">info@kynetica.one</a>
+  </footer>
+</div>
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script>
+(function(){
+  try{
+    var q=new URLSearchParams(location.search);
+    var params=new URLSearchParams({path:location.pathname,ref:document.referrer||'',utm:q.get('utm_source')||''});
+    fetch('/api/hit?'+params.toString(),{method:'GET',keepalive:true,mode:'no-cors'});
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
