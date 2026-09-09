@@ -160,14 +160,20 @@
       <p class="tier-name" id="tier-name"></p>
       <div class="result-body" id="result-body"></div>
     </div>
-    <div class="upsell">
+    <div class="upsell" id="unlock-upsell">
+    <h3>Placeholder: unlock the full written breakdown of the one task you named.</h3>
+    <p>Placeholder: one tap, $7, no forms, no re-answering anything. Your answers are already saved.</p>
+    <button class="btn" id="unlock-btn">Unlock the full breakdown — $7</button>
+    <div class="err" id="unlock-err" style="display:none">Something went wrong starting checkout. Please try again.</div>
+    <div class="sub">No pressure. This page isn't going anywhere. Unlock when you're ready, or don't.</div>
+  </div>
+  <div class="upsell hidden" id="audit-upsell" style="margin-top:20px">
     <h3>We'll find at least $1,000 a year in recoverable time and cost in your business, or the audit is free.</h3>
     <p>The assessment guessed from nine answers. The Automation Audit reads your actual website, booking flow, and back office, and prices out every leak it finds, not just the one you named.</p>
     <p style="margin:0 0 18px"><strong style="color:var(--fg)">What you get:</strong> your top 5 automation opportunities, ranked by hours saved and cost to implement, an ROI estimate for each, and a step-by-step plan naming the actual tools. 6-10 pages, delivered by email within 48 hours of checkout. No sales call, no demo, no login.</p>
-    <a class="btn" id="upsell-btn" href="#">Order the $249 Automation Audit</a>
+    <a class="btn" id="upsell-btn" href="https://buy.stripe.com/aFa14o3QNc571rR4yzbo400">Order the $249 Automation Audit</a>
     <div class="sub">No pressure. This page isn't going anywhere. Order when you're ready, or don't.</div>
   </div>
-  <p class="sub" id="leak-finder-line" style="margin-top:16px"></p>
     <p class="sub" id="email-note" style="margin-top:20px"></p>
   </div>
 
@@ -185,16 +191,6 @@
     var q=new URLSearchParams(location.search);
     var params=new URLSearchParams({path:location.pathname,ref:document.referrer||'',utm:q.get('utm_source')||''});
     fetch('/api/hit?'+params.toString(),{method:'GET',keepalive:true,mode:'no-cors'});
-  }catch(e){}
-})();
-
-(function(){
-  try{
-    var q=new URLSearchParams(location.search);
-    if (q.get('paid') === '1') {
-      var badge = document.getElementById('intro-paid-badge');
-      if (badge) badge.classList.remove('hidden');
-    }
   }catch(e){}
 })();
 
@@ -313,19 +309,26 @@ document.getElementById('submit-btn').addEventListener('click', function(){
     var v = q.get(k);
     if (v) utm[k] = v;
   });
-  var paid_session = q.get('paid') === '1' ? (q.get('session_id') || '') : '';
 
   formEl.classList.add('hidden');
   loadingEl.classList.remove('hidden');
 
+  submitCompletion({
+    answers: state.answers,
+    task: task, trade: trade, teamSize: teamSize, email: email,
+    utm: utm,
+  });
+});
+
+// Holds the full completion payload in memory (never re-collected from the
+// user) so the $7 unlock button can call /api/unlock with zero re-entry.
+var completion = null;
+
+function submitCompletion(payload){
   fetch('/api/assess', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      answers: state.answers,
-      task: task, trade: trade, teamSize: teamSize, email: email,
-      utm: utm, paid_session: paid_session,
-    }),
+    body: JSON.stringify(payload),
   }).then(function(r){ return r.json(); }).then(function(data){
     loadingEl.classList.add('hidden');
     if (!data || typeof data.score !== 'number' || !data.html) {
@@ -333,33 +336,124 @@ document.getElementById('submit-btn').addEventListener('click', function(){
       resultEl.classList.remove('hidden');
       return;
     }
-    renderResult(data, paid_session);
+    completion = {
+      completion_id: data.completion_id,
+      score: data.score, tier: data.tier,
+      task: payload.task, trade: payload.trade, teamSize: payload.teamSize,
+      email: payload.email, answers: payload.answers, utm: payload.utm,
+    };
+    renderResult(data.score, data.tier, data.html, false);
   }).catch(function(){
     loadingEl.classList.add('hidden');
     resultEl.innerHTML = '<div class="result-card"><p>Something went wrong generating your result. Please try again or email <a href="mailto:info@kynetica.one">info@kynetica.one</a>.</p></div>';
     resultEl.classList.remove('hidden');
   });
-});
+}
 
 var TIER_LABELS = { 'flying-blind': 'Flying Blind', 'aware-but-leaking': 'Aware but Leaking', 'ready-to-automate': 'Ready to Automate' };
 
-function renderResult(data, paid_session){
-  document.getElementById('score-big').innerHTML = data.score + '<small>/18</small>';
-  document.getElementById('tier-name').textContent = TIER_LABELS[data.tier] || data.tier;
-  document.getElementById('result-body').innerHTML = data.html;
-  document.getElementById('upsell-btn').href = 'https://buy.stripe.com/aFa14o3QNc571rR4yzbo400?client_reference_id=assess-' + data.score;
-  if (paid_session) document.getElementById('paid-badge').classList.remove('hidden');
-  var lfLine = document.getElementById('leak-finder-line');
-  if (lfLine) {
-    if (!data.paid) {
-      lfLine.innerHTML = 'Want the full breakdown of that one task? <a href="/leak-finder">The $7 Leak Finder</a>';
-    } else {
-      lfLine.textContent = '';
-    }
+function renderResult(score, tier, html, paid){
+  document.getElementById('score-big').innerHTML = score + '<small>/18</small>';
+  document.getElementById('tier-name').textContent = TIER_LABELS[tier] || tier;
+  document.getElementById('result-body').innerHTML = html;
+  var paidBadge = document.getElementById('paid-badge');
+  var unlockUpsell = document.getElementById('unlock-upsell');
+  var auditUpsell = document.getElementById('audit-upsell');
+  if (paid) {
+    paidBadge.classList.remove('hidden');
+    unlockUpsell.classList.add('hidden');
+    auditUpsell.classList.remove('hidden');
+  } else {
+    paidBadge.classList.add('hidden');
+    unlockUpsell.classList.remove('hidden');
+    auditUpsell.classList.add('hidden');
   }
   document.getElementById('email-note').textContent = "We've also emailed this result to you.";
   resultEl.classList.remove('hidden');
 }
+
+document.getElementById('unlock-btn').addEventListener('click', function(){
+  if (!completion) return;
+  var btn = this;
+  var errEl = document.getElementById('unlock-err');
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Starting checkout...';
+  fetch('/api/unlock', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(completion),
+  }).then(function(r){ return r.json(); }).then(function(data){
+    if (data && data.url) {
+      location.href = data.url;
+    } else {
+      throw new Error('no_url');
+    }
+  }).catch(function(){
+    btn.disabled = false;
+    btn.textContent = 'Unlock the full breakdown — $7';
+    errEl.style.display = 'block';
+  });
+});
+
+// Return-from-Stripe handling: ?unlock=<checkout_session_id> means the
+// visitor just paid. Retrieve + render the paid breakdown directly, no
+// questions asked again.
+(function(){
+  try{
+    var q = new URLSearchParams(location.search);
+    var sessionId = q.get('unlock');
+    var unlockStart = q.get('unlock_start');
+
+    if (sessionId) {
+      introEl.classList.add('hidden');
+      loadingEl.classList.remove('hidden');
+      fetch('/api/unlock?session_id=' + encodeURIComponent(sessionId))
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          loadingEl.classList.add('hidden');
+          if (data && data.paid && data.html) {
+            renderResult(data.score, data.tier, data.html, true);
+          } else {
+            resultEl.innerHTML = '<div class="result-card"><p>We could not confirm this payment yet. If you were just charged, give it a minute and refresh, or email <a href="mailto:info@kynetica.one">info@kynetica.one</a> with your receipt.</p></div>';
+            resultEl.classList.remove('hidden');
+          }
+        }).catch(function(){
+          loadingEl.classList.add('hidden');
+          resultEl.innerHTML = '<div class="result-card"><p>Something went wrong confirming your payment. Please email <a href="mailto:info@kynetica.one">info@kynetica.one</a> with your receipt.</p></div>';
+          resultEl.classList.remove('hidden');
+        });
+      return;
+    }
+
+    // Signed link from the free-result email: goes straight to Stripe
+    // Checkout for the $7 unlock, no re-entry, no lookup needed — the
+    // token itself carries the HMAC-signed completion.
+    if (unlockStart) {
+      introEl.classList.add('hidden');
+      loadingEl.classList.remove('hidden');
+      fetch('/api/unlock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: unlockStart }),
+      }).then(function(r){ return r.json(); }).then(function(data){
+        if (data && data.url) {
+          location.href = data.url;
+        } else {
+          loadingEl.classList.add('hidden');
+          resultEl.innerHTML = '<div class="result-card"><p>This unlock link is no longer valid. Please take the assessment again to get a fresh link: <a href="/assess">/assess</a>.</p></div>';
+          resultEl.classList.remove('hidden');
+        }
+      }).catch(function(){
+        loadingEl.classList.add('hidden');
+        resultEl.innerHTML = '<div class="result-card"><p>Something went wrong starting checkout. Please email <a href="mailto:info@kynetica.one">info@kynetica.one</a>.</p></div>';
+        resultEl.classList.remove('hidden');
+      });
+      return;
+    }
+  }catch(e){}
+})();
+
 </script>
 </body>
 </html>
