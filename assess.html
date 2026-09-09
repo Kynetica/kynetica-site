@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automation Readiness Assessment: Kynetica</title>
+<meta name="description" content="Free 3-minute assessment: find out where your business is leaking time to manual work, and what to automate first. Built by Kynetica, run by AI.">
+<meta property="og:title" content="Automation Readiness Assessment: Kynetica">
+<meta property="og:description" content="9 quick questions on your phone. Find your automation leaks in 3 minutes.">
+<meta property="og:url" content="https://kynetica.one/assess">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@kyneticahq">
+<style>
+  :root{--bg:#0b0d12;--fg:#e8eaf0;--muted:#9aa3b2;--accent:#5ee1a2;--card:#141824;--line:#232a3a;--bad:#ff6b6b}
+  *{box-sizing:border-box}
+  body{margin:0;font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+  a{color:var(--accent)}
+  .wrap{max-width:560px;margin:0 auto;padding:32px 20px 64px}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+  .logo{font-weight:700;letter-spacing:.04em;font-size:15px}
+  .tag{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+  h1{font-size:clamp(26px,6vw,34px);line-height:1.2;margin:0 0 12px;letter-spacing:-.02em}
+  .lead{font-size:17px;color:var(--muted);margin:0 0 28px}
+  .progress-wrap{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:28px}
+  .progress-bar{height:100%;background:var(--accent);border-radius:99px;transition:width .25s ease;width:0%}
+  .stage-label{font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:700}
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 20px}
+  .qtext{font-size:21px;font-weight:600;margin:0 0 22px;line-height:1.35}
+  .opt{display:block;width:100%;text-align:left;background:#0f131c;border:1px solid var(--line);color:var(--fg);padding:18px 16px;border-radius:12px;font-size:16px;margin-bottom:12px;cursor:pointer;line-height:1.4;-webkit-tap-highlight-color:transparent}
+  .opt:hover, .opt:active{border-color:var(--accent);background:#131a26}
+  .opt.selected{border-color:var(--accent);background:#131a26;box-shadow:0 0 0 1px var(--accent) inset}
+  .nav-row{display:flex;justify-content:space-between;margin-top:18px}
+  .btn-back{background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;padding:8px 0}
+  .btn{display:inline-block;background:var(--accent);color:#06130c;font-weight:700;padding:16px 28px;border-radius:10px;text-decoration:none;font-size:18px;border:none;cursor:pointer;width:100%;text-align:center}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  input, select, textarea{width:100%;background:#0f131c;border:1px solid var(--line);color:var(--fg);padding:14px 14px;border-radius:10px;font-size:16px;font-family:inherit;margin-bottom:16px}
+  textarea{min-height:100px;resize:vertical}
+  label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px;font-weight:600}
+  .field{margin-bottom:18px}
+  .hint{font-size:13px;color:var(--muted);margin-top:-10px;margin-bottom:16px}
+  .err{color:var(--bad);font-size:14px;margin-top:8px;display:none}
+  .result-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 22px}
+  .score-big{font-size:48px;font-weight:800;letter-spacing:-.02em;margin:0}
+  .score-big small{font-size:20px;color:var(--muted);font-weight:400}
+  .tier-name{font-size:15px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin:0 0 20px}
+  .result-body p{margin:0 0 16px}
+  .paid-badge{display:inline-block;background:var(--accent);color:#06130c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:16px}
+  .upsell{margin-top:28px;background:#0f131c;border:1px solid var(--accent);border-radius:14px;padding:22px}
+  .upsell h3{margin:0 0 12px;font-size:19px;line-height:1.35}
+  .upsell p{color:var(--muted);margin:0 0 18px}
+  .sub{font-size:13px;color:var(--muted);margin-top:12px;text-align:center}
+  footer{margin-top:56px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:20px}
+  .hidden{display:none !important}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid #06130c;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-3px;margin-right:6px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><a href="/" style="color:inherit;text-decoration:none">KYNETICA</a></div>
+    <div class="tag">Free · 3 min</div>
+  </header>
+
+  <div id="intro">
+    <div id="intro-paid-badge" class="paid-badge hidden">Paid Leak Finder</div>
+    <h1>Automation Readiness Assessment</h1>
+    <p class="lead">9 quick questions about how your week actually runs, not your opinions, your habits. Takes about 3 minutes on your phone. At the end you'll get a written result and get it emailed to you.</p>
+    <button class="btn" id="start-btn">Start the assessment</button>
+    <div class="sub">No signup. Email only requested at the end, to send your result.</div>
+  </div>
+
+  <div id="quiz" class="hidden">
+    <div class="stage-label" id="stage-label">Visibility</div>
+    <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+    <div class="qcard">
+      <p class="qtext" id="qtext"></p>
+      <div id="options"></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" id="back-btn">&larr; Back</button>
+      <div></div>
+    </div>
+  </div>
+
+  <div id="detailsForm" class="hidden">
+    <div class="stage-label">Last step</div>
+    <div class="progress-wrap"><div class="progress-bar" style="width:100%"></div></div>
+    <div class="qcard">
+      <p class="qtext">One more thing.</p>
+      <div class="field">
+        <label for="task">Describe the one task that eats your week</label>
+        <textarea id="task" maxlength="500" placeholder="e.g. Every evening I re-type the day's jobs from paper tickets into our invoicing software..."></textarea>
+        <div class="hint">1-500 characters. Be specific: this is what your result is built around.</div>
+      </div>
+      <div class="field">
+        <label for="trade">What kind of business?</label>
+        <select id="trade">
+          <option value="">Select one</option>
+          <option>HVAC</option>
+          <option>Plumbing</option>
+          <option>Electrical</option>
+          <option>Dental</option>
+          <option>Landscaping</option>
+          <option>Agency</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="teamSize">How many people work in the business?</label>
+        <select id="teamSize">
+          <option value="">Select one</option>
+          <option value="1-2">1-2</option>
+          <option value="3-9">3-9</option>
+          <option value="10-25">10-25</option>
+          <option value="25+">25+</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="email">Email (to send your result)</label>
+        <input type="email" id="email" placeholder="you@yourbusiness.com">
+      </div>
+      <div class="err" id="form-err">Please fill in the task description and a valid email.</div>
+      <button class="btn" id="submit-btn">Get my result</button>
+    </div>
+  </div>
+
+  <div id="loading" class="hidden" style="text-align:center;padding:60px 0;color:var(--muted)">
+    <div class="spinner" style="border-color:var(--muted);border-top-color:transparent;width:24px;height:24px"></div>
+    Building your result...
+  </div>
+
+  <div id="result" class="hidden">
+    <div class="result-card">
+      <div id="paid-badge" class="paid-badge hidden">Paid Leak Finder</div>
+      <p class="score-big" id="score-big"></p>
+      <p class="tier-name" id="tier-name"></p>
+      <div class="result-body" id="result-body"></div>
+    </div>
+    <div class="upsell">
+      <h3>We'll find at least $1,000 a year in recoverable time and cost in your business, or the audit is free.</h3>
+      <p>The assessment guessed from nine answers. The audit reads your actual website, booking flow and back-office, and prices every leak it finds.</p>
+      <a class="btn" id="upsell-btn" href="#">Order the $249 Automation Audit</a>
+      <div class="sub">Delivered by email within 48 hours.</div>
+    </div>
+    <p class="sub" id="email-note" style="margin-top:20px"></p>
+  </div>
+
+  <footer id="page-footer">
+    Kynetica LLC · 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131 · Operated by AI.<br>
+    <a href="/">&larr; Back to kynetica.one</a> · <a href="mailto:info@kynetica.one">info@kynetica.one</a>
+  </footer>
+</div>
+
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script>
+(function(){
+  try{
+    var q=new URLSearchParams(location.search);
+    var params=new URLSearchParams({path:location.pathname,ref:document.referrer||'',utm:q.get('utm_source')||''});
+    fetch('/api/hit?'+params.toString(),{method:'GET',keepalive:true,mode:'no-cors'});
+  }catch(e){}
+})();
+
+(function(){
+  try{
+    var q=new URLSearchParams(location.search);
+    if (q.get('paid') === '1') {
+      var badge = document.getElementById('intro-paid-badge');
+      if (badge) badge.classList.remove('hidden');
+    }
+  }catch(e){}
+})();
+
+var QUESTIONS = [
+  // Visibility
+  { stage: 'Visibility', text: 'When did you last know, hour by hour, where a workday actually went?', options: [
+    { label: "Never, I couldn't tell you", score: 0 },
+    { label: 'A few months ago, roughly', score: 1 },
+    { label: 'This week, I actually tracked it', score: 2 },
+  ]},
+  { stage: 'Visibility', text: 'If someone asked how many hours you personally spent on paperwork or admin last week, could you give a real number?', options: [
+    { label: 'No idea', score: 0 },
+    { label: 'A rough guess', score: 1 },
+    { label: 'Yes, I know the number', score: 2 },
+  ]},
+  { stage: 'Visibility', text: 'Do you know which single task ate the most of your time last week?', options: [
+    { label: 'No', score: 0 },
+    { label: 'Sort of', score: 1 },
+    { label: 'Yes, exactly', score: 2 },
+  ]},
+  // Leakage
+  { stage: 'Leakage', text: 'How often do you type the same customer info into more than one place (quote, invoice, calendar, texts)?', options: [
+    { label: 'Every job', score: 0 },
+    { label: 'Sometimes', score: 1 },
+    { label: "Rarely, it's already synced", score: 2 },
+  ]},
+  { stage: 'Leakage', text: 'In the last month, how often did you have to redo or fix something because of a scheduling or paperwork mistake?', options: [
+    { label: 'Weekly or more', score: 0 },
+    { label: 'A couple of times', score: 1 },
+    { label: 'Never', score: 2 },
+  ]},
+  { stage: 'Leakage', text: 'How often do you have to chase someone (a customer, supplier, or employee) for a reply or payment that should show up on its own?', options: [
+    { label: 'Almost every day', score: 0 },
+    { label: 'A few times a week', score: 1 },
+    { label: 'Rarely', score: 2 },
+  ]},
+  // Leverage
+  { stage: 'Leverage', text: 'Do you already use scheduling or booking software, not just a paper calendar or texts?', options: [
+    { label: 'No', score: 0 },
+    { label: 'Yes, but I barely use it', score: 1 },
+    { label: 'Yes, it runs most of my bookings', score: 2 },
+  ]},
+  { stage: 'Leverage', text: 'A customer texts you at 9pm asking for a quote. What actually happens?', options: [
+    { label: 'I answer manually whenever I see it', score: 0 },
+    { label: 'I have a canned reply I copy-paste', score: 1 },
+    { label: "It's mostly handled automatically", score: 2 },
+  ]},
+  { stage: 'Leverage', text: 'Have you ever connected two of your business tools together (Zapier, Make, or a built-in automation) so one triggers the other?', options: [
+    { label: 'Never, not sure how', score: 0 },
+    { label: 'Tried once, gave up', score: 1 },
+    { label: 'Yes, I have something running', score: 2 },
+  ]},
+];
+
+var state = { idx: 0, answers: new Array(QUESTIONS.length).fill(null) };
+
+var introEl = document.getElementById('intro');
+var quizEl = document.getElementById('quiz');
+var formEl = document.getElementById('detailsForm');
+var loadingEl = document.getElementById('loading');
+var resultEl = document.getElementById('result');
+
+document.getElementById('start-btn').addEventListener('click', function(){
+  introEl.classList.add('hidden');
+  quizEl.classList.remove('hidden');
+  renderQuestion();
+});
+
+document.getElementById('back-btn').addEventListener('click', function(){
+  if (state.idx > 0) { state.idx--; renderQuestion(); }
+});
+
+function renderQuestion(){
+  var q = QUESTIONS[state.idx];
+  document.getElementById('stage-label').textContent = q.stage;
+  document.getElementById('qtext').textContent = q.text;
+  document.getElementById('progress-bar').style.width = Math.round((state.idx / QUESTIONS.length) * 100) + '%';
+  var opts = document.getElementById('options');
+  opts.innerHTML = '';
+  q.options.forEach(function(o){
+    var b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = o.label;
+    if (state.answers[state.idx] === o.score) b.classList.add('selected');
+    b.addEventListener('click', function(){
+      state.answers[state.idx] = o.score;
+      if (state.idx < QUESTIONS.length - 1) {
+        state.idx++;
+        renderQuestion();
+      } else {
+        quizEl.classList.add('hidden');
+        formEl.classList.remove('hidden');
+      }
+    });
+    opts.appendChild(b);
+  });
+  document.getElementById('back-btn').style.visibility = state.idx === 0 ? 'hidden' : 'visible';
+}
+
+document.getElementById('submit-btn').addEventListener('click', function(){
+  var task = document.getElementById('task').value.trim();
+  var trade = document.getElementById('trade').value;
+  var teamSize = document.getElementById('teamSize').value;
+  var email = document.getElementById('email').value.trim();
+  var errEl = document.getElementById('form-err');
+  var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!task || task.length > 500 || !emailOk) {
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  var q = new URLSearchParams(location.search);
+  var utm = {};
+  ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(k){
+    var v = q.get(k);
+    if (v) utm[k] = v;
+  });
+  var paid_session = q.get('paid') === '1' ? (q.get('session_id') || '') : '';
+
+  formEl.classList.add('hidden');
+  loadingEl.classList.remove('hidden');
+
+  fetch('/api/assess', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      answers: state.answers,
+      task: task, trade: trade, teamSize: teamSize, email: email,
+      utm: utm, paid_session: paid_session,
+    }),
+  }).then(function(r){ return r.json(); }).then(function(data){
+    loadingEl.classList.add('hidden');
+    if (!data || typeof data.score !== 'number' || !data.html) {
+      resultEl.innerHTML = '<div class="result-card"><p>Something went wrong generating your result. Please try again or email <a href="mailto:info@kynetica.one">info@kynetica.one</a>.</p></div>';
+      resultEl.classList.remove('hidden');
+      return;
+    }
+    renderResult(data, paid_session);
+  }).catch(function(){
+    loadingEl.classList.add('hidden');
+    resultEl.innerHTML = '<div class="result-card"><p>Something went wrong generating your result. Please try again or email <a href="mailto:info@kynetica.one">info@kynetica.one</a>.</p></div>';
+    resultEl.classList.remove('hidden');
+  });
+});
+
+var TIER_LABELS = { 'flying-blind': 'Flying Blind', 'aware-but-leaking': 'Aware but Leaking', 'ready-to-automate': 'Ready to Automate' };
+
+function renderResult(data, paid_session){
+  document.getElementById('score-big').innerHTML = data.score + '<small>/18</small>';
+  document.getElementById('tier-name').textContent = TIER_LABELS[data.tier] || data.tier;
+  document.getElementById('result-body').innerHTML = data.html;
+  document.getElementById('upsell-btn').href = 'https://buy.stripe.com/aFa14o3QNc571rR4yzbo400?client_reference_id=assess-' + data.score;
+  if (paid_session) document.getElementById('paid-badge').classList.remove('hidden');
+  document.getElementById('email-note').textContent = "We've also emailed this result to you.";
+  resultEl.classList.remove('hidden');
+}
+</script>
+</body>
+</html>
