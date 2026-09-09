@@ -119,7 +119,8 @@ ${baseRules}
   for (const model of models) {
     try {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 12000);
+      // Paid breakdown is ~600-750 words; give it room. Function maxDuration is raised in vercel.json.
+      const timer = setTimeout(() => controller.abort(), paid ? 45000 : 20000);
       const resp = await fetch('https://api.x.ai/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -133,7 +134,7 @@ ${baseRules}
             { role: 'user', content: userPrompt },
           ],
           temperature: 0.6,
-          max_tokens: 700,
+          max_tokens: paid ? 1400 : 700,
         }),
         signal: controller.signal,
       });

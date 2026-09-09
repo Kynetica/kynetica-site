@@ -2,15 +2,33 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/leak-finder", "destination": "/assess", "permanent": true }
+    {
+      "source": "/leak-finder",
+      "destination": "/assess",
+      "permanent": true
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/unlock.js": {
+      "maxDuration": 60
+    },
+    "api/assess.js": {
+      "maxDuration": 30
+    }
+  }
 }
