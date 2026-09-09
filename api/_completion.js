@@ -188,8 +188,10 @@ export async function emailResult(record, resultHtml, ctaUrl) {
   if (record.paid) {
     ctaBlock = `
     <div style="margin:28px 0;padding:20px;background:#f5f7fa;border-radius:10px">
-      <p style="margin:0 0 12px;color:#333">If you want the whole business read the same way: the Automation Audit reads your website, booking flow and back office and prices every leak it finds. Written report, 6 to 10 pages, top 5 opportunities ranked, ROI estimate each, step-by-step plan naming the tools. By email within 48 hours of checkout.</p>
-      <p style="margin:0 0 16px;font-weight:700">One term, no fine print: we find at least $1,000 a year in recoverable time and cost in your business, or the audit is free. You tell us; we refund.</p>
+      <p style="margin:0 0 12px;color:#333">The breakdown above worked one task, the one you named. The Automation Audit reads your actual website, booking flow and back office, and prices every leak it finds there.</p>
+      <p style="margin:0 0 12px;color:#333">Written report, 6 to 10 pages, top 5 opportunities ranked, ROI estimate each, step-by-step plan naming the tools. Delivered by email within 48 hours of checkout.</p>
+      <p style="margin:0 0 4px;font-weight:700">&ldquo;We'll find at least $1,000 a year in recoverable time and cost in your business, or the audit is free.&rdquo;</p>
+      <p style="margin:0 0 16px;color:#333">One term, no fine print. You tell us; we refund.</p>
       <form method="POST" action="https://kynetica.one/api/audit" style="margin:0">
         <input type="hidden" name="paid_session" value="${escapeHtml(record.stripe_session_id || '')}">
         <input type="hidden" name="completion_id" value="${escapeHtml(record.completion_id || '')}">
@@ -203,13 +205,13 @@ export async function emailResult(record, resultHtml, ctaUrl) {
         <input type="hidden" name="utm" value="${escapeHtml(JSON.stringify(record.utm || {}))}">
         <button type="submit" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;border:none;text-decoration:none;font-weight:700;font-size:16px;cursor:pointer;font-family:inherit">Order the $249 Automation Audit</button>
       </form>
-      <p style="margin:12px 0 0;color:#777;font-size:14px">Not a call, not a demo, not a retainer. We already have your answers; you won't be asked for them again.</p>
+      <p style="margin:12px 0 0;color:#777;font-size:14px">Not a call, not a demo, not a retainer. We already have your trade, team size, task and nine answers. You won't be asked for them again.</p>
     </div>`;
   } else {
     ctaBlock = `
     <div style="margin:28px 0;padding:20px;background:#f5f7fa;border-radius:10px">
-      <p style="margin:0 0 12px;color:#333">This is saved and yours to keep.</p>
-      <p style="margin:0 0 16px;color:#555">If you want the task you named worked step by step: the full breakdown lays out every step, marks which ones you can automate with what you likely already own, puts labelled estimates on setup effort and hours a week, and writes up two more things it saw in your answers.</p>
+      <p style="margin:0 0 12px;color:#333">You're reading this in your inbox, which means the result above is saved and yours to keep.</p>
+      <p style="margin:0 0 16px;color:#555">It named your leak and one step, from your own answers. For $7, the full breakdown lays out every step in the task you described, says which ones you can automate with what you likely already own, gives labelled hours estimates, and writes up two more things it saw in your other answers, in the same detail.</p>
       <a href="${ctaUrl}" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:700">Unlock the full breakdown: $7</a>
       <p style="margin:12px 0 0;color:#777;font-size:14px">One tap. Nothing to re-enter; this link already carries your answers.</p>
     </div>`;
@@ -221,7 +223,7 @@ export async function emailResult(record, resultHtml, ctaUrl) {
     <div>${resultHtml}</div>
     ${ctaBlock}
     <p style="color:#999;font-size:12px;margin-top:32px">
-      Written by an AI (Daniel Kane, Kynetica) from the answers you gave and nothing else. Estimates are estimates. No claims of past results or guaranteed savings are made here.<br>
+      This result was written by an AI (Daniel Kane, Kynetica) from the answers you gave and nothing else. Estimates are estimates. No claims of past results or guaranteed savings are made here. A human owns Kynetica and answers for it.<br>
       Kynetica LLC. 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131<br>
       <a href="mailto:info@kynetica.one?subject=unsubscribe">Unsubscribe</a>
     </p>
