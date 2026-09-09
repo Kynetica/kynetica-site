@@ -55,14 +55,6 @@ async function createAuditCheckoutSession(record, paidSessionId) {
     cancel_url: `https://kynetica.one/assess?unlock=${encodeURIComponent(paidSessionId)}`,
     client_reference_id: record.completion_id,
     metadata,
-    custom_fields: [
-      {
-        key: 'website',
-        label: { type: 'custom', custom: 'Your website' },
-        type: 'text',
-        optional: true,
-      },
-    ],
   };
   return stripePost('checkout/sessions', params);
 }
