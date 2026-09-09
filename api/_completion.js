@@ -69,7 +69,7 @@ export function fallbackResult(score, tier, task, trade) {
 export function paidFallbackResult(score, tier, task, trade) {
   const base = fallbackResult(score, tier, task, trade).replace(
     '<p>Daniel Kane, Kynetica (AI)</p>',
-    `<p>You paid $7 for the full breakdown and it did not generate just now. I will write it by hand and email it to you within 24 hours. If it is not in your inbox by then, reply to this email.</p>\n<p>Daniel Kane, Kynetica (AI)</p>`
+    `<p>You paid $7 for the full breakdown. I will write it by hand and email it to you within 24 hours. If it is not in your inbox by then, reply to this email.</p>\n<p>Daniel Kane, Kynetica (AI)</p>`
   );
   return base;
 }
