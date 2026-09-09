@@ -93,8 +93,8 @@ ${baseRules}
 - Total length: the standard section (180-250 words) PLUS a second section (380-500 words) headed exactly "The full breakdown".
 - Standard section structure exactly: (1) a behavioural portrait paragraph that opens on ONE concrete detail from their actual answers (a specific answer they gave, or a specific word from their task description) — never open with a category description of their tier; (2) a paragraph headed "Your biggest leak" that addresses THEIR free-text task specifically: it must reference the actual nouns/objects/tools/people named in their task description (e.g. if they wrote "paper tickets" and "invoicing software", the automation approach must name those same things, not a generic substitute), name one concrete automation approach using tools a small business like theirs plausibly already owns (email, calendar, spreadsheets, their booking/CRM software, Zapier/Make-style connectors), and give one rough hours/week estimate CLEARLY labelled as an estimate/guess, not a fact; (3) exactly ONE next step that is SPECIFIC to their named task (must contain at least one noun from their task description) and doable this week without buying anything — generic tips like "write down your process" or "map your workflow" without reference to their specific task are banned.
 - The "The full breakdown" section must, in order: (a) decompose THEIR named task into its concrete steps, using the task's own nouns; (b) state which of those steps are automatable and, for each, the CATEGORY of tool they plausibly already own that could do it (email, calendar, spreadsheet, booking/CRM software, Zapier/Make-style connector) — never a specific named product/model; (c) give a rough setup-effort estimate in hours, clearly labelled as an estimate; (d) give a rough weekly-hours-recovered range, clearly labelled as an estimate, not a promise; (e) name two more secondary leaks inferred from their 9 answers (not the named task), each one sentence.
-- Sign off ONCE at the very end of the whole output (not after each section).
-- Keep the same plain first-person voice in the breakdown section as in the opening; no report register, no headings inside paragraphs, no lists.` : `You write short, personalised results for a free 9-question "Nine-Question Leak Trace" assessment taken by owners of small service businesses (HVAC, plumbing, electrical, dental, landscaping, agencies). You are writing as Daniel Kane, the AI that runs Kynetica.
+- Keep the same plain first-person voice in the breakdown section as in the opening; no report register, no headings inside paragraphs, no lists.
+- Sign off ONCE at the very end of the whole output (not after each section).` : `You write short, personalised results for a free 9-question "Nine-Question Leak Trace" assessment taken by owners of small service businesses (HVAC, plumbing, electrical, dental, landscaping, agencies). You are writing as Daniel Kane, the AI that runs Kynetica.
 
 ${baseRules}
 - Open the entire output by restating their described task in their own words, in one sentence, before any analysis (e.g. "You told us the task eating your week is ___.").
@@ -114,7 +114,7 @@ ${baseRules}
       const resp = await fetch('https://api.x.ai/v1/chat/completions', {
         method: 'POST',
         headers: {
-          Authorization: *** ${key}`,
+          Authorization: `Bearer ${key}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -150,7 +150,7 @@ export async function appendCompletionLine(line) {
   if (!token || !repo) return { stored: false, reason: 'gh_not_configured' };
   const apiBase = `https://api.github.com/repos/${repo}/contents/${filePath}`;
   const headers = {
-    Authorization: *** ${token}`,
+    Authorization: `Bearer ${token}`,
     'User-Agent': 'kynetica-assess',
     Accept: 'application/vnd.github+json',
   };
@@ -234,7 +234,7 @@ export async function emailResult(record, resultHtml, ctaUrl) {
 
   const resp = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: { Authorization: *** ${key}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: 'Daniel Kane <daniel@mail.kynetica.one>',
       to: [record.email],
@@ -267,7 +267,7 @@ export async function notifyOwner(record) {
   ].filter(Boolean);
   const resp = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: { Authorization: *** ${key}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: 'Kynetica Assessments <daniel@mail.kynetica.one>',
       to: ['info@kynetica.one'],
@@ -387,7 +387,7 @@ export function stripeAuthHeader() {
 
 export async function stripeGet(path) {
   const resp = await fetch(`https://api.stripe.com/v1/${path}`, {
-    headers: { Authorization: stripe...er() },
+    headers: { Authorization: stripeAuthHeader() },
   });
   const data = await resp.json().catch(() => ({}));
   return { ok: resp.ok, status: resp.status, data };
@@ -397,7 +397,7 @@ export async function stripePost(path, params) {
   const resp = await fetch(`https://api.stripe.com/v1/${path}`, {
     method: 'POST',
     headers: {
-      Authorization: stripe...r(),
+      Authorization: stripeAuthHeader(),
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: toFormBody(params),
