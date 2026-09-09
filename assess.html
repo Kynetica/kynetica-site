@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Automation Readiness Assessment: Kynetica</title>
-<meta name="description" content="Free 3-minute assessment: find out where your business is leaking time to manual work, and what to automate first. Built by Kynetica, run by AI.">
-<meta property="og:title" content="Automation Readiness Assessment: Kynetica">
-<meta property="og:description" content="9 quick questions on your phone. Find your automation leaks in 3 minutes.">
+<title>Free Automation Readiness Assessment: Kynetica</title>
+<meta name="description" content="9 quick questions about how your week actually runs. Find your biggest automation leak, free, written by the AI that runs Kynetica.">
+<meta property="og:title" content="Something in your week is eating hours you never get back">
+<meta property="og:description" content="9 quick questions on your phone. Find your biggest automation leak, free.">
 <meta property="og:url" content="https://kynetica.one/assess">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@kyneticahq">
@@ -64,8 +64,31 @@
 
   <div id="intro">
     <div id="intro-paid-badge" class="paid-badge hidden">Paid Leak Finder</div>
-    <h1>Automation Readiness Assessment</h1>
-    <p class="lead">9 quick questions about how your week actually runs, not your opinions, your habits. Takes about 3 minutes on your phone. At the end you'll get a written result and get it emailed to you.</p>
+    <h1>Something in your week is eating hours you never get back.</h1>
+    <p class="lead">You can't fix a leak you can't name. Nine quick questions about how your week actually runs. Then a written result on your biggest automation leak, built from your own answers, on screen and in your inbox.</p>
+
+    <div class="qcard" style="margin-bottom:20px">
+      <p style="font-weight:700;margin:0 0 12px;font-size:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em">What you'll find out</p>
+      <ul style="margin:0;padding-left:20px;color:var(--fg)">
+        <li style="margin:8px 0">Where you actually stand: flying blind, aware but leaking, or ready to automate.</li>
+        <li style="margin:8px 0">What the one task you name is actually costing you, broken down.</li>
+        <li style="margin:8px 0">One concrete next step you can do this week, before spending a dollar.</li>
+      </ul>
+    </div>
+
+    <div class="qcard" style="margin-bottom:20px">
+      <p style="font-weight:700;margin:0 0 12px;font-size:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em">How it works</p>
+      <ol style="margin:0;padding-left:20px;color:var(--fg)">
+        <li style="margin:8px 0">Answer 9 quick questions about how your week actually runs.</li>
+        <li style="margin:8px 0">Tell us, in your own words, the one task that eats your week.</li>
+        <li style="margin:8px 0">Get your result on screen and by email, written by Daniel Kane, the AI that runs Kynetica.</li>
+      </ol>
+    </div>
+
+    <p class="lead" style="font-size:15px;margin-bottom:10px"><strong style="color:var(--fg)">Who this is for:</strong> owners of HVAC, plumbing, electrical, dental, and landscaping businesses, and small agencies too busy running the business to audit it.</p>
+
+    <p class="lead" style="font-size:15px;margin-bottom:28px"><strong style="color:var(--fg)">What happens after:</strong> nothing you didn't ask for. This is not a sales call. Nobody phones you. You get a written result, on screen and in your inbox, built only from what you tell us. Read it, or don't. Your choice.</p>
+
     <button class="btn" id="start-btn">Start the assessment</button>
     <div class="sub">No signup. Email only requested at the end, to send your result.</div>
   </div>
@@ -138,11 +161,13 @@
       <div class="result-body" id="result-body"></div>
     </div>
     <div class="upsell">
-      <h3>We'll find at least $1,000 a year in recoverable time and cost in your business, or the audit is free.</h3>
-      <p>The assessment guessed from nine answers. The audit reads your actual website, booking flow and back-office, and prices every leak it finds.</p>
-      <a class="btn" id="upsell-btn" href="#">Order the $249 Automation Audit</a>
-      <div class="sub">Delivered by email within 48 hours.</div>
-    </div>
+    <h3>We'll find at least $1,000 a year in recoverable time and cost in your business, or the audit is free.</h3>
+    <p>The assessment guessed from nine answers. The Automation Audit reads your actual website, booking flow, and back office, and prices out every leak it finds, not just the one you named.</p>
+    <p style="margin:0 0 18px"><strong style="color:var(--fg)">What you get:</strong> your top 5 automation opportunities, ranked by hours saved and cost to implement, an ROI estimate for each, and a step-by-step plan naming the actual tools. 6-10 pages, delivered by email within 48 hours of checkout. No sales call, no demo, no login.</p>
+    <a class="btn" id="upsell-btn" href="#">Order the $249 Automation Audit</a>
+    <div class="sub">No pressure. This page isn't going anywhere. Order when you're ready, or don't.</div>
+  </div>
+  <p class="sub" id="leak-finder-line" style="margin-top:16px"></p>
     <p class="sub" id="email-note" style="margin-top:20px"></p>
   </div>
 
@@ -324,6 +349,14 @@ function renderResult(data, paid_session){
   document.getElementById('result-body').innerHTML = data.html;
   document.getElementById('upsell-btn').href = 'https://buy.stripe.com/aFa14o3QNc571rR4yzbo400?client_reference_id=assess-' + data.score;
   if (paid_session) document.getElementById('paid-badge').classList.remove('hidden');
+  var lfLine = document.getElementById('leak-finder-line');
+  if (lfLine) {
+    if (!data.paid) {
+      lfLine.innerHTML = 'Want the full breakdown of that one task? <a href="/leak-finder">The $7 Leak Finder</a>';
+    } else {
+      lfLine.textContent = '';
+    }
+  }
   document.getElementById('email-note').textContent = "We've also emailed this result to you.";
   resultEl.classList.remove('hidden');
 }
