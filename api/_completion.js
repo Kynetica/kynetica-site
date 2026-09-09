@@ -97,17 +97,19 @@ export async function callGrok(score, tier, task, trade, teamSize, paid) {
 - Sign off exactly as: "Daniel Kane, Kynetica (AI)"
 - Output plain HTML using only <p> and <strong> tags. No markdown, no headings, no lists, no links, no scripts.`;
 
-  const systemPrompt = paid ? `You write short, personalised results for a paid ($7) "Automation Leak Finder" variant of a 9-question "Automation Readiness Assessment" taken by owners of small service businesses (HVAC, plumbing, electrical, dental, landscaping, agencies). You are writing as Daniel Kane, the AI that runs Kynetica.
+  const systemPrompt = paid ? `You write short, personalised results for a paid ($7) "Automation Leak Finder" variant of a 9-question "Nine-Question Leak Trace" assessment taken by owners of small service businesses (HVAC, plumbing, electrical, dental, landscaping, agencies). You are writing as Daniel Kane, the AI that runs Kynetica.
 
 ${baseRules}
+- Open the entire output by restating their described task in their own words, in one sentence, before any analysis (e.g. "You told us the task eating your week is ___.").
 - Total length: the standard section (180-250 words) PLUS a second section (380-500 words) headed exactly "Your Leak Finder breakdown".
-- Standard section structure exactly: (1) a short behavioural portrait paragraph matching their tier — write as if describing THEM specifically, not a generic score band; (2) a paragraph headed "Your biggest leak" that addresses THEIR free-text task specifically, names one concrete automation approach using tools a small business like theirs plausibly already owns (email, calendar, spreadsheets, their booking/CRM software, Zapier/Make-style connectors), and gives one rough hours/week estimate CLEARLY labelled as an estimate/guess, not a fact; (3) exactly ONE next step, one sentence, concrete and doable this week without buying anything.
-- The "Your Leak Finder breakdown" section must, in order: (a) decompose their named task into its concrete steps; (b) state which of those steps are automatable and, for each, the CATEGORY of tool they plausibly already own that could do it (email, calendar, spreadsheet, booking/CRM software, Zapier/Make-style connector) — never a specific named product/model; (c) give a rough setup-effort estimate in hours, clearly labelled as an estimate; (d) give a rough weekly-hours-recovered range, clearly labelled as an estimate, not a promise; (e) name two more secondary leaks inferred from their 9 answers (not the named task), each one sentence.
-- Sign off ONCE at the very end of the whole output (not after each section).` : `You write short, personalised results for a free 9-question "Automation Readiness Assessment" taken by owners of small service businesses (HVAC, plumbing, electrical, dental, landscaping, agencies). You are writing as Daniel Kane, the AI that runs Kynetica.
+- Standard section structure exactly: (1) a behavioural portrait paragraph that opens on ONE concrete detail from their actual answers (a specific answer they gave, or a specific word from their task description) — never open with a category description of their tier; (2) a paragraph headed "Your biggest leak" that addresses THEIR free-text task specifically: it must reference the actual nouns/objects/tools/people named in their task description (e.g. if they wrote "paper tickets" and "invoicing software", the automation approach must name those same things, not a generic substitute), name one concrete automation approach using tools a small business like theirs plausibly already owns (email, calendar, spreadsheets, their booking/CRM software, Zapier/Make-style connectors), and give one rough hours/week estimate CLEARLY labelled as an estimate/guess, not a fact; (3) exactly ONE next step that is SPECIFIC to their named task (must contain at least one noun from their task description) and doable this week without buying anything — generic tips like "write down your process" or "map your workflow" without reference to their specific task are banned.
+- The "Your Leak Finder breakdown" section must, in order: (a) decompose THEIR named task into its concrete steps, using the task's own nouns; (b) state which of those steps are automatable and, for each, the CATEGORY of tool they plausibly already own that could do it (email, calendar, spreadsheet, booking/CRM software, Zapier/Make-style connector) — never a specific named product/model; (c) give a rough setup-effort estimate in hours, clearly labelled as an estimate; (d) give a rough weekly-hours-recovered range, clearly labelled as an estimate, not a promise; (e) name two more secondary leaks inferred from their 9 answers (not the named task), each one sentence.
+- Sign off ONCE at the very end of the whole output (not after each section).` : `You write short, personalised results for a free 9-question "Nine-Question Leak Trace" assessment taken by owners of small service businesses (HVAC, plumbing, electrical, dental, landscaping, agencies). You are writing as Daniel Kane, the AI that runs Kynetica.
 
 ${baseRules}
+- Open the entire output by restating their described task in their own words, in one sentence, before any analysis (e.g. "You told us the task eating your week is ___.").
 - 180-250 words total.
-- Structure exactly: (1) a short behavioural portrait paragraph matching their tier — write as if describing THEM specifically, not a generic score band; (2) a paragraph headed "Your biggest leak" that addresses THEIR free-text task specifically, names one concrete automation approach using tools a small business like theirs plausibly already owns (email, calendar, spreadsheets, their booking/CRM software, Zapier/Make-style connectors), and gives one rough hours/week estimate CLEARLY labelled as an estimate/guess, not a fact; (3) exactly ONE next step, one sentence, concrete and doable this week without buying anything.`;
+- Structure exactly: (1) a behavioural portrait paragraph that opens on ONE concrete detail from their actual answers (a specific answer they gave, or a specific word from their task description) — never open with a category description of their tier; (2) a paragraph headed "Your biggest leak" that addresses THEIR free-text task specifically: it must reference the actual nouns/objects/tools/people named in their task description (e.g. if they wrote "paper tickets" and "invoicing software", the automation approach must name those same things, not a generic substitute), name one concrete automation approach using tools a small business like theirs plausibly already owns (email, calendar, spreadsheets, their booking/CRM software, Zapier/Make-style connectors), and give one rough hours/week estimate CLEARLY labelled as an estimate/guess, not a fact; (3) exactly ONE next step that is SPECIFIC to their named task (must contain at least one noun from their task description) and doable this week without buying anything — generic tips like "write down your process" or "map your workflow" without reference to their specific task are banned.`;
 
   const answersNote = paid ? ' They have paid for the Leak Finder breakdown; use all 9 answer values plus their team size and trade to infer two secondary leaks beyond the named task.' : '';
   const userPrompt = `Score: ${score}/18. Tier: ${TIER_LABEL[tier]}. Trade: ${trade || 'not given'}. Team size: ${teamSize || 'not given'}. Their described task that eats their week: "${task}".${answersNote}`;
@@ -196,35 +198,36 @@ export async function emailResult(record, resultHtml, ctaUrl) {
     ctaBlock = `
     <div style="margin:28px 0;padding:20px;background:#f5f7fa;border-radius:10px">
       <p style="margin:0 0 12px;font-weight:700">We'll find at least $1,000 a year in recoverable time and cost in your business, or the audit is free.</p>
-      <p style="margin:0 0 16px;color:#555">The assessment guessed from nine answers. The audit reads your actual website, booking flow and back-office, and prices every leak it finds.</p>
+      <p style="margin:0 0 16px;color:#555">The breakdown above worked one task, the one you named. The audit reads your actual website, booking flow and back office, and prices every leak it finds there.</p>
       <a href="${AUDIT_STRIPE_LINK}" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:700">Order the $249 Automation Audit</a>
-      <p style="margin:12px 0 0;color:#777;font-size:14px">Delivered by email within 48 hours.</p>
+      <p style="margin:12px 0 0;color:#777;font-size:14px">Delivered by email within 48 hours. Not a call, not a demo, not a retainer.</p>
     </div>`;
   } else {
     ctaBlock = `
     <div style="margin:28px 0;padding:20px;background:#f5f7fa;border-radius:10px">
-      <p style="margin:0 0 12px;font-weight:700">Want the full breakdown of that one task?</p>
-      <p style="margin:0 0 16px;color:#555">Placeholder line: one tap unlocks the full written breakdown for $7 — no forms, no re-answering.</p>
-      <a href="${ctaUrl}" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:700">Unlock the full breakdown — $7</a>
+      <p style="margin:0 0 12px;font-weight:700">This result guessed at one fix for the task you named. It hasn't actually worked the problem yet.</p>
+      <p style="margin:0 0 16px;color:#555">For $7, the full breakdown decomposes that task into its steps, names what's automatable with tools you likely already own, gives labelled hours estimates, and names two more leaks from your other answers. One tap, nothing to re-enter.</p>
+      <a href="${ctaUrl}" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:700">Unlock the full breakdown: $7</a>
     </div>`;
   }
 
   const html = `
   <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:600px;margin:0 auto;color:#1a1d24;line-height:1.6">
-    <h2 style="margin:0 0 8px">Your Automation Readiness result: ${record.score}/18</h2>
+    <h2 style="margin:0 0 8px">Your Leak Trace result: ${record.score}/18</h2>
     <p style="color:#555;margin:0 0 20px">Tier: ${escapeHtml(TIER_LABEL[record.tier])}</p>
     <div>${resultHtml}</div>
     ${ctaBlock}
     <p style="color:#999;font-size:12px;margin-top:32px">
       This result was generated by AI (Daniel Kane, Kynetica) based only on the answers you gave. No claims of past results, testimonials, or guaranteed savings are made here.<br>
-      Kynetica LLC · 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131<br>
+      Kynetica LLC. 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131<br>
       <a href="mailto:info@kynetica.one?subject=unsubscribe">Unsubscribe</a>
     </p>
   </div>`;
 
   const subject = record.paid
-    ? `Your Automation Leak Finder breakdown: ${record.score}/18`
-    : `Your Automation Readiness result: ${record.score}/18`;
+    ? `Your Leak Finder breakdown is ready: ${record.score}/18`
+    : `Your Leak Trace result: the leak in "${record.task ? record.task.slice(0, 40) : 'your week'}"`;
+
 
   const resp = await fetch('https://api.resend.com/emails', {
     method: 'POST',
