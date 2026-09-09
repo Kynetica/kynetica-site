@@ -29,6 +29,9 @@
     },
     "api/assess.js": {
       "maxDuration": 30
+    },
+    "api/audit.js": {
+      "maxDuration": 30
     }
   }
 }

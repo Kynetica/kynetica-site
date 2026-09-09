@@ -58,20 +58,9 @@ export function genCompletionId() {
 }
 
 export function fallbackResult(score, tier, task, trade) {
-  const label = TIER_LABEL[tier];
-  const bodies = {
-    'flying-blind': `You're running the business by feel right now: most of your week gets decided by whatever's loudest, not by a system. That's normal at this stage; it's also exactly why hours disappear without a clear explanation.`,
-    'aware-but-leaking': `You can see where the time goes, but a chunk of it is still being spent twice: retyping something you already typed, re-checking something you already checked, chasing a reply that should have arrived on its own.`,
-    'ready-to-automate': `You already track your time and your tools well enough to know where the friction is. The gap now isn't awareness. It's that the fixing hasn't happened yet, even though the pieces you'd need are probably already in your account.`,
-  };
-  const taskLine = task
-    ? `You told us the task that eats your week is: "${task}". That's a concrete, recurring task, which usually means it's automatable with the tools you already have, once it's mapped out step by step.`
-    : `You didn't name a specific task, which itself is worth noticing: it's hard to fix a leak you haven't pinned down yet.`;
   const html = [
-    `<p><strong>${escapeHtml(label)} (${score}/18)</strong></p>`,
-    `<p>${escapeHtml(bodies[tier])}</p>`,
-    `<p><strong>Your biggest leak.</strong> ${escapeHtml(taskLine)} A rough estimate: tasks like this often run 2-6 hours a week depending on volume. That's an estimate, not a measurement of your business specifically.</p>`,
-    `<p><strong>Next step.</strong> Write down, in order, every click and message that task takes you from start to finish. That list is the map an automation would follow.</p>`,
+    `<p>You told us the task eating your week is: ${escapeHtml(task)}.</p>`,
+    `<p>The detailed read of that task did not complete just now. I'm not going to hand you a generic answer instead. Reply to this email and I will write it by hand and send it back.</p>`,
     `<p>Daniel Kane, Kynetica (AI)</p>`,
   ].join('\n');
   return html;
@@ -80,7 +69,7 @@ export function fallbackResult(score, tier, task, trade) {
 export function paidFallbackResult(score, tier, task, trade) {
   const base = fallbackResult(score, tier, task, trade).replace(
     '<p>Daniel Kane, Kynetica (AI)</p>',
-    `<p>Your paid Leak Finder breakdown couldn't be generated automatically. Sorry about that. Daniel will personally put together your full breakdown and email it to you within 24 hours.</p>\n<p>Daniel Kane, Kynetica (AI)</p>`
+    `<p>You paid $7 for the full breakdown and it did not generate just now. I will write it by hand and email it to you within 24 hours. If it is not in your inbox by then, reply to this email.</p>\n<p>Daniel Kane, Kynetica (AI)</p>`
   );
   return base;
 }
@@ -101,10 +90,11 @@ export async function callGrok(score, tier, task, trade, teamSize, paid) {
 
 ${baseRules}
 - Open the entire output by restating their described task in their own words, in one sentence, before any analysis (e.g. "You told us the task eating your week is ___.").
-- Total length: the standard section (180-250 words) PLUS a second section (380-500 words) headed exactly "Your Leak Finder breakdown".
+- Total length: the standard section (180-250 words) PLUS a second section (380-500 words) headed exactly "The full breakdown".
 - Standard section structure exactly: (1) a behavioural portrait paragraph that opens on ONE concrete detail from their actual answers (a specific answer they gave, or a specific word from their task description) — never open with a category description of their tier; (2) a paragraph headed "Your biggest leak" that addresses THEIR free-text task specifically: it must reference the actual nouns/objects/tools/people named in their task description (e.g. if they wrote "paper tickets" and "invoicing software", the automation approach must name those same things, not a generic substitute), name one concrete automation approach using tools a small business like theirs plausibly already owns (email, calendar, spreadsheets, their booking/CRM software, Zapier/Make-style connectors), and give one rough hours/week estimate CLEARLY labelled as an estimate/guess, not a fact; (3) exactly ONE next step that is SPECIFIC to their named task (must contain at least one noun from their task description) and doable this week without buying anything — generic tips like "write down your process" or "map your workflow" without reference to their specific task are banned.
-- The "Your Leak Finder breakdown" section must, in order: (a) decompose THEIR named task into its concrete steps, using the task's own nouns; (b) state which of those steps are automatable and, for each, the CATEGORY of tool they plausibly already own that could do it (email, calendar, spreadsheet, booking/CRM software, Zapier/Make-style connector) — never a specific named product/model; (c) give a rough setup-effort estimate in hours, clearly labelled as an estimate; (d) give a rough weekly-hours-recovered range, clearly labelled as an estimate, not a promise; (e) name two more secondary leaks inferred from their 9 answers (not the named task), each one sentence.
-- Sign off ONCE at the very end of the whole output (not after each section).` : `You write short, personalised results for a free 9-question "Nine-Question Leak Trace" assessment taken by owners of small service businesses (HVAC, plumbing, electrical, dental, landscaping, agencies). You are writing as Daniel Kane, the AI that runs Kynetica.
+- The "The full breakdown" section must, in order: (a) decompose THEIR named task into its concrete steps, using the task's own nouns; (b) state which of those steps are automatable and, for each, the CATEGORY of tool they plausibly already own that could do it (email, calendar, spreadsheet, booking/CRM software, Zapier/Make-style connector) — never a specific named product/model; (c) give a rough setup-effort estimate in hours, clearly labelled as an estimate; (d) give a rough weekly-hours-recovered range, clearly labelled as an estimate, not a promise; (e) name two more secondary leaks inferred from their 9 answers (not the named task), each one sentence.
+- Sign off ONCE at the very end of the whole output (not after each section).
+- Keep the same plain first-person voice in the breakdown section as in the opening; no report register, no headings inside paragraphs, no lists.` : `You write short, personalised results for a free 9-question "Nine-Question Leak Trace" assessment taken by owners of small service businesses (HVAC, plumbing, electrical, dental, landscaping, agencies). You are writing as Daniel Kane, the AI that runs Kynetica.
 
 ${baseRules}
 - Open the entire output by restating their described task in their own words, in one sentence, before any analysis (e.g. "You told us the task eating your week is ___.").
@@ -124,7 +114,7 @@ ${baseRules}
       const resp = await fetch('https://api.x.ai/v1/chat/completions', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${key}`,
+          Authorization: *** ${key}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -160,7 +150,7 @@ export async function appendCompletionLine(line) {
   if (!token || !repo) return { stored: false, reason: 'gh_not_configured' };
   const apiBase = `https://api.github.com/repos/${repo}/contents/${filePath}`;
   const headers = {
-    Authorization: `Bearer ${token}`,
+    Authorization: *** ${token}`,
     'User-Agent': 'kynetica-assess',
     Accept: 'application/vnd.github+json',
   };
@@ -198,41 +188,53 @@ export async function emailResult(record, resultHtml, ctaUrl) {
   if (record.paid) {
     ctaBlock = `
     <div style="margin:28px 0;padding:20px;background:#f5f7fa;border-radius:10px">
-      <p style="margin:0 0 12px;font-weight:700">We'll find at least $1,000 a year in recoverable time and cost in your business, or the audit is free.</p>
-      <p style="margin:0 0 16px;color:#555">The breakdown above worked one task, the one you named. The audit reads your actual website, booking flow and back office, and prices every leak it finds there.</p>
-      <a href="${AUDIT_STRIPE_LINK}" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:700">Order the $249 Automation Audit</a>
-      <p style="margin:12px 0 0;color:#777;font-size:14px">Delivered by email within 48 hours. Not a call, not a demo, not a retainer.</p>
+      <p style="margin:0 0 12px;color:#333">If you want the whole business read the same way: the Automation Audit reads your website, booking flow and back office and prices every leak it finds. Written report, 6 to 10 pages, top 5 opportunities ranked, ROI estimate each, step-by-step plan naming the tools. By email within 48 hours of checkout.</p>
+      <p style="margin:0 0 16px;font-weight:700">One term, no fine print: we find at least $1,000 a year in recoverable time and cost in your business, or the audit is free. You tell us; we refund.</p>
+      <form method="POST" action="https://kynetica.one/api/audit" style="margin:0">
+        <input type="hidden" name="paid_session" value="${escapeHtml(record.stripe_session_id || '')}">
+        <input type="hidden" name="completion_id" value="${escapeHtml(record.completion_id || '')}">
+        <input type="hidden" name="score" value="${escapeHtml(record.score)}">
+        <input type="hidden" name="tier" value="${escapeHtml(record.tier || '')}">
+        <input type="hidden" name="task" value="${escapeHtml(record.task || '')}">
+        <input type="hidden" name="trade" value="${escapeHtml(record.trade || '')}">
+        <input type="hidden" name="teamSize" value="${escapeHtml(record.teamSize || '')}">
+        <input type="hidden" name="email" value="${escapeHtml(record.email || '')}">
+        <input type="hidden" name="answers" value="${escapeHtml(JSON.stringify(record.answers || []))}">
+        <input type="hidden" name="utm" value="${escapeHtml(JSON.stringify(record.utm || {}))}">
+        <button type="submit" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;border:none;text-decoration:none;font-weight:700;font-size:16px;cursor:pointer;font-family:inherit">Order the $249 Automation Audit</button>
+      </form>
+      <p style="margin:12px 0 0;color:#777;font-size:14px">Not a call, not a demo, not a retainer. We already have your answers; you won't be asked for them again.</p>
     </div>`;
   } else {
     ctaBlock = `
     <div style="margin:28px 0;padding:20px;background:#f5f7fa;border-radius:10px">
-      <p style="margin:0 0 12px;font-weight:700">This result guessed at one fix for the task you named. It hasn't actually worked the problem yet.</p>
-      <p style="margin:0 0 16px;color:#555">For $7, the full breakdown decomposes that task into its steps, names what's automatable with tools you likely already own, gives labelled hours estimates, and names two more leaks from your other answers. One tap, nothing to re-enter.</p>
+      <p style="margin:0 0 12px;color:#333">This is saved and yours to keep.</p>
+      <p style="margin:0 0 16px;color:#555">If you want the task you named worked step by step: the full breakdown lays out every step, marks which ones you can automate with what you likely already own, puts labelled estimates on setup effort and hours a week, and writes up two more things it saw in your answers.</p>
       <a href="${ctaUrl}" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:700">Unlock the full breakdown: $7</a>
+      <p style="margin:12px 0 0;color:#777;font-size:14px">One tap. Nothing to re-enter; this link already carries your answers.</p>
     </div>`;
   }
 
   const html = `
   <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:600px;margin:0 auto;color:#1a1d24;line-height:1.6">
-    <h2 style="margin:0 0 8px">Your Leak Trace result: ${record.score}/18</h2>
-    <p style="color:#555;margin:0 0 20px">Tier: ${escapeHtml(TIER_LABEL[record.tier])}</p>
+    <h2 style="margin:0 0 20px">${record.paid ? 'Your full breakdown, written from your nine answers and the task you named' : 'Your result, written from your nine answers'}</h2>
     <div>${resultHtml}</div>
     ${ctaBlock}
     <p style="color:#999;font-size:12px;margin-top:32px">
-      This result was generated by AI (Daniel Kane, Kynetica) based only on the answers you gave. No claims of past results, testimonials, or guaranteed savings are made here.<br>
+      Written by an AI (Daniel Kane, Kynetica) from the answers you gave and nothing else. Estimates are estimates. No claims of past results or guaranteed savings are made here.<br>
       Kynetica LLC. 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131<br>
       <a href="mailto:info@kynetica.one?subject=unsubscribe">Unsubscribe</a>
     </p>
   </div>`;
 
   const subject = record.paid
-    ? `Your Leak Finder breakdown is ready: ${record.score}/18`
-    : `Your Leak Trace result: the leak in "${record.task ? record.task.slice(0, 40) : 'your week'}"`;
+    ? `Your full breakdown is ready`
+    : `Your result: the leak in "${record.task ? record.task.slice(0, 40) : 'your week'}"`;
 
 
   const resp = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: *** ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: 'Daniel Kane <daniel@mail.kynetica.one>',
       to: [record.email],
@@ -265,7 +267,7 @@ export async function notifyOwner(record) {
   ].filter(Boolean);
   const resp = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: *** ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: 'Kynetica Assessments <daniel@mail.kynetica.one>',
       to: ['info@kynetica.one'],
@@ -385,7 +387,7 @@ export function stripeAuthHeader() {
 
 export async function stripeGet(path) {
   const resp = await fetch(`https://api.stripe.com/v1/${path}`, {
-    headers: { Authorization: stripeAuthHeader() },
+    headers: { Authorization: stripe...er() },
   });
   const data = await resp.json().catch(() => ({}));
   return { ok: resp.ok, status: resp.status, data };
@@ -395,7 +397,7 @@ export async function stripePost(path, params) {
   const resp = await fetch(`https://api.stripe.com/v1/${path}`, {
     method: 'POST',
     headers: {
-      Authorization: stripeAuthHeader(),
+      Authorization: stripe...r(),
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: toFormBody(params),
