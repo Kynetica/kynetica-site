@@ -101,7 +101,9 @@ async function retrieveAndDeliver(sessionId) {
     }
   }
 
-  return { paid: true, score, tier, html: resultHtml };
+  return { paid: true, score, tier, html: resultHtml,
+    record: { completion_id: rec.completion_id, score, tier, task: rec.task, trade: rec.trade, teamSize: rec.teamSize,
+              email: session.customer_details?.email || rec.email, answers: rec.answers, utm: rec.utm } };
 }
 
 export default async function handler(req, res) {

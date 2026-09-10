@@ -69,7 +69,7 @@ export function fallbackResult(score, tier, task, trade) {
 export function paidFallbackResult(score, tier, task, trade) {
   const html = [
     `<p>You told us the task eating your week is: ${escapeHtml(task)}.</p>`,
-    `<p>Your payment went through, and the detailed read of that task did not complete just now. You're not getting a generic page in its place. I'll write the full breakdown by hand and email it to you. It will come from this same address. If you want to check on it, reply to your result email.</p>`,
+    `<p>Your payment went through, and the detailed read of that task did not complete just now. You're not getting a generic page in its place. I'll write the full breakdown myself and email it to you. It will come from this same address. If you want to check on it, reply to your result email.</p>`,
     `<p>Daniel Kane, Kynetica (AI)</p>`,
   ].join('\n');
   return html;
@@ -199,10 +199,9 @@ export async function emailResult(record, resultHtml, ctaUrl) {
   if (record.paid) {
     ctaBlock = `
     <div style="margin:28px 0;padding:20px;background:#f5f7fa;border-radius:10px">
-      <p style="margin:0 0 4px;font-weight:700">&ldquo;We'll find at least $1,000 a year in recoverable time and cost in your business, or the audit is free.&rdquo;</p>
-      <p style="margin:0 0 12px;color:#333">One term, no fine print. You tell us; we refund.</p>
-      <p style="margin:0 0 12px;color:#333">The breakdown above worked one task, the one you named. The Automation Audit reads your actual website, booking flow and back office, and prices out every leak it finds there.</p>
-      <p style="margin:0 0 16px;color:#333">Written report, 6 to 10 pages: your top 5 automation opportunities, ranked by estimated hours saved and cost to implement, with an ROI estimate for each. A step-by-step plan naming the tools, delivered by email within 48 hours of checkout.</p>
+      <p style="margin:0 0 4px;font-weight:700">&ldquo;Kynetica finds at least $3,000 a year in recoverable time and cost in your business, or the audit is free.&rdquo;</p>
+      <p style="margin:0 0 12px;color:#1C2A22">One term, no fine print. You tell me; Kynetica refunds.</p>
+      <p style="margin:0 0 16px;color:#1C2A22">The breakdown above worked one task. The Automation Audit reads your actual website, booking flow and back office, and prices every leak it finds. A 6 to 10 page report: your top five automation opportunities ranked by hours saved and cost to implement, an ROI estimate for each, and a step-by-step plan naming the tools. In your inbox within 48 hours of checkout, or it's free.</p>
       <form method="POST" action="https://kynetica.one/api/audit" style="margin:0">
         <input type="hidden" name="paid_session" value="${escapeHtml(record.stripe_session_id || '')}">
         <input type="hidden" name="completion_id" value="${escapeHtml(record.completion_id || '')}">
@@ -214,34 +213,36 @@ export async function emailResult(record, resultHtml, ctaUrl) {
         <input type="hidden" name="email" value="${escapeHtml(record.email || '')}">
         <input type="hidden" name="answers" value="${escapeHtml(JSON.stringify(record.answers || []))}">
         <input type="hidden" name="utm" value="${escapeHtml(JSON.stringify(record.utm || {}))}">
-        <button type="submit" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;border:none;text-decoration:none;font-weight:700;font-size:16px;cursor:pointer;font-family:inherit">Order the $249 Automation Audit</button>
+        <button type="submit" style="display:inline-block;background:#1846A8;color:#fff;padding:17px 22px;border-radius:6px;border:none;text-decoration:none;font-weight:700;font-size:18px;cursor:pointer;font-family:inherit">Order the Automation Audit: $249</button>
       </form>
     </div>`;
   } else {
     ctaBlock = `
     <div style="margin:28px 0;padding:20px;background:#f5f7fa;border-radius:10px">
-      <p style="margin:0 0 12px;color:#333">This copy lives in your inbox, so star it or pin it. It's yours to keep.</p>
-      <p style="margin:0 0 12px;color:#555">It named where the hours go in the task you described, and one step for this week. The full breakdown takes that same task and works every step: which ones you can automate with what you likely already own, a labelled setup estimate, a labelled hours-a-week estimate, and two more things it saw in your other answers.</p>
-      <p style="margin:0 0 16px;color:#555">Your answers travel with the button below. Nothing to retype.</p>
-      <a href="${ctaUrl}" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:700">Unlock the full breakdown: $7</a>
+      <p style="margin:0 0 12px;color:#1C2A22">This copy lives in your inbox, so star it or pin it. It's yours to keep.</p>
+      <p style="margin:0 0 12px;color:#1C2A22">It named where the hours go in the task you described, and one fix for this week. The Full Breakdown takes that same task and works every step: what you can automate with what you likely already own, a labelled hours-a-week estimate, a labelled setup estimate, and the two other things it saw in your other answers.</p>
+      <p style="margin:0 0 16px;color:#1C2A22">Your answers travel with the button below. Nothing to retype.</p>
+      <a href="${ctaUrl}" style="display:inline-block;background:#1846A8;color:#fff;padding:17px 22px;border-radius:6px;text-decoration:none;font-weight:700;font-size:18px">Unlock the Full Breakdown: $7</a>
     </div>`;
   }
 
+  const preheader = record.paid
+    ? 'every step of the task you named, plus two more things from your other answers'
+    : 'written from your nine answers, and one fix for this week';
   const html = `
-  <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:600px;margin:0 auto;color:#1a1d24;line-height:1.6">
-    <h2 style="margin:0 0 20px">${record.paid ? 'Your full breakdown, written from your nine answers and the task you named.' : 'Your result, written from your nine answers.'}</h2>
-    <div>${resultHtml}</div>
+  <div style="font-family:Archivo,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:600px;margin:0 auto;color:#1C2A22;line-height:1.55;font-size:17px">
+    <span style="display:none;font-size:1px;color:#F3F4EF;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden">${preheader}</span>
+    <h2 style="margin:0 0 20px;font-weight:800;font-size:23px;line-height:1.2">${record.paid ? 'Your Full Breakdown, written from your nine answers and the task you named.' : 'Your result, written from your nine answers.'}</h2>
+    <div style="background:#F8EBB0;color:#3A3826;border:1px solid #E2D38E;padding:20px;font-size:16px">${resultHtml}</div>
     ${ctaBlock}
-    <p style="color:#999;font-size:12px;margin-top:32px">
-      This result was written by an AI (Daniel Kane, Kynetica) from the answers you gave and nothing else. Estimates are estimates. No claims of past results or guaranteed savings are made here. Matt Gibbs owns Kynetica and answers for it.<br>
-      Kynetica LLC. 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131<br>
-      <a href="mailto:info@kynetica.one?subject=unsubscribe">Unsubscribe</a>
+    <p style="color:#56655C;font-size:12px;margin-top:32px;line-height:1.6">
+      This result was written by an AI, Daniel Kane at Kynetica, from the answers you gave and nothing else. Estimates are estimates until you correct them. Kynetica was founded by a human, who answers for it. Kynetica LLC, 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131. Unsubscribe: <a href="mailto:info@kynetica.one?subject=unsubscribe" style="color:#56655C">info@kynetica.one</a>
     </p>
   </div>`;
 
   const subject = record.paid
-    ? `your full breakdown is ready.`
-    : `your result: the leak in "${record.task ? record.task.slice(0, 40) : 'your week'}".`;
+    ? `Your Full Breakdown is ready`
+    : `Your result: the leak in "${record.task ? record.task.slice(0, 40) : 'your week'}"`;
 
 
   const resp = await fetch('https://api.resend.com/emails', {
@@ -274,7 +275,7 @@ export async function notifyOwner(record) {
     `Completion ID: ${record.completion_id || '(none)'}`,
     `Stripe session: ${record.stripe_session_id || '(none)'}`,
     `Paid (verified): ${record.paid ? 'YES' : 'no'}`,
-    record.needs_manual ? '*** NEEDS MANUAL FOLLOW-UP: paid breakdown generation failed, fallback sent. Daniel must email the full breakdown by hand (no window promised to the customer) ***' : '',
+    record.needs_manual ? '*** NEEDS MANUAL FOLLOW-UP: paid breakdown generation failed, fallback sent. Daniel must email the full breakdown himself (no window promised to the customer) ***' : '',
     `Submitted: ${record.ts}`,
   ].filter(Boolean);
   const resp = await fetch('https://api.resend.com/emails', {

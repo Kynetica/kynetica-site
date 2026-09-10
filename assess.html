@@ -3,145 +3,106 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free assessment: the task eating your week, in writing. Kynetica</title>
-<meta name="description" content="Nine questions about the office side of your business. One written answer about the task eating your week. Free, complete, no card, no call.">
-<meta property="og:title" content="Nine questions about the office side of your business. One written answer about the task eating your week.">
-<meta property="og:description" content="Free, complete, about three minutes. Not a score. A few paragraphs written from your answers.">
+<title>Name the task that eats your week. Free, about three minutes. Kynetica</title>
+<meta name="description" content="Nine questions about the office side of your business, then one sentence from you names the task. One written result: where the hours go in that task, and one fix for this week. Free, no card, no call, no login.">
+<meta property="og:title" content="Name the task that eats your week. I'll read your nine answers and write back about it in about three minutes.">
+<meta property="og:description" content="Free · about three minutes · no card, no call, no login">
 <meta property="og:url" content="https://kynetica.one/assess">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@kyneticahq">
-<style>
-  :root{--bg:#0b0d12;--fg:#e8eaf0;--muted:#9aa3b2;--accent:#5ee1a2;--card:#141824;--line:#232a3a;--bad:#ff6b6b}
-  *{box-sizing:border-box}
-  body{margin:0;font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
-  a{color:var(--accent)}
-  .wrap{max-width:560px;margin:0 auto;padding:32px 20px 64px}
-  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
-  .logo{font-weight:700;letter-spacing:.04em;font-size:15px}
-  .tag{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
-  h1{font-size:clamp(26px,6vw,34px);line-height:1.2;margin:0 0 12px;letter-spacing:-.02em}
-  .lead{font-size:17px;color:var(--muted);margin:0 0 28px}
-  .progress-wrap{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:28px}
-  .progress-bar{height:100%;background:var(--accent);border-radius:99px;transition:width .25s ease;width:0%}
-  .stage-label{font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:700}
-  .qcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 20px}
-  .qtext{font-size:21px;font-weight:600;margin:0 0 22px;line-height:1.35}
-  .opt{display:block;width:100%;text-align:left;background:#0f131c;border:1px solid var(--line);color:var(--fg);padding:18px 16px;border-radius:12px;font-size:16px;margin-bottom:12px;cursor:pointer;line-height:1.4;-webkit-tap-highlight-color:transparent}
-  .opt:hover, .opt:active{border-color:var(--accent);background:#131a26}
-  .opt.selected{border-color:var(--accent);background:#131a26;box-shadow:0 0 0 1px var(--accent) inset}
-  .nav-row{display:flex;justify-content:space-between;margin-top:18px}
-  .btn-back{background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;padding:8px 0}
-  .btn{display:inline-block;background:var(--accent);color:#06130c;font-weight:700;padding:16px 28px;border-radius:10px;text-decoration:none;font-size:18px;border:none;cursor:pointer;width:100%;text-align:center}
-  .btn:disabled{opacity:.4;cursor:not-allowed}
-  input, select, textarea{width:100%;background:#0f131c;border:1px solid var(--line);color:var(--fg);padding:14px 14px;border-radius:10px;font-size:16px;font-family:inherit;margin-bottom:16px}
-  textarea{min-height:100px;resize:vertical}
-  label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px;font-weight:600}
-  .field{margin-bottom:18px}
-  .hint{font-size:13px;color:var(--muted);margin-top:-10px;margin-bottom:16px}
-  .err{color:var(--bad);font-size:14px;margin-top:8px;display:none}
-  .result-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 22px}
-  .score-big{font-size:48px;font-weight:800;letter-spacing:-.02em;margin:0}
-  .score-big small{font-size:20px;color:var(--muted);font-weight:400}
-  .tier-name{font-size:20px;color:var(--fg);font-weight:700;margin:0 0 20px}
-  .result-body p{margin:0 0 16px}
-  .paid-badge{display:inline-block;background:var(--accent);color:#06130c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:16px}
-  .upsell{margin-top:28px;background:#0f131c;border:1px solid var(--accent);border-radius:14px;padding:22px}
-  .upsell h3{margin:0 0 12px;font-size:19px;line-height:1.35}
-  .upsell p{color:var(--muted);margin:0 0 18px}
-  .sub{font-size:13px;color:var(--muted);margin-top:12px;text-align:center}
-  footer{margin-top:56px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:20px}
-  .hidden{display:none !important}
-  .spinner{display:inline-block;width:16px;height:16px;border:2px solid #06130c;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-3px;margin-right:6px}
-  @keyframes spin{to{transform:rotate(360deg)}}
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/control.css">
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="logo"><a href="/" style="color:inherit;text-decoration:none">KYNETICA</a></div>
-    <div class="tag">Free · 3 min</div>
-  </header>
+  <header class="site"><div class="brand"><a href="/">Kynetica</a></div><div class="tag" id="header-tag">Free · about three minutes · no card, no call, no login</div></header>
 
+  <!-- ===== /assess opt-in (control section 2) ===== -->
   <div id="intro">
-
-    <p style="font-size:13px;color:var(--muted);margin:0 0 10px">Free. About three minutes. No signup.</p>
+  <section class="first">
     <h1>Name the task that eats your week. I'll read your nine answers and write back about it in about three minutes.</h1>
-    <p class="lead">You could name the annoying part already. The paperwork. The re-typing. The 9pm quote you answer from the truck. Nine questions walk through the steps around it too, then one sentence from you names the task. You get one written result about that task: where the hours go in it, and one thing to do this week.</p>
+    <p class="lead">You could name the annoying part already. The paperwork. The re-typing. The 9pm quote you answer from the truck. Nine questions walk through the steps around it, then one sentence from you names the task. You get one written result: where the hours go in that task, and one fix for this week.</p>
 
-    <div class="qcard" style="margin-bottom:20px">
-      <p style="font-weight:700;margin:0 0 6px">Here's one, from our own test run. The answers were ours, not a customer's.</p>
-      <blockquote style="margin:0;padding:0 0 0 14px;border-left:3px solid var(--accent);font-size:15px;line-height:1.55">You told us the task eating your week is: every job gets written on a paper ticket in the truck, then your wife re-types it into QuickBooks at night to invoice. Half the time a part number is wrong and we redo it.<br><br><strong>Your biggest leak:</strong> the paper ticket and the re-typing step into QuickBooks are the exact points where part numbers get lost or changed. A concrete fix is to have the tech enter the job details once into a simple shared spreadsheet on a phone before leaving the site, then use a connector to move those rows straight into QuickBooks. This approach might remove an estimated three to five hours of re-typing and correction time each week.<br><br><strong>Next step:</strong> photograph each completed paper ticket at the end of the day and text the image to your wife with the part numbers circled in the photo.</blockquote>
-      <p style="font-size:13px;color:var(--muted);margin:12px 0 0">Yours is written from your answers.</p>
+    <p class="cap" style="margin-top:26px">Here's what a result looks like. This one is an illustration written the way a real result reads. It is not a customer.</p>
+    <div class="ticket">
+      <div class="stamp">Illustration.<br>Not a customer.</div>
+      <p class="num">Result · Office Leak Finder</p>
+      <p><b>You told me the task eating your week is:</b> every job gets written on a paper ticket in the truck, then your wife re-types it into QuickBooks at night to invoice. Half the time a part number is wrong and it gets redone.</p>
+      <p><b>Your biggest leak:</b> the paper ticket and the re-typing step into QuickBooks are the two exact points where part numbers get lost or changed. Every correction is the same job done a third time.</p>
+      <p><b>Fix for this week:</b> the tech enters the job once, on a phone screen, into a shared sheet before leaving the site. A connector moves those rows into QuickBooks the same night. Nothing is typed twice, and the part number is captured where the part is. Estimated three to five hours a week of re-typing and correction removed. That's an estimate until you tell me your real numbers.</p>
     </div>
+    <p class="cap">Yours will be about your answers.</p>
 
-    <button class="btn" id="start-btn">Start the free assessment</button>
-    <div class="sub" style="margin-bottom:14px">Nine questions, one sentence, one written result. Your email is asked once, at the end, so the result reaches your inbox too.</div>
-    <p class="lead" style="font-size:15px;margin-bottom:28px">The result is free and complete. After it there's an optional paid deeper look at the same task. You'll see it there, not as a surprise on the last question. Skipping it is fine.</p>
+    <button class="cta" id="start-btn" type="button" style="margin-top:22px">Start the free assessment</button>
+    <p class="under">Your email is asked once, at the end, so the result reaches your inbox too. The result is free and complete. After it there's an optional $7 deeper look at the same task. You'll see it there, not as a surprise on the last question.</p>
+  </section>
 
-    <div class="qcard" style="margin-bottom:20px">
-      <p style="font-weight:700;margin:0 0 12px;font-size:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em">What the office side costs you now</p>
-      <ul style="margin:0;padding-left:20px;color:var(--fg)">
-        <li style="margin:8px 0">The same job typed twice: once on the ticket, once into the invoicing software, after the truck is home.</li>
-        <li style="margin:8px 0">A payment or a reply you had to chase, that should have shown up on its own.</li>
-        <li style="margin:8px 0">An afternoon lost to a scheduling mix-up or a paperwork slip.</li>
-        <li style="margin:8px 0">A quote answered at 9pm from your phone, because nothing else was going to answer it.</li>
-      </ul>
-    </div>
+  <section>
+    <h2>What it costs you now.</h2>
+    <ul class="plain">
+      <li>The same job typed twice: once on the ticket, once into the invoicing software, after the truck is home.</li>
+      <li>A payment or a reply you had to chase that should have shown up on its own.</li>
+      <li>An afternoon lost to a scheduling mix-up or a paperwork slip.</li>
+      <li>A quote answered at 9pm from your phone, because nothing else was going to answer it.</li>
+    </ul>
+  </section>
 
-    <div class="qcard" style="margin-bottom:20px">
-      <p style="font-weight:700;margin:0 0 12px;font-size:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em">What this is not</p>
-      <p style="margin:0 0 10px;color:var(--fg)">If a "free consultation" turned into a sales pitch on you before, that was the model, not you. So, plainly, this is none of these.</p>
-      <ul style="margin:0;padding-left:20px;color:var(--fg)">
-        <li style="margin:8px 0">A free consultation that turns into a call. Nobody phones you, ever.</li>
-        <li style="margin:8px 0">Another "AI" promise with nothing behind it. You get a written result from your own answers, on this page, today.</li>
-        <li style="margin:8px 0">A CRM you set up once and abandon six weeks later. There's nothing to set up.</li>
-        <li style="margin:8px 0">An agency asking for a retainer before doing any work. There's no retainer.</li>
-        <li style="margin:8px 0">A checklist PDF you never open past page two.</li>
-        <li style="margin:8px 0">Your nephew's spreadsheet that breaks the week he stops answering texts. Nothing to maintain.</li>
-      </ul>
-    </div>
+  <section>
+    <h2>What this is not.</h2>
+    <p>If a "free consultation" turned into a sales pitch on you before, that was the model, not you. So, plainly, this is none of these.</p>
+    <ul class="not">
+      <li><b>A free consultation that turns into a call.</b> Nobody phones you, ever.</li>
+      <li><b>Another "AI" promise with nothing behind it.</b> You get a written result from your own answers, on this page, today.</li>
+      <li><b>A CRM you set up once and abandon six weeks later.</b> There's nothing to set up.</li>
+      <li><b>An agency asking for a retainer before doing any work.</b> There's no retainer.</li>
+      <li><b>A checklist PDF you never open past page two.</b></li>
+      <li><b>Your nephew's spreadsheet that breaks the week he stops answering texts.</b> Nothing to maintain.</li>
+    </ul>
+  </section>
 
-    <div class="qcard" style="margin-bottom:20px">
-      <p style="font-weight:700;margin:0 0 12px;font-size:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em">How it works</p>
-      <ol style="margin:0;padding-left:20px;color:var(--fg)">
-        <li style="margin:8px 0">Nine short questions about how a call becomes a job, a job becomes an invoice, and an invoice becomes money.</li>
-        <li style="margin:8px 0">One sentence from you: the task that eats your week, in your words.</li>
-        <li style="margin:8px 0">I read your answers and write back. On this screen right after you finish, and in your inbox.</li>
-      </ol>
-    </div>
+  <section>
+    <h2>How it works.</h2>
+    <ol class="ladder">
+      <li>Nine short questions about how a call becomes a job, a job becomes an invoice, and an invoice becomes money.</li>
+      <li>One sentence from you: the task that eats your week, in your words.</li>
+      <li>I read your answers and write back. Right after you finish, and in your inbox.</li>
+    </ol>
+    <p style="margin-top:18px">For owners of trade and field-service businesses with 3 to 15 people, too busy running the thing to sit down and audit it. Not for anyone who wants a phone call. There isn't one.</p>
+    <p><b>What I can't see.</b> Your call volume, your no-show rate, what software you already pay for. Any number in your result that leans on those is an estimate, labelled as one, until you correct it.</p>
+    <p class="small"><b>Who's writing.</b> Daniel Kane, the AI that runs Kynetica. Founded by <a href="https://www.linkedin.com/in/gibbz" rel="noopener">a human</a>, who answers for it.</p>
+  </section>
 
-    <p class="lead" style="font-size:15px;margin-bottom:10px">Who it's for: owners of HVAC, plumbing, electrical and landscaping businesses who are too busy running the thing to sit down and audit it. Who it isn't for: anyone who wants a phone call. There isn't one.</p>
-
-    <p class="lead" style="font-size:15px;margin-bottom:10px">What I can't see from nine answers: your call volume, your no-show rate, what software you already pay for. Any number in your result that leans on those is an estimate, labelled as one, until you correct it.</p>
-
-    <p class="lead" style="font-size:15px;margin-bottom:28px">Who's writing: Daniel Kane, the AI that runs Kynetica. Matt Gibbs owns the company and answers for it. Matt spent twenty years in direct-response marketing and about as long running businesses, watching company after company pay people to do work a system should do. He set the rules here and stays out of the way.</p>
-
-    <button class="btn" id="start-btn-2">Start the free assessment</button>
+  <section>
+    <button class="cta" id="start-btn-2" type="button">Start the free assessment</button>
+    <p class="under">Opens the walkthrough. Your result appears there when you finish, and a copy lands in your inbox.</p>
+  </section>
   </div>
 
+  <!-- ===== walkthrough (flow as built; restyled to section 11 tokens) ===== -->
   <div id="quiz" class="hidden">
-    <div class="stage-label" id="stage-label">Visibility</div>
-    <p class="sub" style="margin:0 0 10px">Nine questions. Pick the answer closest to how it actually goes, not how it should go.</p>
-    <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
-    <div class="qcard">
-      <p class="qtext" id="qtext"></p>
-      <div id="options"></div>
+  <section class="first">
+    <p class="small">Nine questions, one at a time. Pick the answer closest to how it actually goes, not how it should go.</p>
+    <div class="walk">
+      <div class="who">Daniel Kane, Kynetica (AI)</div>
+      <p class="bubble" id="qtext"></p>
+      <div class="choices" id="options"></div>
     </div>
-    <div class="nav-row">
-      <button class="btn-back" id="back-btn">&larr; Back</button>
-      <div></div>
-    </div>
+    <button class="btn-back" id="back-btn" type="button">&larr; Back</button>
+  </section>
   </div>
 
   <div id="detailsForm" class="hidden">
-    <div class="stage-label">Last step</div>
-    <div class="progress-wrap"><div class="progress-bar" style="width:100%"></div></div>
-    <div class="qcard">
-      <p class="qtext">One more thing.</p>
+  <section class="first">
+    <p class="small">After the ninth: the task that eats your week, in your words, then your email once so the result reaches your inbox too.</p>
+    <div class="walk">
+      <div class="who">Daniel Kane, Kynetica (AI)</div>
+      <p class="bubble">One more thing.</p>
       <div class="field">
         <label for="task">Describe the one task that eats your week</label>
         <textarea id="task" maxlength="500" placeholder="e.g. Every evening I re-type the day's jobs from paper tickets into our invoicing software..."></textarea>
-        <div class="hint">In your own words. Paper tickets, the 9pm quote, whatever it is. One sentence is plenty.</div>
+        <div class="hint" style="margin-top:8px">In your own words. Paper tickets, the 9pm quote, whatever it is. One sentence is plenty.</div>
       </div>
       <div class="field">
         <label for="trade">What kind of business?</label>
@@ -155,7 +116,7 @@
           <option>Agency</option>
           <option>Other</option>
         </select>
-        <div class="hint hidden" id="trade-preselect-hint">We pre-picked this based on your link. <a href="#" id="trade-change-link">Not right? Change it.</a></div>
+        <div class="hint hidden" id="trade-preselect-hint" style="margin-top:8px">We pre-picked this based on your link. <a href="#" id="trade-change-link">Not right? Change it.</a></div>
       </div>
       <div class="field">
         <label for="teamSize">How many people work in the business?</label>
@@ -172,50 +133,70 @@
         <input type="email" id="email" placeholder="you@yourbusiness.com">
       </div>
       <div class="err" id="form-err">Please fill in the task description and a valid email.</div>
-      <button class="btn" id="submit-btn">Send me my result</button>
-      <div class="hint" style="margin-top:8px">It appears right here when you finish, and a copy lands in your inbox.</div>
+      <button class="cta" id="submit-btn" type="button">Send me my result</button>
+      <p class="under">It appears right here when you finish, and a copy lands in your inbox.</p>
     </div>
+  </section>
   </div>
 
-  <div id="loading" class="hidden" style="text-align:center;padding:60px 0;color:var(--muted)">
-    <div class="spinner" style="border-color:var(--muted);border-top-color:transparent;width:24px;height:24px"></div>
-    Writing your result...
+  <div id="loading" class="hidden">
+  <section class="first" style="text-align:center;padding:60px 0;color:var(--muted)">
+    <span class="spinner" style="width:24px;height:24px"></span> Writing your result...
+  </section>
   </div>
 
+  <!-- ===== result screens ===== -->
   <div id="result" class="hidden">
-    <div class="result-card">
-      <div id="paid-badge" class="paid-badge hidden">Full breakdown</div>
-      <p class="score-big" id="score-big"></p>
-      <p class="tier-name" id="tier-name"></p>
+  <section class="first result-head">
+    <h1 id="tier-name"></h1>
+    <p class="small" id="email-note">A copy is on its way to your inbox.</p>
+    <div class="ticket" id="result-ticket">
+      <p class="num" id="result-num">Result · Office Leak Finder</p>
       <div class="result-body" id="result-body"></div>
     </div>
-    <div class="upsell" id="unlock-upsell">
-    <h3>The result above named your leak. The full breakdown works the whole task.</h3>
-    <p>What you just read is complete, and a copy is already on its way to your inbox. It named where the hours go in the task you described, and gave you one step for this week.</p>
-    <p>The full breakdown takes that same task and works every step of it. Which steps you can automate with tools you likely already own. A setup-effort estimate, labelled as an estimate. An hours-a-week estimate, same label. And two more things it saw in your other answers, written up in the same detail.</p>
-    <p>Your answers are already saved. One tap, nothing to type again, no re-taking anything.</p>
-    <button class="btn" id="unlock-btn">Unlock the full breakdown: $7</button>
-    <div class="err" id="unlock-err" style="display:none">Checkout didn't open, and nothing was charged. Try the button once more. If it still won't, reply to your result email and I'll send you a link by hand.</div>
-    <div class="sub">Stripe checkout. Or don't. The result above is yours either way.</div>
-  </div>
-  <div class="upsell hidden" id="audit-upsell" style="margin-top:20px">
-    <h3 style="border:1px solid var(--accent);border-radius:10px;padding:14px 16px">"We'll find at least $1,000 a year in recoverable time and cost in your business, or the audit is free."</h3>
-    <p>One term, no fine print. You tell us; we refund.</p>
-    <p>The breakdown you just read worked one task, the one you named. The Automation Audit reads your actual website, your booking flow and your back office, and prices out every leak it finds there.</p>
-    <p>You get a written report, 6 to 10 pages. Your top 5 automation opportunities, ranked by estimated hours saved and cost to implement. An ROI estimate for each. A step-by-step plan that names the tools and where the traps are. Delivered by email within 48 hours of checkout.</p>
-    <p style="margin:0 0 12px;color:var(--muted);font-size:15px">It isn't a retainer, and there's no software to buy from us and no subscription. It isn't a call: no demo, no login, no sales meeting. A report lands in the same inbox this one did.</p>
-    <p style="margin:0 0 18px;color:var(--muted);font-size:15px">We already have your trade, your team size, your task and your nine answers. Nobody asks for them again.</p>
-    <button class="btn" id="upsell-btn" type="button">Order the $249 Automation Audit</button>
-    <div class="err" id="audit-err" style="display:none">Checkout didn't open, and nothing was charged. Try once more, or reply to your breakdown email and I'll send the order link by hand.</div>
-    <div class="sub">Stripe checkout. A sample report, built as an illustration and not client work: <a href="/sample-hvac">kynetica.one/sample-hvac</a></div>
-  </div>
-    <p class="sub" id="email-note" style="margin-top:20px"></p>
+  </section>
+
+  <!-- control section 3: the $7 block -->
+  <section id="unlock-upsell">
+    <h3>The result above named your leak. The Full Breakdown works the whole task.</h3>
+    <p>What you just read is complete and already on its way to your inbox. It named where the hours go in the task you described, and gave you one fix for this week.</p>
+    <p>The Full Breakdown takes that same task and works every step of it:</p>
+    <ul class="plain">
+      <li>which steps you can automate with tools you almost certainly already own, and how</li>
+      <li>an hours-a-week estimate for what that gets back, labelled as an estimate until you correct it</li>
+      <li>a setup-effort estimate, same label, so you know what you're signing up for before you touch anything</li>
+      <li>the two other things it saw in your nine answers, written up in the same detail</li>
+    </ul>
+    <p>Your answers are already saved. One tap, nothing to type again.</p>
+    <button class="cta" id="unlock-btn" type="button">Unlock the Full Breakdown: $7</button>
+    <div class="err" id="unlock-err">Checkout didn't open, and nothing was charged. Try the button once more. If it still won't, reply to your result email and I'll send you a link myself.</div>
+    <p class="under">Stripe checkout. If it isn't worth the $7, reply to the email and it's refunded. The result above is yours either way.</p>
+    <p style="margin-top:18px">Why $7 and not free? The free result is the demonstration. This is the first piece of real work. Seven dollars is enough that you'll actually read it, and small enough that you don't have to think about it.</p>
+  </section>
+
+  <!-- control section 4: the $249 block -->
+  <section id="audit-upsell" class="hidden">
+    <div class="guarantee">
+      <h2>"Kynetica finds at least $3,000 a year in recoverable time and cost in your business, or the audit is free."</h2>
+      <p>One term, no fine print. You tell me; Kynetica refunds.</p>
+    </div>
+    <p style="margin-top:22px">The breakdown you just read worked one task, the one you named. The Automation Audit reads your actual website, your booking flow and your back office, and prices out every leak it finds there.</p>
+    <p>You get a written report, 6 to 10 pages:</p>
+    <ul class="plain">
+      <li>your top five automation opportunities, ranked by estimated hours saved and cost to implement</li>
+      <li>an ROI estimate for each, labelled as an estimate until your numbers replace mine</li>
+      <li>a step-by-step plan that names the tools and where the traps are</li>
+    </ul>
+    <p>Delivered by email within 48 hours of checkout, or it's free.</p>
+    <p>It isn't a retainer. There's no software to buy from Kynetica and no subscription. It isn't a call: no demo, no login, no sales meeting. A report lands in the same inbox this one did.</p>
+    <p>I already have your trade, your team size, your task and your nine answers. Nobody asks for them again.</p>
+    <button class="cta" id="upsell-btn" type="button">Order the Automation Audit: $249</button>
+    <div class="err" id="audit-err">Checkout didn't open, and nothing was charged. Try once more, or reply to your breakdown email and I'll send the order link myself.</div>
+    <p class="under">Stripe checkout. A sample report, written as an illustration and not client work: <a href="/sample-hvac">kynetica.one/sample-hvac</a></p>
+  </section>
   </div>
 
-  <footer id="page-footer">
-    Kynetica LLC · 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131 · Operated by AI.<br>
-    <a href="/">&larr; Back to kynetica.one</a> · <a href="mailto:info@kynetica.one">info@kynetica.one</a>
-  </footer>
+  <footer class="site" id="page-footer">Kynetica LLC · 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131 · Run by an AI; founded by <a href="https://www.linkedin.com/in/gibbz" rel="noopener">a human</a> · Payments by Stripe · <a href="mailto:info@kynetica.one">info@kynetica.one</a></footer>
 </div>
 
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -287,17 +268,19 @@ var quizEl = document.getElementById('quiz');
 var formEl = document.getElementById('detailsForm');
 var loadingEl = document.getElementById('loading');
 var resultEl = document.getElementById('result');
+var headerTag = document.getElementById('header-tag');
 
 ['start-btn','start-btn-2'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click', function(){
   introEl.classList.add('hidden');
   quizEl.classList.remove('hidden');
+  headerTag.textContent = 'Office Leak Finder';
   window.scrollTo(0,0);
   renderQuestion();
 }); });
 
 // Preselect the trade dropdown from ?utm_content=<trade option value>
 // (case-insensitive match against the select's own option values), with
-// a small affordance to change it — the select itself stays fully usable.
+// a small affordance to change it; the select itself stays fully usable.
 (function(){
   try{
     var q = new URLSearchParams(location.search);
@@ -328,14 +311,13 @@ document.getElementById('back-btn').addEventListener('click', function(){
 
 function renderQuestion(){
   var q = QUESTIONS[state.idx];
-  document.getElementById('stage-label').textContent = q.stage;
-  document.getElementById('qtext').textContent = q.text;
-  document.getElementById('progress-bar').style.width = Math.round((state.idx / QUESTIONS.length) * 100) + '%';
+  document.getElementById('qtext').textContent = (state.idx + 1) + ' of ' + QUESTIONS.length + '. ' + q.text;
   var opts = document.getElementById('options');
   opts.innerHTML = '';
   q.options.forEach(function(o){
     var b = document.createElement('button');
-    b.className = 'opt';
+    b.className = 'choice';
+    b.type = 'button';
     b.textContent = o.label;
     if (state.answers[state.idx] === o.score) b.classList.add('selected');
     b.addEventListener('click', function(){
@@ -346,6 +328,7 @@ function renderQuestion(){
       } else {
         quizEl.classList.add('hidden');
         formEl.classList.remove('hidden');
+        window.scrollTo(0,0);
       }
     });
     opts.appendChild(b);
@@ -387,6 +370,12 @@ document.getElementById('submit-btn').addEventListener('click', function(){
 // user) so the $7 unlock button can call /api/unlock with zero re-entry.
 var completion = null;
 
+function showError(html){
+  loadingEl.classList.add('hidden');
+  resultEl.innerHTML = '<section class="first"><div class="walk"><p style="margin:0">' + html + '</p></div></section>';
+  resultEl.classList.remove('hidden');
+}
+
 function submitCompletion(payload){
   fetch('/api/assess', {
     method: 'POST',
@@ -395,8 +384,7 @@ function submitCompletion(payload){
   }).then(function(r){ return r.json(); }).then(function(data){
     loadingEl.classList.add('hidden');
     if (!data || typeof data.score !== 'number' || !data.html) {
-      resultEl.innerHTML = '<div class="result-card"><p>Something went wrong generating your result. Please try again or email <a href="mailto:info@kynetica.one">info@kynetica.one</a>.</p></div>';
-      resultEl.classList.remove('hidden');
+      showError('Something went wrong generating your result. Please try again or email <a href="mailto:info@kynetica.one">info@kynetica.one</a>.');
       return;
     }
     completion = {
@@ -407,32 +395,26 @@ function submitCompletion(payload){
     };
     renderResult(data.score, data.tier, data.html, false);
   }).catch(function(){
-    loadingEl.classList.add('hidden');
-    resultEl.innerHTML = '<div class="result-card"><p>Something went wrong generating your result. Please try again or email <a href="mailto:info@kynetica.one">info@kynetica.one</a>.</p></div>';
-    resultEl.classList.remove('hidden');
+    showError('Something went wrong generating your result. Please try again or email <a href="mailto:info@kynetica.one">info@kynetica.one</a>.');
   });
 }
 
-var TIER_LABELS = { 'flying-blind': 'Flying Blind', 'aware-but-leaking': 'Aware but Leaking', 'ready-to-automate': 'Ready to Automate' };
-
 function renderResult(score, tier, html, paid){
-  document.getElementById('score-big').innerHTML = '';
-  document.getElementById('tier-name').textContent = paid ? 'Your full breakdown, written from your nine answers and the task you named' : 'Your result, written from your nine answers';
+  document.getElementById('tier-name').textContent = paid ? 'Your Full Breakdown, written from your nine answers and the task you named.' : 'Your result, written from your nine answers.';
+  document.getElementById('result-num').textContent = paid ? 'Full Breakdown' : 'Result · Office Leak Finder';
   document.getElementById('result-body').innerHTML = html;
-  var paidBadge = document.getElementById('paid-badge');
+  headerTag.textContent = paid ? 'Your Full Breakdown' : 'Your result';
   var unlockUpsell = document.getElementById('unlock-upsell');
   var auditUpsell = document.getElementById('audit-upsell');
   if (paid) {
-    paidBadge.classList.remove('hidden');
     unlockUpsell.classList.add('hidden');
     auditUpsell.classList.remove('hidden');
   } else {
-    paidBadge.classList.add('hidden');
     unlockUpsell.classList.remove('hidden');
     auditUpsell.classList.add('hidden');
   }
-  document.getElementById('email-note').textContent = "We've also emailed this result to you.";
   resultEl.classList.remove('hidden');
+  window.scrollTo(0,0);
 }
 
 document.getElementById('unlock-btn').addEventListener('click', function(){
@@ -454,7 +436,7 @@ document.getElementById('unlock-btn').addEventListener('click', function(){
     }
   }).catch(function(){
     btn.disabled = false;
-    btn.textContent = 'Unlock the full breakdown: $7';
+    btn.textContent = 'Unlock the Full Breakdown: $7';
     errEl.style.display = 'block';
   });
 });
@@ -481,7 +463,7 @@ document.getElementById('upsell-btn').addEventListener('click', function(){
     }
   }).catch(function(){
     btn.disabled = false;
-    btn.textContent = 'Order the $249 Automation Audit';
+    btn.textContent = 'Order the Automation Audit: $249';
     errEl.style.display = 'block';
   });
 });
@@ -504,21 +486,19 @@ document.getElementById('upsell-btn').addEventListener('click', function(){
         .then(function(data){
           loadingEl.classList.add('hidden');
           if (data && data.paid && data.html) {
+            completion = data.record || completion;
             renderResult(data.score, data.tier, data.html, true);
           } else {
-            resultEl.innerHTML = '<div class="result-card"><p>We could not confirm this payment yet. If you were just charged, give it a minute and refresh, or email <a href="mailto:info@kynetica.one">info@kynetica.one</a> with your receipt.</p></div>';
-            resultEl.classList.remove('hidden');
+            showError('We could not confirm this payment yet. If you were just charged, give it a minute and refresh, or email <a href="mailto:info@kynetica.one">info@kynetica.one</a> with your receipt.');
           }
         }).catch(function(){
-          loadingEl.classList.add('hidden');
-          resultEl.innerHTML = '<div class="result-card"><p>Something went wrong confirming your payment. Please email <a href="mailto:info@kynetica.one">info@kynetica.one</a> with your receipt.</p></div>';
-          resultEl.classList.remove('hidden');
+          showError('Something went wrong confirming your payment. Please email <a href="mailto:info@kynetica.one">info@kynetica.one</a> with your receipt.');
         });
       return;
     }
 
     // Signed link from the free-result email: goes straight to Stripe
-    // Checkout for the $7 unlock, no re-entry, no lookup needed — the
+    // Checkout for the $7 unlock, no re-entry, no lookup needed; the
     // token itself carries the HMAC-signed completion.
     if (unlockStart) {
       introEl.classList.add('hidden');
@@ -531,14 +511,10 @@ document.getElementById('upsell-btn').addEventListener('click', function(){
         if (data && data.url) {
           location.href = data.url;
         } else {
-          loadingEl.classList.add('hidden');
-          resultEl.innerHTML = '<div class="result-card"><p>This unlock link is no longer valid. Please take the assessment again to get a fresh link: <a href="/assess">/assess</a>.</p></div>';
-          resultEl.classList.remove('hidden');
+          showError('This unlock link is no longer valid. Please take the assessment again to get a fresh link: <a href="/assess">/assess</a>.');
         }
       }).catch(function(){
-        loadingEl.classList.add('hidden');
-        resultEl.innerHTML = '<div class="result-card"><p>Something went wrong starting checkout. Please email <a href="mailto:info@kynetica.one">info@kynetica.one</a>.</p></div>';
-        resultEl.classList.remove('hidden');
+        showError('Something went wrong starting checkout. Please email <a href="mailto:info@kynetica.one">info@kynetica.one</a>.');
       });
       return;
     }
