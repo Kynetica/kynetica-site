@@ -88,6 +88,18 @@ export function tierFor(score) {
   return 'ready-to-automate';
 }
 
+// Engine selector. ENGINE_V1=1 -> structured engine (api/_engine.js) with validator gate; anything else -> legacy prose prompt.
+// Returns { html, engine, attempts } or throws (caller falls back to the honest fallback text).
+export async function generateResultHtml({ score, tier, task, trade, teamSize, answers, paid }) {
+  if (process.env.ENGINE_V1 === '1') {
+    const { generateResult } = await import('./_engine.js');
+    const r = await generateResult({ task, trade, teamSize, answers, paid });
+    return { html: r.html, engine: r.engine, attempts: r.attempts.length, result: r.result };
+  }
+  const html = await callGrok(score, tier, task, trade, teamSize, paid);
+  return { html, engine: 'legacy-v6', attempts: 1 };
+}
+
 export function genCompletionId() {
   // 16 random bytes -> 22-char base64url string (no padding).
   return crypto.randomBytes(16).toString('base64url');
@@ -312,6 +324,7 @@ export async function notifyOwner(record) {
     `Completion ID: ${record.completion_id || '(none)'}`,
     `Stripe session: ${record.stripe_session_id || '(none)'}`,
     `Paid (verified): ${record.paid ? 'YES' : 'no'}`,
+    `Engine: ${record.engine || 'legacy-v6'} attempts=${record.engine_attempts || 1}${record.engine_failures ? ' REJECTED: ' + record.engine_failures.join(' | ') : ''}`,
     record.needs_manual ? '*** NEEDS MANUAL FOLLOW-UP: paid breakdown generation failed, fallback sent. Daniel must email the full breakdown himself (no window promised to the customer) ***' : '',
     `Submitted: ${record.ts}`,
   ].filter(Boolean);

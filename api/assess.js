@@ -24,7 +24,7 @@
 import {
   TRADES, TEAM_SIZES,
   isValidEmail, clean, scoreAnswers, tierFor, genCompletionId,
-  callGrok, fallbackResult, appendCompletionLine, emailResult, notifyOwner,
+  generateResultHtml, fallbackResult, appendCompletionLine, emailResult, notifyOwner,
   encodeSignedLink, siteBase,
 } from './_completion.js';
 
@@ -75,9 +75,14 @@ export default async function handler(req, res) {
 
   let resultHtml;
   try {
-    resultHtml = await callGrok(score, tier, task, trade, teamSize, false);
+    const g = await generateResultHtml({ score, tier, task, trade, teamSize, answers: body.answers, paid: false });
+    resultHtml = g.html; record.engine = g.engine; record.engine_attempts = g.attempts;
+    if (g.result) record.result_json = g.result;
   } catch (e) {
     resultHtml = fallbackResult(score, tier, task, trade);
+    record.engine = process.env.ENGINE_V1 === '1' ? 'v1-fallback' : 'legacy-fallback';
+    if (e && e.failures) record.engine_failures = e.failures;
+    record.needs_manual = true;
   }
 
   let storeResult, emailR, notifyR;
@@ -101,7 +106,7 @@ export default async function handler(req, res) {
   catch (e) { notifyR = { sent: false, reason: 'exception' }; }
 
   res.status(200).json({
-    completion_id, score, tier, html: resultHtml,
+    completion_id, score, tier, html: resultHtml, engine: record.engine,
     stored: storeResult.stored, emailed: emailR.sent, notified: notifyR.sent,
   });
 }

@@ -24,7 +24,7 @@
 
 import {
   clean, isValidEmail, scoreAnswers, tierFor, TRADES, TEAM_SIZES,
-  callGrok, paidFallbackResult, emailResult, notifyOwner, appendCompletionLine,
+  generateResultHtml, paidFallbackResult, emailResult, notifyOwner, appendCompletionLine,
   signedMetadata, verifyAndReconstruct, decodeSignedLink, siteBase,
   UNLOCK_PRICE_ID, stripeGet, stripePost,
 } from './_completion.js';
@@ -60,12 +60,14 @@ async function retrieveAndDeliver(sessionId, base = 'https://kynetica.one') {
   const score = scoreAnswers(rec.answers) ?? rec.score;
   const tier = rec.tier || tierFor(score);
 
-  let resultHtml, needsManual = false;
+  let resultHtml, needsManual = false, engine = 'legacy-v6', engineAttempts = 1, engineFailures = null, resultJson = null;
   try {
-    resultHtml = await callGrok(score, tier, rec.task, rec.trade, rec.teamSize, true);
+    const g = await generateResultHtml({ score, tier, task: rec.task, trade: rec.trade, teamSize: rec.teamSize, answers: rec.answers, paid: true });
+    resultHtml = g.html; engine = g.engine; engineAttempts = g.attempts; resultJson = g.result || null;
   } catch (e) {
     resultHtml = paidFallbackResult(score, tier, rec.task, rec.trade);
-    needsManual = true;
+    needsManual = true; engine = process.env.ENGINE_V1 === '1' ? 'v1-fallback' : 'legacy-fallback';
+    if (e && e.failures) engineFailures = e.failures;
   }
 
   // Idempotency: Checkout Session metadata can't be updated after
@@ -94,6 +96,7 @@ async function retrieveAndDeliver(sessionId, base = 'https://kynetica.one') {
       needs_manual: needsManual,
       html: resultHtml,
       base,
+      engine, engine_attempts: engineAttempts, engine_failures: engineFailures, result_json: resultJson,
     };
     try { await appendCompletionLine(JSON.stringify(fullRecord) + '\n'); } catch (e) {}
     try { await emailResult(fullRecord, resultHtml); } catch (e) {}
@@ -103,7 +106,7 @@ async function retrieveAndDeliver(sessionId, base = 'https://kynetica.one') {
     }
   }
 
-  return { paid: true, score, tier, html: resultHtml,
+  return { paid: true, score, tier, html: resultHtml, engine,
     record: { completion_id: rec.completion_id, score, tier, task: rec.task, trade: rec.trade, teamSize: rec.teamSize,
               email: session.customer_details?.email || rec.email, answers: rec.answers, utm: rec.utm } };
 }
