@@ -25,25 +25,25 @@
 import {
   clean, isValidEmail, scoreAnswers, tierFor, TRADES, TEAM_SIZES,
   callGrok, paidFallbackResult, emailResult, notifyOwner, appendCompletionLine,
-  signedMetadata, verifyAndReconstruct, decodeSignedLink,
+  signedMetadata, verifyAndReconstruct, decodeSignedLink, siteBase,
   UNLOCK_PRICE_ID, stripeGet, stripePost,
 } from './_completion.js';
 
-async function createCheckoutSession(record) {
+async function createCheckoutSession(record, base = 'https://kynetica.one') {
   const metadata = signedMetadata(record);
   const params = {
     mode: 'payment',
     line_items: [{ price: UNLOCK_PRICE_ID, quantity: 1 }],
     customer_email: record.email,
-    success_url: 'https://kynetica.one/assess?unlock={CHECKOUT_SESSION_ID}',
-    cancel_url: 'https://kynetica.one/assess?cancelled=1',
+    success_url: `${base}/assess?unlock={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${base}/assess?cancelled=1`,
     client_reference_id: record.completion_id,
     metadata,
   };
   return stripePost('checkout/sessions', params);
 }
 
-async function retrieveAndDeliver(sessionId) {
+async function retrieveAndDeliver(sessionId, base = 'https://kynetica.one') {
   const sessionResp = await stripeGet(
     `checkout/sessions/${encodeURIComponent(sessionId)}?expand[]=payment_intent`
   );
@@ -92,6 +92,8 @@ async function retrieveAndDeliver(sessionId) {
       stripe_session_id: sessionId,
       paid: true,
       needs_manual: needsManual,
+      html: resultHtml,
+      base,
     };
     try { await appendCompletionLine(JSON.stringify(fullRecord) + '\n'); } catch (e) {}
     try { await emailResult(fullRecord, resultHtml); } catch (e) {}
@@ -128,7 +130,7 @@ export default async function handler(req, res) {
       sessionId = b && b.session_id;
     }
     try {
-      const result = await retrieveAndDeliver(clean(sessionId, 200));
+      const result = await retrieveAndDeliver(clean(sessionId, 200), siteBase(req));
       res.status(200).json(result);
     } catch (e) {
       res.status(200).json({ paid: false, reason: 'exception' });
@@ -153,7 +155,7 @@ export default async function handler(req, res) {
     const decoded = decodeSignedLink(body.token);
     if (!decoded.valid) { res.status(400).json({ error: 'invalid_token' }); return; }
     try {
-      const result = await createCheckoutSession(decoded.record);
+      const result = await createCheckoutSession(decoded.record, siteBase(req));
       if (!result.ok) {
         res.status(502).json({ error: 'stripe_error', detail: result.data?.error?.message || result.status });
         return;
@@ -192,7 +194,7 @@ export default async function handler(req, res) {
   };
 
   try {
-    const result = await createCheckoutSession(record);
+    const result = await createCheckoutSession(record, siteBase(req));
     if (!result.ok) {
       res.status(502).json({ error: 'stripe_error', detail: result.data?.error?.message || result.status });
       return;

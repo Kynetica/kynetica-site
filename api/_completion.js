@@ -35,6 +35,42 @@ export function escapeHtml(s) {
   return String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+// Model output hardening. Grok has been seen returning fenced (```html), entity-escaped (&lt;p&gt;) or
+// tag-less text. Emails and the on-screen ticket both take the return value raw, so normalise here.
+export function normalizeResultHtml(raw) {
+  let t = String(raw || '').trim();
+  t = t.replace(/^```[a-z]*\s*/i, '').replace(/\s*```$/, '').trim();          // code fences
+  if (!/<p[\s>]/i.test(t) && /&lt;p&gt;/i.test(t)) {                              // escaped tags, no real ones
+    t = t.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+  }
+  t = t.replace(/<\s*(b)\s*>/gi, '<strong>').replace(/<\s*\/\s*b\s*>/gi, '</strong>');
+  t = t.replace(/<(?!\/?(p|strong)\b)[^>]*>/gi, '');                              // strip every other tag
+  t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');                      // stray markdown bold
+  if (!/<p[\s>]/i.test(t)) {                                                       // no paragraphs: wrap on blank lines
+    t = t.split(/\n\s*\n/).map((x) => x.trim()).filter(Boolean).map((x) => `<p>${x}</p>`).join('\n');
+  } else {
+    // text before the first <p> (seen on 2026-09-10 paid result: the restated task line) gets its own paragraph
+    const i = t.search(/<p[\s>]/i);
+    if (i > 0) t = `<p>${t.slice(0, i).trim()}</p>\n${t.slice(i)}`;
+  }
+  return t;
+}
+
+export function htmlToText(html) {
+  return String(html || '')
+    .replace(/<\/p>/gi, '\n\n').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '')
+    .replace(/&ldquo;|&rdquo;/g, '"').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/\n{3,}/g, '\n\n').trim();
+}
+
+// Absolute origin for redirects and email links, derived from the request so a preview deployment
+// returns to itself after Stripe instead of to production. Only Vercel/kynetica hosts are trusted.
+export function siteBase(req) {
+  const h = String((req && req.headers && (req.headers['x-forwarded-host'] || req.headers.host)) || '').split(',')[0].trim().toLowerCase();
+  if (h && (/^([a-z0-9-]+\.)*kynetica\.one$/.test(h) || /^[a-z0-9-]+\.vercel\.app$/.test(h))) return `https://${h}`;
+  return 'https://kynetica.one';
+}
+
 export function scoreAnswers(answers) {
   if (!Array.isArray(answers) || answers.length !== 9) return null;
   let total = 0;
@@ -144,7 +180,7 @@ Sign off once, at the very end.`;
       const data = await resp.json();
       const text = data?.choices?.[0]?.message?.content;
       if (typeof text === 'string' && text.trim().length > 40) {
-        return text.trim();
+        return normalizeResultHtml(text);
       }
       lastErr = new Error('xai_empty');
     } catch (e) {
@@ -202,7 +238,7 @@ export async function emailResult(record, resultHtml, ctaUrl) {
       <p style="margin:0 0 4px;font-weight:700">&ldquo;Kynetica finds at least $3,000 a year in recoverable time and cost in your business, or the audit is free.&rdquo;</p>
       <p style="margin:0 0 12px;color:#1C2A22">One term, no fine print. You tell me; Kynetica refunds.</p>
       <p style="margin:0 0 16px;color:#1C2A22">The breakdown above worked one task. The Automation Audit reads your actual website, booking flow and back office, and prices every leak it finds. A 6 to 10 page report: your top five automation opportunities ranked by hours saved and cost to implement, an ROI estimate for each, and a step-by-step plan naming the tools. In your inbox within 48 hours of checkout, or it's free.</p>
-      <form method="POST" action="https://kynetica.one/api/audit" style="margin:0">
+      <form method="POST" action="${(record.base || 'https://kynetica.one')}/api/audit" style="margin:0">
         <input type="hidden" name="paid_session" value="${escapeHtml(record.stripe_session_id || '')}">
         <input type="hidden" name="completion_id" value="${escapeHtml(record.completion_id || '')}">
         <input type="hidden" name="score" value="${escapeHtml(record.score)}">
@@ -254,6 +290,7 @@ export async function emailResult(record, resultHtml, ctaUrl) {
       reply_to: ['info@kynetica.one'],
       subject,
       html,
+      text: htmlToText(html),
     }),
   });
   if (!resp.ok) return { sent: false, reason: `resend_${resp.status}` };

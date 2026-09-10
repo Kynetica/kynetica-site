@@ -29,7 +29,7 @@
 
 import {
   clean, isValidEmail, scoreAnswers, tierFor, TRADES, TEAM_SIZES,
-  signedMetadata, verifyAndReconstruct, stripeGet, stripePost,
+  signedMetadata, verifyAndReconstruct, stripeGet, stripePost, siteBase,
 } from './_completion.js';
 
 const AUDIT_PRICE_ID = 'price_1UBlBlLJjM5m13mjiEvdFYKj';
@@ -45,14 +45,14 @@ async function verifyPaidSession(sessionId) {
   return verify.valid;
 }
 
-async function createAuditCheckoutSession(record, paidSessionId) {
+async function createAuditCheckoutSession(record, paidSessionId, base = 'https://kynetica.one') {
   const metadata = signedMetadata(record);
   const params = {
     mode: 'payment',
     line_items: [{ price: AUDIT_PRICE_ID, quantity: 1 }],
     customer_email: record.email,
-    success_url: 'https://kynetica.one/thanks?audit={CHECKOUT_SESSION_ID}',
-    cancel_url: `https://kynetica.one/assess?unlock=${encodeURIComponent(paidSessionId)}`,
+    success_url: `${base}/thanks?audit={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${base}/assess?unlock=${encodeURIComponent(paidSessionId)}`,
     client_reference_id: record.completion_id,
     metadata,
   };
@@ -125,7 +125,7 @@ export default async function handler(req, res) {
   };
 
   try {
-    const result = await createAuditCheckoutSession(record, paidSession);
+    const result = await createAuditCheckoutSession(record, paidSession, siteBase(req));
     if (!result.ok) {
       res.status(502).json({ error: 'stripe_error', detail: result.data?.error?.message || result.status });
       return;

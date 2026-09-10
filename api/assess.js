@@ -25,7 +25,7 @@ import {
   TRADES, TEAM_SIZES,
   isValidEmail, clean, scoreAnswers, tierFor, genCompletionId,
   callGrok, fallbackResult, appendCompletionLine, emailResult, notifyOwner,
-  encodeSignedLink,
+  encodeSignedLink, siteBase,
 } from './_completion.js';
 
 export default async function handler(req, res) {
@@ -87,10 +87,11 @@ export default async function handler(req, res) {
   // Signed link for the free-result email's $7 CTA: encodes the whole
   // completion (HMAC-signed) so the recipient can go straight to Stripe
   // Checkout later with zero re-entry, with no server-side lookup needed.
-  let ctaUrl = 'https://kynetica.one/assess';
+  const base = siteBase(req);
+  let ctaUrl = `${base}/assess`;
   try {
     const token = encodeSignedLink(record);
-    ctaUrl = `https://kynetica.one/assess?unlock_start=${token}`;
+    ctaUrl = `${base}/assess?unlock_start=${token}`;
   } catch (e) { /* fall back to bare /assess link */ }
 
   try { emailR = await emailResult(record, resultHtml, ctaUrl); }
