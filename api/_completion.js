@@ -60,48 +60,59 @@ export function genCompletionId() {
 export function fallbackResult(score, tier, task, trade) {
   const html = [
     `<p>You told us the task eating your week is: ${escapeHtml(task)}.</p>`,
-    `<p>The detailed read of that task did not complete just now. I'm not going to hand you a generic answer instead. Reply to this email and I will write it by hand and send it back.</p>`,
+    `<p>That written read didn't finish just now. I'm not handing you a generic page instead. I'll write it and send it to the email you gave. Nothing is owed for it. If it hasn't turned up and you want to nudge me, reply to that email.</p>`,
     `<p>Daniel Kane, Kynetica (AI)</p>`,
   ].join('\n');
   return html;
 }
 
 export function paidFallbackResult(score, tier, task, trade) {
-  const base = fallbackResult(score, tier, task, trade).replace(
-    '<p>Daniel Kane, Kynetica (AI)</p>',
-    `<p>You paid $7 for the full breakdown. I will write it by hand and email it to you within 24 hours. If it is not in your inbox by then, reply to this email.</p>\n<p>Daniel Kane, Kynetica (AI)</p>`
-  );
-  return base;
+  const html = [
+    `<p>You told us the task eating your week is: ${escapeHtml(task)}.</p>`,
+    `<p>Your payment went through, and the detailed read of that task did not complete just now. You're not getting a generic page in its place. I'll write the full breakdown by hand and email it to you. It will come from this same address. If you want to check on it, reply to your result email.</p>`,
+    `<p>Daniel Kane, Kynetica (AI)</p>`,
+  ].join('\n');
+  return html;
 }
 
 export async function callGrok(score, tier, task, trade, teamSize, paid) {
   const key = process.env.XAI_API_KEY;
   if (!key) throw new Error('no_key');
 
-  const baseRules = `HARD RULES — follow all of them exactly:
+  const baseRules = `You are Daniel Kane, the AI that runs Kynetica. You are writing to a small service-business owner who just answered nine questions and described, in one sentence, the task that eats their week. Write to that one person, about that one task, in plain first person.
+
+Rules that never bend:
+- Open the entire output by restating their described task in their own words, in one sentence, before any analysis. Example shape: "You told us the task eating your week is ___."
+- Use their nouns. If they wrote "paper tickets" and "QuickBooks", your fix names paper tickets and QuickBooks, not a generic substitute.
 - No invented statistics. No customer counts, testimonials, or claims of past results anywhere.
-- No promises of results ("this will save you X hours") — only clearly-labelled estimates, and only if you label them as estimates.
-- Plain, direct language. No jargon, no buzzwords, no exclamation points, no emoji.
-- Never mention any AI model or provider name (not "GPT", "Grok", "xAI", "Claude", "trained on", etc.).
-- Sign off exactly as: "Daniel Kane, Kynetica (AI)"
+- No promises of results. Any hours or dollars figure is a rough estimate and must be labelled as an estimate or a guess in the same sentence.
+- Never name a specific software product, model, or vendor as the automation approach. Name the category of tool ("a shared spreadsheet on a phone", "a connector", "a form that texts the office").
+- Never mention any AI model or provider name. Never mention any price, any paid product, any audit, or any guarantee. You deliver the result; you do not sell anything.
+- Plain, direct language. Short sentences mixed with a few longer ones. No jargon, no buzzwords, no exclamation points, no emoji, no em dashes.
+- No generic advice. "Write down your process" or "map your workflow" without their task's nouns is banned.
+- Sign off exactly: Daniel Kane, Kynetica (AI)
 - Output plain HTML using only <p> and <strong> tags. No markdown, no headings, no lists, no links, no scripts.`;
 
-  const systemPrompt = paid ? `You write short, personalised results for a paid ($7) "Automation Leak Finder" variant of a 9-question "Nine-Question Leak Trace" assessment taken by owners of small service businesses (HVAC, plumbing, electrical, dental, landscaping, agencies). You are writing as Daniel Kane, the AI that runs Kynetica.
+  const freeStructure = `Structure, exactly, 180 to 250 words:
+1. One paragraph that opens on one concrete detail from their actual answers and describes how their week runs from it. Never open with a description of their score tier.
+2. One paragraph beginning with the bold words "Your biggest leak". It addresses their free-text task specifically, names one concrete automation approach using tools a business like theirs plausibly already owns, and gives one rough hours-per-week figure clearly labelled as an estimate.
+3. Exactly one next step, specific to their named task, doable this week, containing at least one noun from their task.
+4. The sign-off.`;
 
-${baseRules}
-- Open the entire output by restating their described task in their own words, in one sentence, before any analysis (e.g. "You told us the task eating your week is ___.").
-- Total length: the standard section (180-250 words) PLUS a second section (380-500 words) headed exactly "The full breakdown".
-- Standard section structure exactly: (1) a behavioural portrait paragraph that opens on ONE concrete detail from their actual answers (a specific answer they gave, or a specific word from their task description) — never open with a category description of their tier; (2) a paragraph headed "Your biggest leak" that addresses THEIR free-text task specifically: it must reference the actual nouns/objects/tools/people named in their task description (e.g. if they wrote "paper tickets" and "invoicing software", the automation approach must name those same things, not a generic substitute), name one concrete automation approach using tools a small business like theirs plausibly already owns (email, calendar, spreadsheets, their booking/CRM software, Zapier/Make-style connectors), and give one rough hours/week estimate CLEARLY labelled as an estimate/guess, not a fact; (3) exactly ONE next step that is SPECIFIC to their named task (must contain at least one noun from their task description) and doable this week without buying anything — generic tips like "write down your process" or "map your workflow" without reference to their specific task are banned.
-- The "The full breakdown" section must, in order: (a) decompose THEIR named task into its concrete steps, using the task's own nouns; (b) state which of those steps are automatable and, for each, the CATEGORY of tool they plausibly already own that could do it (email, calendar, spreadsheet, booking/CRM software, Zapier/Make-style connector) — never a specific named product/model; (c) give a rough setup-effort estimate in hours, clearly labelled as an estimate; (d) give a rough weekly-hours-recovered range, clearly labelled as an estimate, not a promise; (e) name two more secondary leaks inferred from their 9 answers (not the named task), each one sentence.
-- Keep the same plain first-person voice in the breakdown section as in the opening; no report register, no headings inside paragraphs, no lists.
-- Sign off ONCE at the very end of the whole output (not after each section).` : `You write short, personalised results for a free 9-question "Nine-Question Leak Trace" assessment taken by owners of small service businesses (HVAC, plumbing, electrical, dental, landscaping, agencies). You are writing as Daniel Kane, the AI that runs Kynetica.
+  const paidStructure = `Write the free structure above, 180 to 250 words, then a second section of 380 to 500 words that begins with the bold words "Your full breakdown". In this order:
+a. Take their named task apart into its concrete steps, using the task's own nouns, in the order the steps actually happen.
+b. Say which of those steps can be automated and, for each, the category of tool they plausibly already own. Say plainly which steps should stay manual.
+c. Give a rough setup-effort figure in hours, labelled as an estimate.
+d. Give a rough weekly-hours-recovered range, labelled as an estimate, not a promise.
+e. Name two more secondary leaks inferred from their nine answers, not the named task, one sentence each.
+Keep the same plain first-person voice in this section as in the opening. No report register, no headings inside paragraphs, no numbered lists. It should read like the same person kept talking, not like a template got filled in.
+Sign off once, at the very end.`;
 
-${baseRules}
-- Open the entire output by restating their described task in their own words, in one sentence, before any analysis (e.g. "You told us the task eating your week is ___.").
-- 180-250 words total.
-- Structure exactly: (1) a behavioural portrait paragraph that opens on ONE concrete detail from their actual answers (a specific answer they gave, or a specific word from their task description) — never open with a category description of their tier; (2) a paragraph headed "Your biggest leak" that addresses THEIR free-text task specifically: it must reference the actual nouns/objects/tools/people named in their task description (e.g. if they wrote "paper tickets" and "invoicing software", the automation approach must name those same things, not a generic substitute), name one concrete automation approach using tools a small business like theirs plausibly already owns (email, calendar, spreadsheets, their booking/CRM software, Zapier/Make-style connectors), and give one rough hours/week estimate CLEARLY labelled as an estimate/guess, not a fact; (3) exactly ONE next step that is SPECIFIC to their named task (must contain at least one noun from their task description) and doable this week without buying anything — generic tips like "write down your process" or "map your workflow" without reference to their specific task are banned.`;
+  const systemPrompt = paid
+    ? `${baseRules}\n\n${freeStructure}\n\n${paidStructure}`
+    : `${baseRules}\n\n${freeStructure}`;
 
-  const answersNote = paid ? ' They have paid for the Leak Finder breakdown; use all 9 answer values plus their team size and trade to infer two secondary leaks beyond the named task.' : '';
+  const answersNote = paid ? ' They have paid for the full breakdown; use all nine answer values plus their team size and trade to infer two secondary leaks beyond the named task.' : '';
   const userPrompt = `Score: ${score}/18. Tier: ${TIER_LABEL[tier]}. Trade: ${trade || 'not given'}. Team size: ${teamSize || 'not given'}. Their described task that eats their week: "${task}".${answersNote}`;
 
   const models = ['grok-4-fast', 'grok-3-mini'];
@@ -188,10 +199,10 @@ export async function emailResult(record, resultHtml, ctaUrl) {
   if (record.paid) {
     ctaBlock = `
     <div style="margin:28px 0;padding:20px;background:#f5f7fa;border-radius:10px">
-      <p style="margin:0 0 12px;color:#333">The breakdown above worked one task, the one you named. The Automation Audit reads your actual website, booking flow and back office, and prices every leak it finds there.</p>
-      <p style="margin:0 0 12px;color:#333">Written report, 6 to 10 pages, top 5 opportunities ranked, ROI estimate each, step-by-step plan naming the tools. Delivered by email within 48 hours of checkout.</p>
       <p style="margin:0 0 4px;font-weight:700">&ldquo;We'll find at least $1,000 a year in recoverable time and cost in your business, or the audit is free.&rdquo;</p>
-      <p style="margin:0 0 16px;color:#333">One term, no fine print. You tell us; we refund.</p>
+      <p style="margin:0 0 12px;color:#333">One term, no fine print. You tell us; we refund.</p>
+      <p style="margin:0 0 12px;color:#333">The breakdown above worked one task, the one you named. The Automation Audit reads your actual website, booking flow and back office, and prices out every leak it finds there.</p>
+      <p style="margin:0 0 16px;color:#333">Written report, 6 to 10 pages: your top 5 automation opportunities, ranked by estimated hours saved and cost to implement, with an ROI estimate for each. A step-by-step plan naming the tools, delivered by email within 48 hours of checkout.</p>
       <form method="POST" action="https://kynetica.one/api/audit" style="margin:0">
         <input type="hidden" name="paid_session" value="${escapeHtml(record.stripe_session_id || '')}">
         <input type="hidden" name="completion_id" value="${escapeHtml(record.completion_id || '')}">
@@ -205,33 +216,32 @@ export async function emailResult(record, resultHtml, ctaUrl) {
         <input type="hidden" name="utm" value="${escapeHtml(JSON.stringify(record.utm || {}))}">
         <button type="submit" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;border:none;text-decoration:none;font-weight:700;font-size:16px;cursor:pointer;font-family:inherit">Order the $249 Automation Audit</button>
       </form>
-      <p style="margin:12px 0 0;color:#777;font-size:14px">Not a call, not a demo, not a retainer. We already have your trade, team size, task and nine answers. You won't be asked for them again.</p>
     </div>`;
   } else {
     ctaBlock = `
     <div style="margin:28px 0;padding:20px;background:#f5f7fa;border-radius:10px">
-      <p style="margin:0 0 12px;color:#333">You're reading this in your inbox, which means the result above is saved and yours to keep.</p>
-      <p style="margin:0 0 16px;color:#555">It named your leak and one step, from your own answers. For $7, the full breakdown lays out every step in the task you described, says which ones you can automate with what you likely already own, gives labelled hours estimates, and writes up two more things it saw in your other answers, in the same detail.</p>
+      <p style="margin:0 0 12px;color:#333">This copy lives in your inbox, so star it or pin it. It's yours to keep.</p>
+      <p style="margin:0 0 12px;color:#555">It named where the hours go in the task you described, and one step for this week. The full breakdown takes that same task and works every step: which ones you can automate with what you likely already own, a labelled setup estimate, a labelled hours-a-week estimate, and two more things it saw in your other answers.</p>
+      <p style="margin:0 0 16px;color:#555">Your answers travel with the button below. Nothing to retype.</p>
       <a href="${ctaUrl}" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:700">Unlock the full breakdown: $7</a>
-      <p style="margin:12px 0 0;color:#777;font-size:14px">One tap. Nothing to re-enter; this link already carries your answers.</p>
     </div>`;
   }
 
   const html = `
   <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:600px;margin:0 auto;color:#1a1d24;line-height:1.6">
-    <h2 style="margin:0 0 20px">${record.paid ? 'Your full breakdown, written from your nine answers and the task you named' : 'Your result, written from your nine answers'}</h2>
+    <h2 style="margin:0 0 20px">${record.paid ? 'Your full breakdown, written from your nine answers and the task you named.' : 'Your result, written from your nine answers.'}</h2>
     <div>${resultHtml}</div>
     ${ctaBlock}
     <p style="color:#999;font-size:12px;margin-top:32px">
-      This result was written by an AI (Daniel Kane, Kynetica) from the answers you gave and nothing else. Estimates are estimates. No claims of past results or guaranteed savings are made here. A human owns Kynetica and answers for it.<br>
+      This result was written by an AI (Daniel Kane, Kynetica) from the answers you gave and nothing else. Estimates are estimates. No claims of past results or guaranteed savings are made here. Matt Gibbs owns Kynetica and answers for it.<br>
       Kynetica LLC. 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131<br>
       <a href="mailto:info@kynetica.one?subject=unsubscribe">Unsubscribe</a>
     </p>
   </div>`;
 
   const subject = record.paid
-    ? `Your full breakdown is ready`
-    : `Your result: the leak in "${record.task ? record.task.slice(0, 40) : 'your week'}"`;
+    ? `your full breakdown is ready.`
+    : `your result: the leak in "${record.task ? record.task.slice(0, 40) : 'your week'}".`;
 
 
   const resp = await fetch('https://api.resend.com/emails', {
@@ -264,7 +274,7 @@ export async function notifyOwner(record) {
     `Completion ID: ${record.completion_id || '(none)'}`,
     `Stripe session: ${record.stripe_session_id || '(none)'}`,
     `Paid (verified): ${record.paid ? 'YES' : 'no'}`,
-    record.needs_manual ? '*** NEEDS MANUAL FOLLOW-UP: paid Leak Finder breakdown generation failed, apology fallback sent — Daniel must email full breakdown within 24h ***' : '',
+    record.needs_manual ? '*** NEEDS MANUAL FOLLOW-UP: paid breakdown generation failed, fallback sent. Daniel must email the full breakdown by hand (no window promised to the customer) ***' : '',
     `Submitted: ${record.ts}`,
   ].filter(Boolean);
   const resp = await fetch('https://api.resend.com/emails', {
