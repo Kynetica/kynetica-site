@@ -35,8 +35,8 @@ export const FIX_LIBRARY = [
 "T-HCP",
 "T-ST"
 ],
-"diy_steps": "Pick Jobber (1 to 10 users, cheapest with QuickBooks sync) or Housecall Pro (stronger online booking). Start the free trial, import customers from QuickBooks, load the price book, set the job form, run one truck on it for a week, then all trucks; keep QuickBooks for the books via the sync.",
-"kynetica_build": "I run the migration: platform choice with reasons, customer and price-book import from QuickBooks Online, job form and invoice template, automatic reminders, on-my-way and review texts, the website booking widget, QuickBooks sync, one-truck pilot week, then the whole crew, a one-page card per tech and a 30-day check-in. The booking widget and review requests are included wins at no extra cost.",
+"diy_steps": "Pick Jobber (1 to 10 users, cheapest with QuickBooks sync) or Housecall Pro (stronger online booking). Start the free trial, import customers from QuickBooks, load the price book (item 2), set the job form, run one truck on it for a week, then all trucks; keep QuickBooks for the books via the sync.",
+"kynetica_build": "I run the migration: platform choice with reasons, customer import from QuickBooks Online (the price book itself is item 2, separate data work), job form and invoice template, automatic reminders, on-my-way and review texts, the website booking widget, QuickBooks sync, one-truck pilot week, then the whole crew, a one-page card per tech and a 30-day check-in. The booking widget and review requests are included wins at no extra cost.",
 "build_price_low": 1500.0,
 "build_price_high": 3500.0,
 "turnaround_days": 14.0,
@@ -46,7 +46,8 @@ export const FIX_LIBRARY = [
 "trucks",
 "software",
 "office_hourly_rate"
-]
+],
+"scope_includes": "FL-001,FL-005,FL-006,FL-007,FL-012,FL-016,FL-020,FL-022,FL-026,FL-036"
 },
 {
 "id": "FL-001",
@@ -92,7 +93,8 @@ export const FIX_LIBRARY = [
 "jobs_per_week",
 "corrections_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-002",
@@ -132,7 +134,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "calls_per_day",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-003",
@@ -175,7 +178,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "quote_requests_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-004",
@@ -216,7 +220,8 @@ export const FIX_LIBRARY = [
 "jobs_per_week",
 "trucks",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-005",
@@ -254,7 +259,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "no_shows_per_month",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-006",
@@ -292,7 +298,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "jobs_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-007",
@@ -333,7 +340,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "jobs_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-008",
@@ -371,7 +379,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "corrections_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-009",
@@ -409,7 +418,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "quotes_per_month",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-010",
@@ -448,7 +458,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "jobs_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-011",
@@ -486,7 +497,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "jobs_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-012",
@@ -497,7 +509,15 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "chasing invoices",
 "Friday calls",
-"pay when they feel like it"
+"pay when they feel like it",
+"haven't paid",
+"not paid",
+"unpaid",
+"chasing payment",
+"chase a payment",
+"who owes",
+"late payers",
+"past due"
 ],
 "automation_category": "payment_reminder_sequence",
 "tools_owner_likely_has": [
@@ -526,7 +546,8 @@ export const FIX_LIBRARY = [
 "open_invoices_per_month",
 "jobs_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-013",
@@ -565,7 +586,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "deposits_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-014",
@@ -603,7 +625,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "large_jobs_per_month",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-015",
@@ -614,7 +637,15 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "who paid",
 "reconcile",
-"which invoice"
+"which invoice",
+"who paid",
+"which invoice",
+"match payments",
+"unmatched",
+"bank feed",
+"receipts",
+"bookkeeper",
+"books"
 ],
 "automation_category": "payment_to_invoice_matching",
 "tools_owner_likely_has": [
@@ -640,7 +671,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "payments_per_month",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-016",
@@ -678,7 +710,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "jobs_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-017",
@@ -718,7 +751,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "plan_customers",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-018",
@@ -756,7 +790,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "installs_per_month",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-019",
@@ -794,7 +829,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "missed_calls_per_day",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-020",
@@ -831,7 +867,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "jobs_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-021",
@@ -868,7 +905,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "after_hours_calls_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-022",
@@ -911,7 +949,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "supply_runs_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-023",
@@ -949,7 +988,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "pm_accounts",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-024",
@@ -989,7 +1029,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "permits_per_month",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-025",
@@ -1026,7 +1067,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "quotes_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-026",
@@ -1065,7 +1107,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "leads_per_day_peak",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-027",
@@ -1104,7 +1147,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "insurance_jobs_per_month",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-028",
@@ -1142,7 +1186,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "open_claims",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-029",
@@ -1184,7 +1229,8 @@ export const FIX_LIBRARY = [
 "crews",
 "recurring_customers",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-030",
@@ -1223,7 +1269,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "recurring_customers",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-031",
@@ -1260,7 +1307,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "crew_size",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-032",
@@ -1297,7 +1345,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "surveys_per_week",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-033",
@@ -1334,7 +1383,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "installs_per_month",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-034",
@@ -1371,7 +1421,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "service_accounts",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-035",
@@ -1409,7 +1460,8 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "orders_per_month",
 "software"
-]
+],
+"scope_includes": ""
 },
 {
 "id": "FL-036",
@@ -1447,6 +1499,7 @@ export const FIX_LIBRARY = [
 "intake_needed": [
 "jobs_per_day",
 "software"
-]
+],
+"scope_includes": ""
 }
 ];
