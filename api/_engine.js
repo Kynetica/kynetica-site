@@ -217,7 +217,7 @@ export async function generateResult({ task, trade, teamSize, answers, paid, key
     const raw = await (fetchImpl ? fetchImpl(system, user, paid) : callModel(system, user, paid, key)); lastRaw = raw;
     let parsed; try { parsed = parseJson(raw); } catch (e) { failures = ['S output was not valid JSON']; attempts.push({ attempt, failures }); continue; }
     parsed.tier_paid = !!paid; parsed.version = '0.2'; normalizeTools(parsed, teamSize);
-    failures = validateResult(parsed, depth); attempts.push({ attempt, failures });
+    failures = validateResult(parsed, depth); attempts.push({ attempt, failures, draft: parsed });
     if (!failures.length) { result = parsed; break; }
   }
   if (!result) { const e = new Error('engine_rejected'); e.failures = failures; e.attempts = attempts; throw e; }
