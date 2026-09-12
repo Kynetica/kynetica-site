@@ -5,7 +5,7 @@ export const FIX_LIBRARY = [
 "trade": "all",
 "stage": "call_to_job",
 "leak_category": "paper_office",
-"leak_pattern": "The whole office runs on paper tickets, a whiteboard and night-time re-typing; three or more leaks share one root",
+"leak_pattern": "The whole office runs on paper tickets, a whiteboard and night-time re-typing; the platform move also closes the website booking path and review requests at no extra cost",
 "signal_words": [
 "paper",
 "paper ticket",
@@ -36,7 +36,7 @@ export const FIX_LIBRARY = [
 "T-ST"
 ],
 "diy_steps": "Pick Jobber (1 to 10 users, cheapest with QuickBooks sync) or Housecall Pro (stronger online booking). Start the free trial, import customers from QuickBooks, load the price book, set the job form, run one truck on it for a week, then all trucks; keep QuickBooks for the books via the sync.",
-"kynetica_build": "I run the migration: platform choice with reasons, customer and price-book import from your QuickBooks, job form and invoice template, reminders, on-my-way and review texts, QuickBooks sync, one-truck pilot week, then the whole crew, with a one-page card per tech and a 30-day check-in.",
+"kynetica_build": "I run the migration: platform choice with reasons, customer and price-book import from QuickBooks Online, job form and invoice template, automatic reminders, on-my-way and review texts, the website booking widget, QuickBooks sync, one-truck pilot week, then the whole crew, a one-page card per tech and a 30-day check-in. The booking widget and review requests are included wins at no extra cost.",
 "build_price_low": 1500.0,
 "build_price_high": 3500.0,
 "turnaround_days": 14.0,
@@ -86,7 +86,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "In your invoicing app's mobile app, turn on create-invoice-from-job (QuickBooks Online: Sales > Invoices > mobile; Jobber/HCP: job form). Add your parts to the price book so the tech picks, not types. Have one tech run Monday's jobs on the phone.",
 "kynetica_build": "I set up the job form and price book in your platform (or QuickBooks mobile if you stay there), import your customer list, connect the QuickBooks sync, and hand your crew a one-page card.",
 "build_price_low": 400.0,
-"build_price_high": 800.0,
+"build_price_high": 500.0,
 "turnaround_days": 3.0,
 "intake_needed": [
 "jobs_per_week",
@@ -210,7 +210,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Move the whiteboard into your platform's schedule (or a shared Google Calendar with one calendar per truck) and turn on customer confirmations.",
 "kynetica_build": "I build the schedule (one calendar per truck), import next month's jobs, and turn on confirmations and on-my-way texts.",
 "build_price_low": 300.0,
-"build_price_high": 600.0,
+"build_price_high": 500.0,
 "turnaround_days": 3.0,
 "intake_needed": [
 "jobs_per_week",
@@ -287,7 +287,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Use one customer record: create the quote in the platform, convert quote to job to invoice with one tap; QuickBooks sync carries the customer.",
 "kynetica_build": "I import your customers once, set quote-to-job-to-invoice conversion and the QuickBooks sync so nothing is typed twice.",
 "build_price_low": 400.0,
-"build_price_high": 800.0,
+"build_price_high": 500.0,
 "turnaround_days": 3.0,
 "intake_needed": [
 "jobs_per_week",
@@ -328,7 +328,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Tech marks the job complete in the app; the invoice generates from the job form and emails the customer before the truck leaves.",
 "kynetica_build": "I set invoice-on-completion, your invoice template and the pay link, and train one tech on it.",
 "build_price_low": 300.0,
-"build_price_high": 600.0,
+"build_price_high": 500.0,
 "turnaround_days": 2.0,
 "intake_needed": [
 "jobs_per_week",
@@ -356,7 +356,7 @@ export const FIX_LIBRARY = [
 "hours_week_high": 3.0,
 "setup_hours_low": 1.0,
 "setup_hours_high": 2.0,
-"estimate_basis": "corrections/week x minutes to redo + customer call; needs corrections/week",
+"estimate_basis": "corrections per week x minutes to redo the invoice and call the customer; uses corrections per week from intake",
 "anti_pattern_to_reject": "photograph the part label and send the photo (a workaround; the part must be picked from a price book on the job form)",
 "named_tools": [
 "T-JOBBER",
@@ -364,9 +364,9 @@ export const FIX_LIBRARY = [
 "T-QBO"
 ],
 "diy_steps": "Load your parts and prices into the platform's price book (Jobber Products & Services; HCP Price Book; QuickBooks Products and Services). The tech picks the part on the job form; the number is never typed.",
-"kynetica_build": "I build your price book from your last 90 days of invoices and supplier list, and set the job form so parts are picked, not typed.",
+"kynetica_build": "I build your price book from your last 90 days of invoices and your supplier list, load it into Jobber (or QuickBooks Online Products and Services), and set the job form so parts are picked, not typed.",
 "build_price_low": 400.0,
-"build_price_high": 800.0,
+"build_price_high": 500.0,
 "turnaround_days": 3.0,
 "intake_needed": [
 "corrections_per_week",
@@ -443,7 +443,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Job photos go into the job record (platform photo field or CompanyCam project) so the office and the customer see them without a text.",
 "kynetica_build": "I set up CompanyCam (or your platform's photo field) per job and connect it to the invoice.",
 "build_price_low": 300.0,
-"build_price_high": 600.0,
+"build_price_high": 500.0,
 "turnaround_days": 2.0,
 "intake_needed": [
 "jobs_per_week",
@@ -493,7 +493,7 @@ export const FIX_LIBRARY = [
 "trade": "all",
 "stage": "invoice_to_money",
 "leak_category": "payment_chasing",
-"leak_pattern": "Owner chases unpaid invoices by phone on Fridays",
+"leak_pattern": "Unpaid invoices chased by phone across all customers",
 "signal_words": [
 "chasing invoices",
 "Friday calls",
@@ -510,20 +510,21 @@ export const FIX_LIBRARY = [
 "hours_week_high": 3.0,
 "setup_hours_low": 0.5,
 "setup_hours_high": 1.0,
-"estimate_basis": "open invoices x reminder calls x minutes; needs open invoices/month",
+"estimate_basis": "invoices needing a chase per week (assume a third of jobs) x minutes per call; uses jobs per week",
 "anti_pattern_to_reject": "block out Friday afternoon for collections",
 "named_tools": [
-"T-QBO",
 "T-JOBBER",
+"T-QBO",
 "T-SQI"
 ],
-"diy_steps": "In QuickBooks Online: Settings > Sales > Reminders, turn on automatic reminders at 7, 14 and 21 days and add the pay link to the invoice template. Jobber and Square Invoices have the same switch.",
-"kynetica_build": "I turn on reminders and pay links in your invoicing tool, write the three reminder texts in your voice, and hand you the day-21 list format.",
+"diy_steps": "In Jobber: Settings > Invoices > Automatic reminders, turn on 7, 14 and 21 days with Jobber Payments pay link. On QuickBooks Online: Account and settings > Sales > Reminders, same schedule, Pay now link on the template.",
+"kynetica_build": "I turn on automatic invoice reminders at 7, 14 and 21 days with a pay link in Jobber (or QuickBooks Online if you stay), write the three reminder texts in your voice, and set up the day-21 call list.",
 "build_price_low": 150.0,
 "build_price_high": 300.0,
 "turnaround_days": 1.0,
 "intake_needed": [
 "open_invoices_per_month",
+"jobs_per_week",
 "software"
 ]
 },
@@ -634,7 +635,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Connect your bank feed and payment processor to QuickBooks so payments match invoices; review only the exceptions weekly.",
 "kynetica_build": "I connect the bank feed and processor sync, clean up the last 60 days of unmatched payments, and set the weekly exceptions view.",
 "build_price_low": 300.0,
-"build_price_high": 600.0,
+"build_price_high": 500.0,
 "turnaround_days": 3.0,
 "intake_needed": [
 "payments_per_month",
@@ -663,7 +664,7 @@ export const FIX_LIBRARY = [
 "setup_hours_low": 0.5,
 "setup_hours_high": 1.0,
 "estimate_basis": "jobs/week x minutes per manual ask; needs jobs/week",
-"anti_pattern_to_reject": "ask in person and hope",
+"anti_pattern_to_reject": "counting the review request as a separate paid item when a Jobber/HCP migration is already recommended (it is included); ask in person and hope",
 "named_tools": [
 "T-JOBBER",
 "T-HCP",
@@ -712,7 +713,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Put maintenance-plan customers on recurring jobs with automatic renewal reminders; bill on QuickBooks recurring invoices.",
 "kynetica_build": "I load your plan customers, set the recurring jobs and renewal texts, and the recurring invoices.",
 "build_price_low": 400.0,
-"build_price_high": 800.0,
+"build_price_high": 500.0,
 "turnaround_days": 3.0,
 "intake_needed": [
 "plan_customers",
@@ -905,7 +906,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Supply-house receipts are added to the job as an expense in the app at the counter; parts from the price book bill automatically.",
 "kynetica_build": "I set expense capture on the job and load your supplier parts into the price book.",
 "build_price_low": 300.0,
-"build_price_high": 600.0,
+"build_price_high": 500.0,
 "turnaround_days": 2.0,
 "intake_needed": [
 "supply_runs_per_week",
@@ -1020,7 +1021,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Build quote templates per job type with the materials list pre-loaded from the price book; adjust quantities only.",
 "kynetica_build": "I build your quote templates from your last 20 quotes and load the price book.",
 "build_price_low": 400.0,
-"build_price_high": 800.0,
+"build_price_high": 500.0,
 "turnaround_days": 3.0,
 "intake_needed": [
 "quotes_per_week",
@@ -1051,7 +1052,7 @@ export const FIX_LIBRARY = [
 "setup_hours_low": 1.0,
 "setup_hours_high": 2.0,
 "estimate_basis": "leads/day in surge x minutes first response; needs leads/day",
-"anti_pattern_to_reject": "hire a cousin to text people",
+"anti_pattern_to_reject": "counting the booking widget as a separate paid item when a Jobber/HCP migration is already recommended (it is included); hire a cousin to text people",
 "named_tools": [
 "T-HCP",
 "T-QUO"
@@ -1059,7 +1060,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Turn on online booking and an instant text reply for storm leads; leads queue in the platform ordered by address.",
 "kynetica_build": "I set up the lead intake form, the auto-reply and the queue for storm season.",
 "build_price_low": 300.0,
-"build_price_high": 600.0,
+"build_price_high": 500.0,
 "turnaround_days": 2.0,
 "intake_needed": [
 "leads_per_day_peak",
@@ -1177,7 +1178,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Set recurring jobs per customer with route order; rain reschedules move the whole day with one drag.",
 "kynetica_build": "I load your recurring customers and routes and set the reschedule rule.",
 "build_price_low": 400.0,
-"build_price_high": 800.0,
+"build_price_high": 500.0,
 "turnaround_days": 3.0,
 "intake_needed": [
 "crews",
@@ -1217,7 +1218,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Recurring invoices with card on file (autopay) for monthly customers; reminders for the rest.",
 "kynetica_build": "I set up recurring invoices, autopay enrolment and reminders for your monthly customers.",
 "build_price_low": 300.0,
-"build_price_high": 600.0,
+"build_price_high": 500.0,
 "turnaround_days": 2.0,
 "intake_needed": [
 "recurring_customers",
@@ -1254,7 +1255,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Mobile clock-in (QuickBooks Time or your platform's timesheets) with GPS; approve hours Friday; export to payroll.",
 "kynetica_build": "I set up mobile time tracking for the crew and the payroll export.",
 "build_price_low": 300.0,
-"build_price_high": 600.0,
+"build_price_high": 500.0,
 "turnaround_days": 2.0,
 "intake_needed": [
 "crew_size",
@@ -1291,7 +1292,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Survey form with photo fields (Google Forms or CompanyCam project per lead); photos land in the job folder.",
 "kynetica_build": "I build the survey form with photo upload and the per-lead folder.",
 "build_price_low": 400.0,
-"build_price_high": 800.0,
+"build_price_high": 500.0,
 "turnaround_days": 3.0,
 "intake_needed": [
 "surveys_per_week",
@@ -1365,7 +1366,7 @@ export const FIX_LIBRARY = [
 "diy_steps": "Quarterly recurring jobs with a confirmation text; the customer taps to confirm or reschedule.",
 "kynetica_build": "I load your service accounts as recurring jobs with confirmation texts.",
 "build_price_low": 300.0,
-"build_price_high": 600.0,
+"build_price_high": 500.0,
 "turnaround_days": 2.0,
 "intake_needed": [
 "service_accounts",

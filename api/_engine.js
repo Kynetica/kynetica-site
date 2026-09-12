@@ -10,6 +10,9 @@ import { QUESTIONS } from './_questions.js';
 
 export const ENGINE_VERSION = 'v2.0';
 const TOOL_BY_ID = Object.fromEntries(TOOLS.map((t) => [t.tool_id, t]));
+const VERIFIED = new Set(TOOLS.filter((t) => t.verified && String(t.vendor_pricing_url || '').startsWith('http') && t.price_checked_on).map((t) => t.tool_id));
+const LOGIN_WORDS = [/\b(?:log-?in|login|username|password|passwords|credentials|sign-?in details)\b/i, /\byour [a-z ]{0,20}(?:account )?(?:login|password)\b/i, /\bshare (?:your|the) (?:login|password|credentials)\b/i];
+const MAX_SENTENCE_WORDS = 32;
 const ALIASES = { jobber: 'T-JOBBER', 'housecall pro': 'T-HCP', housecall: 'T-HCP', servicetitan: 'T-ST', 'service titan': 'T-ST', 'quickbooks online': 'T-QBO', quickbooks: 'T-QBO', qbo: 'T-QBO', 'square invoices': 'T-SQI', square: 'T-SQI', quo: 'T-QUO', openphone: 'T-QUO', podium: 'T-PODIUM', nicejob: 'T-NICEJOB', companycam: 'T-CCAM', 'quickbooks time': 'T-QBT', 'google workspace': 'T-GWS', 'google forms': 'T-GWS', 'google sheets': 'T-GWS', 'google calendar': 'T-GWS', stripe: 'T-STRIPE', 'kynetica pdf prefill': 'T-PDFFILL', 'pdf prefill': 'T-PDFFILL' };
 const PAPER = /\b(?:paper|whiteboard|re-?typ|retyp|at night|by hand|binder|carbon|notebook|clipboard)/i;
 
@@ -60,7 +63,9 @@ function checkTools(tools, tag, f, needPrice) {
   if (!tools || !tools.length) { f.push(`R2 ${tag} names no tool`); return; }
   for (const x of tools) {
     const name = typeof x === 'object' ? x.name : x;
-    if (!toolIdsIn(name).size) f.push(`R2 ${tag} tool '${name}' is not in tools-catalog.csv`);
+    const ids = toolIdsIn(name);
+    if (!ids.size) f.push(`R2 ${tag} tool '${name}' is not in tools-catalog.csv`);
+    else if (![...ids].some((i) => VERIFIED.has(i))) f.push(`R2 ${tag} tool '${name}' has no vendor-verified price (vendor_pricing_url + price_checked_on + verified=yes required in tools-catalog.csv)`);
     if (needPrice && typeof x === 'object') { const m = x.monthly_cost_usd || {}; if (typeof m.low !== 'number' || typeof m.high !== 'number') f.push(`R2 ${tag} tool '${name}' has no monthly price`); }
     if (typeof x === 'object' && String(x.why || '').length < 15) f.push(`R2 ${tag} tool '${name}' has no 'why this one'`);
   }
@@ -71,6 +76,8 @@ function common(t, f, depth) {
   for (const p of RAW_EVIDENCE) { const m = t.match(p); if (m) f.push(`R3 raw evidence line: '${m[0].trim()}'`); }
   for (const p of BOILERPLATE) { const m = t.match(p); if (m) f.push(`R6 boilerplate: '${m[0]}'`); }
   for (const [p, why] of BANNED_ALL) { const m = t.match(p); if (m) f.push(`R7 ${why}: '${m[0]}'`); }
+  for (const p of LOGIN_WORDS) { const m = t.match(p); if (m) f.push(`R9 asks for or mentions a login/password: '${m[0]}' (every access request is an invite: accountant access in QuickBooks Online, a user in Jobber, an editor on the website; removed when done)`); }
+  for (const sent of t.split(/(?<=[.!?])\s+|\n+/)) { const w = sent.trim().split(/\s+/).filter(Boolean); if (w.length > MAX_SENTENCE_WORDS && !/\d+ to \d+ hours a week x/.test(sent)) f.push(`R10 sentence over ${MAX_SENTENCE_WORDS} words (${w.length}): '${sent.slice(0, 70)}...'`); }
   if (SELL.test(t)) f.push('R7 sells or references the ladder inside a result');
 }
 export function validateResult(r, depth) {
@@ -114,7 +121,7 @@ export function validateResult(r, depth) {
 }
 
 // ---------- prompt ----------
-function toolsBlock() { return TOOLS.map((t) => `- ${t.name} ($${t.monthly_low_usd} to $${t.monthly_high_usd}/mo; ${t.pricing_note}). Best for: ${t.best_for}. Why: ${t.why_this_one}`).join('\n'); }
+function toolsBlock() { return TOOLS.filter((t) => VERIFIED.has(t.tool_id)).map((t) => `- ${t.name} ($${t.monthly_low_usd} to $${t.monthly_high_usd}/mo; ${t.pricing_note}). Best for: ${t.best_for}. Why: ${t.why_this_one}`).join('\n'); }
 function libraryBlock(rows) { return rows.map((r) => `- ${r.id} [${r.leak_category}] ${r.leak_pattern}. Named tools (first = recommended): ${r.named_tools.map((id) => TOOL_BY_ID[id]?.name || id).join(', ')}. What the owner does: ${r.diy_steps} Stays manual: ${r.manual_step_that_stays}. hours/wk ${r.hours_week_low}-${r.hours_week_high}, setup ${r.setup_hours_low}-${r.setup_hours_high}h. NEVER: ${r.anti_pattern_to_reject}.`).join('\n'); }
 
 export function buildPrompt({ task, trade, teamSize, answers, paid, rows, priorFailures }) {
@@ -129,11 +136,13 @@ export function buildPrompt({ task, trade, teamSize, answers, paid, rows, priorF
 "estimates":{"hours_per_week":{"low":n,"high":n},"setup_effort_hours":{"low":n,"high":n},"basis":"<state the count you assumed: 'I assumed about 40 jobs a week and four minutes a ticket'>","label":"estimate until you correct it"},
 "cannot_see":["<inputs you did not have>"]${paid ? `,
 "breakdown":{"steps":[{"name":"<step>","today":"<how it happens now>","automate":"<how, naming the tool>" or null,"keep_manual":true|false,"tools":[{"name":"<EXACT TOOLS name>","monthly_cost_usd":{"low":n,"high":n},"why":"<one sentence>"}],"setup_hours":{"low":n,"high":n}} x 3 to 8 in the order the steps happen],
-"secondary_leaks":[{"leak_category":"<different from the main one>","sentence":"<one sentence tied to a specific answer, naming the tool that closes it>"} x exactly 2],
+"secondary_leaks":[{"leak_category":"<different from the main one>","sentence":"<one sentence tied to a specific answer, naming the tool that closes it>"},{"leak_category":"<a third, different category>","sentence":"<one sentence>"}],
 "monthly_total_usd":{"low":n,"high":n}}` : ''},
 "sign_off":"Daniel Kane, Kynetica (AI)"}
 
 Rules that never bend:
+- Never write 'the app', 'the phone app', 'the software' on its own: write the tool's name (Jobber, QuickBooks Online, Quo) every time.
+- Sentences of 32 words or fewer. Never mention a login, password or credentials; if access comes up, it is an invite (accountant access in QuickBooks Online, a user in Jobber) removed when done.
 - Use THEIR nouns. Paper tickets stay paper tickets; QuickBooks stays QuickBooks. But biggest_leak.where is NOT a repeat of the task: it names the exact step or hand-off where the time goes ("the hand-off from the paper ticket to the QuickBooks screen at night, where part numbers get re-read and re-typed"). Write about the owner in second person: "your wife", never "my wife".
 - NAME the tool, from TOOLS only, and say why this one. Never "scheduling software", "invoicing tool", "business texting app", "a connector", "shared spreadsheet", "the app" on their own. If they already pay for QuickBooks Online, prefer what is inside their login first; if they are a paper office with 3 or more people (paper tickets, whiteboard, re-typing at night, same info typed into several places), the fix is moving to Jobber (Housecall Pro if online booking matters; never ServiceTitan under 10 techs) with QuickBooks Online sync, and you say it covers the re-typing, the parts and the invoicing in one move.
 - Parts and serial numbers are picked from a price book or equipment record on the job form. Never photographed and sent.
@@ -181,14 +190,16 @@ async function callModel(system, user, paid, key) {
 export function parseJson(text) { let t = String(text).trim().replace(/^```[a-z]*\s*/i, '').replace(/\s*```$/, ''); const i = t.indexOf('{'), j = t.lastIndexOf('}'); if (i >= 0 && j > i) t = t.slice(i, j + 1); return JSON.parse(t); }
 
 // Code owns the arithmetic: tool prices from the catalog, monthly total.
-export function normalizeTools(r) {
-  const fix = (tools) => (tools || []).map((t) => { const id = [...toolIdsIn(t.name)][0]; const c = id && TOOL_BY_ID[id]; return c ? { ...t, name: c.name, monthly_cost_usd: { low: c.monthly_low_usd, high: c.monthly_high_usd } } : t; });
+export function normalizeTools(r, teamSize = '') {
+  const bandKey = (ts) => (/^1/.test(String(ts || '')) ? 'band_small' : /^(3|4|5|6|7|8|9)/.test(String(ts || '')) ? 'band_mid' : 'band_large');
+  const band = (c, ts) => { const b = String(c[bandKey(ts)] || '').split('-').map(Number); return b.length === 2 && !b.some(isNaN) ? { low: b[0], high: b[1] } : { low: c.monthly_low_usd, high: c.monthly_high_usd }; };
+  const fix = (tools) => (tools || []).map((t) => { const id = [...toolIdsIn(t.name)][0]; const c = id && TOOL_BY_ID[id]; return c ? { ...t, name: c.name, monthly_cost_usd: band(c, teamSize) } : t; });
   if (r.fix_this_week) r.fix_this_week.tools = fix(r.fix_this_week.tools);
   if (r.breakdown) {
     for (const s of r.breakdown.steps || []) s.tools = fix(s.tools);
     const ids = new Set(); for (const s of r.breakdown.steps || []) for (const t of s.tools || []) for (const id of toolIdsIn(t.name)) ids.add(id);
     for (const t of r.fix_this_week?.tools || []) for (const id of toolIdsIn(t.name)) ids.add(id);
-    let lo = 0, hi = 0; for (const id of ids) { const c = TOOL_BY_ID[id]; if (c) { lo += c.monthly_low_usd; hi += c.monthly_high_usd; } }
+    let lo = 0, hi = 0; for (const id of ids) { const c = TOOL_BY_ID[id]; if (c) { const b = band(c, teamSize); lo += b.low; hi += b.high; } }
     r.breakdown.monthly_total_usd = { low: lo, high: hi };
   }
   if (!r.tier_paid && r.fix_this_week) for (const t of r.fix_this_week.tools || []) delete t.monthly_cost_usd;
@@ -199,12 +210,13 @@ export async function generateResult({ task, trade, teamSize, answers, paid, key
   if (!key) throw new Error('no_key');
   const depth = paid ? 'breakdown' : 'free';
   const rows = retrieveRows(task, trade, answers, 6, teamSize);
-  let failures = [], result = null; const attempts = [];
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    const { system, user } = buildPrompt({ task, trade, teamSize, answers, paid, rows, priorFailures: failures });
-    const raw = await (fetchImpl ? fetchImpl(system, user, paid) : callModel(system, user, paid, key));
+  let failures = [], result = null, lastRaw = null; const attempts = [];
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const { system, user: user0 } = buildPrompt({ task, trade, teamSize, answers, paid, rows, priorFailures: failures });
+    const user = lastRaw && failures.length ? `${user0}\n\nYOUR PREVIOUS DRAFT (edit it minimally: fix only the rejected items, keep every other field word for word, keep the same number of steps and secondary leaks):\n${lastRaw}` : user0;
+    const raw = await (fetchImpl ? fetchImpl(system, user, paid) : callModel(system, user, paid, key)); lastRaw = raw;
     let parsed; try { parsed = parseJson(raw); } catch (e) { failures = ['S output was not valid JSON']; attempts.push({ attempt, failures }); continue; }
-    parsed.tier_paid = !!paid; parsed.version = '0.2'; normalizeTools(parsed);
+    parsed.tier_paid = !!paid; parsed.version = '0.2'; normalizeTools(parsed, teamSize);
     failures = validateResult(parsed, depth); attempts.push({ attempt, failures });
     if (!failures.length) { result = parsed; break; }
   }
