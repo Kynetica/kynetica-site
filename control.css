@@ -106,3 +106,21 @@ footer.site a{color:var(--muted)}
 @media (prefers-reduced-motion:no-preference){ details p{animation:open .18s ease-out} }
 @media (prefers-reduced-motion:reduce){ .spinner{animation:none} }
 @keyframes open{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+
+/* Tables inside tickets (sample audit: "The five, ranked" and "Have Kynetica do it"). Section 11 tokens; no horizontal blow-out. */
+.ticket table.plain{width:100%;border-collapse:collapse;table-layout:fixed;font-size:15px;margin:4px 0 6px}
+.ticket table.plain th,.ticket table.plain td{text-align:left;vertical-align:top;padding:8px 8px 8px 0;border-bottom:1px solid var(--ticket-edge);overflow-wrap:anywhere}
+.ticket table.plain th{font-size:12px;letter-spacing:.02em;color:#7A7350;font-weight:700}
+.ticket table.plain tr:last-child td{border-bottom:0}
+.ticket table.plain td:first-child,.ticket table.plain th:first-child{width:2.2em;padding-right:4px}
+@media (max-width:560px){
+  .ticket table.plain,.ticket table.plain tbody,.ticket table.plain tr,.ticket table.plain td{display:block;width:100%}
+  .ticket table.plain thead{display:none}
+  .ticket table.plain tr{padding:10px 0;border-bottom:1px solid var(--ticket-edge)}
+  .ticket table.plain tr:last-child{border-bottom:0}
+  .ticket table.plain td{border:0;padding:2px 0}
+  .ticket table.plain td:first-child{width:auto;display:inline;font-weight:700;padding-right:6px}
+  .ticket table.plain td:first-child::after{content:". "}
+  .ticket table.plain td:nth-child(2){display:inline;font-weight:700}
+  .ticket table.plain td[data-l]::before{content:attr(data-l) ": ";color:#7A7350;font-size:13px}
+}
