@@ -38,7 +38,9 @@ export default async function handler(req, res) {
   if (!secret) { res.status(500).send('unsubscribe not configured'); return; }
   const email = verify((req.query || {}).t, secret);
   if (!email) { res.status(400).send('That unsubscribe link is not valid. Write to info@kynetica.one and I remove you myself.'); return; }
-  const line = JSON.stringify({ ts: new Date().toISOString(), email, method: req.method, ua: String(req.headers['user-agent'] || '').slice(0, 120), one_click: /One-Click/i.test(String(req.body || '')) || String(req.headers['content-type'] || '').includes('form') }) + '\n';
+  let bodyText = '';
+  try { bodyText = typeof req.body === 'string' ? req.body : (req.body && typeof req.body === 'object' ? JSON.stringify(req.body) : ''); } catch { bodyText = ''; }
+  const line = JSON.stringify({ ts: new Date().toISOString(), email, method: req.method, ua: String(req.headers['user-agent'] || '').slice(0, 120), one_click: /One-Click/i.test(bodyText) || String(req.headers['content-type'] || '').includes('form') }) + '\n';
   const r = await record(line);
   res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'POST') { res.status(r.stored ? 200 : 202).end(); return; }
