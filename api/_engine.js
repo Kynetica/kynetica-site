@@ -8,7 +8,7 @@ import { FIX_LIBRARY } from './_fix_library.js';
 import { TOOLS } from './_tools_catalog.js';
 import { QUESTIONS } from './_questions.js';
 
-export const ENGINE_VERSION = 'v2.0';
+export const ENGINE_VERSION = 'v2.1';
 const TOOL_BY_ID = Object.fromEntries(TOOLS.map((t) => [t.tool_id, t]));
 const VERIFIED = new Set(TOOLS.filter((t) => t.verified && String(t.vendor_pricing_url || '').startsWith('http') && t.price_checked_on).map((t) => t.tool_id));
 const LOGIN_WORDS = [/\b(?:log-?in|login|username|password|passwords|credentials|sign-?in details)\b/i, /\byour [a-z ]{0,20}(?:account )?(?:login|password)\b/i, /\bshare (?:your|the) (?:login|password|credentials)\b/i];
@@ -135,7 +135,7 @@ export function buildPrompt({ task, trade, teamSize, answers, paid, rows, priorF
 "fix_library_ids":["FL-xxx"],
 "biggest_leak":{"where":"<the exact step(s) in THEIR process where the time leaks, their nouns, 1-3 sentences>","why_it_costs":"<1-2 sentences>"},
 "fix_this_week":{"what":"<ONE real automation fix they can set up this week, naming the tool: what it replaces and what stops happening. 2-4 sentences.>","automation_category":"<from the row>","tools":[{"name":"<EXACT name from TOOLS>","why":"<why this one for this shop, one sentence>"${paid ? ',"monthly_cost_usd":{"low":n,"high":n}' : ''}}],"removes_step":"<the step that no longer happens>","manual_steps_remaining":["<what stays human>"]},
-"estimates":{"hours_per_week":{"low":n,"high":n},"setup_effort_hours":{"low":n,"high":n},"basis":"<state the count you assumed WITH ITS UNIT: 'I assumed about 40 jobs a week and four minutes a ticket' or 'about 5 quote texts a week and 30 minutes each'>","label":"estimate until you correct it"},
+"estimates":{"hours_per_week":{"low":n,"high":n},"setup_effort_hours":{"low":n,"high":n},"assumed_count":n,"assumed_unit":"<plural noun for what you counted, in the owner's words: jobs, paper tickets, quote texts, storm leads, maintenance customers>","assumed_minutes":n,"label":"estimate until you correct it"},
 "cannot_see":["<inputs you did not have>"]${paid ? `,
 "breakdown":{"steps":[{"name":"<step>","today":"<how it happens now>","automate":"<how, naming the tool>" or null,"keep_manual":true|false,"tools":[{"name":"<EXACT TOOLS name>","monthly_cost_usd":{"low":n,"high":n},"why":"<one sentence>"}],"setup_hours":{"low":n,"high":n}} x 3 to 8 in the order the steps happen],
 "secondary_leaks":[<0 to 2 items, ONLY when a specific answer shows the leak; never invent> {"leak_category":"<different from the main one>","sentence":"<one sentence tied to a specific answer, naming the tool that closes it>"}],
@@ -149,7 +149,7 @@ Rules that never bend:
 - NAME the tool, from TOOLS only, and say why this one. Never "scheduling software", "invoicing tool", "business texting app", "a connector", "shared spreadsheet", "the app" on their own. If they already pay for QuickBooks Online, prefer what is inside their login first; if they are a paper office with 3 or more people (paper tickets, whiteboard, re-typing at night, same info typed into several places), the fix is moving to Jobber (Housecall Pro if online booking matters; never ServiceTitan under 10 techs) with QuickBooks Online sync, and you say it covers the re-typing, the parts and the invoicing in one move.
 - Parts and serial numbers are picked from a price book or equipment record on the job form. Never photographed and sent.
 - The fix REMOVES work. Photographing and texting, a folder, hiring, reminders to yourself, printing, "write clearer", doing it on another day are not fixes; if a row's NEVER line describes your fix, pick another.
-- Numbers are estimates; basis states the count you assumed in words ("about 40 jobs a week"). Never "needs your count" or "from the owner".
+- Numbers are estimates; give assumed_count (a number), assumed_unit (plural noun in the owner's words) and assumed_minutes (per unit). Never "needs your count" or "from the owner".
 - Never a price of ours, a product of ours, an audit, a guarantee, a refund. You deliver the result; you do not sell. ${paid ? 'Tool monthly prices ARE required here (this is the paid breakdown).' : 'No tool prices at this depth.'}
 - Plain first person, I. Never we, us, our. No em dashes. No exclamation points. No URLs. Never mention an AI model or provider.
 - Do not describe their score or tier. No generic advice.${priorFailures?.length ? `
@@ -192,6 +192,20 @@ async function callModel(system, user, paid, key) {
 export function parseJson(text) { let t = String(text).trim().replace(/^```[a-z]*\s*/i, '').replace(/\s*```$/, ''); const i = t.indexOf('{'), j = t.lastIndexOf('}'); if (i >= 0 && j > i) t = t.slice(i, j + 1); return JSON.parse(t); }
 
 // Code owns the arithmetic: tool prices from the catalog, monthly total.
+export function structuralBasis(r) {
+  const e = r.estimates || (r.estimates = {});
+  const n = Number(e.assumed_count), m = Number(e.assumed_minutes); const unit = String(e.assumed_unit || '').trim().replace(/[.]+$/, '');
+  if (Number.isFinite(n) && n > 0 && unit) e.basis = `I assumed about ${n} ${unit} a week${Number.isFinite(m) && m > 0 ? ` and ${m} minutes each` : ''}.`;
+  return r;
+}
+export function proseHygiene(r) {
+  const firstTool = (r.fix_this_week?.tools || []).map((t) => t.name).find((nm) => toolIdsIn(nm).size);
+  const fix = (txt) => { let t = String(txt ?? ''); t = t.replace(/\b(?:your |the )?(?:login|log-in|logins)\b/gi, 'account').replace(/\bpasswords?\b/gi, 'account access'); if (firstTool) t = t.replace(/\b(?:the|your) (?:phone )?(?:app|software|platform|system)\b/gi, firstTool).replace(/\b(?:the|your|a) (?:scheduling|invoicing|accounting|booking|texting|dispatch|field[- ]service) (?:tool|software|app|platform|system)\b/gi, firstTool); return t; };
+  if (r.biggest_leak) for (const k of ['where', 'why_it_costs']) if (k in r.biggest_leak) r.biggest_leak[k] = fix(r.biggest_leak[k]);
+  if (r.fix_this_week) { for (const k of ['what', 'removes_step']) if (k in r.fix_this_week) r.fix_this_week[k] = fix(r.fix_this_week[k]); r.fix_this_week.manual_steps_remaining = (r.fix_this_week.manual_steps_remaining || []).map(fix); }
+  if (r.breakdown) { for (const s of r.breakdown.steps || []) for (const k of ['today', 'automate']) if (s[k]) s[k] = fix(s[k]); for (const x of r.breakdown.secondary_leaks || []) if (x.sentence) x.sentence = fix(x.sentence); }
+  return r;
+}
 export function normalizeTools(r, teamSize = '') {
   const bandKey = (ts) => (/^1/.test(String(ts || '')) ? 'band_small' : /^(3|4|5|6|7|8|9)/.test(String(ts || '')) ? 'band_mid' : 'band_large');
   const band = (c, ts) => { const b = String(c[bandKey(ts)] || '').split('-').map(Number); return b.length === 2 && !b.some(isNaN) ? { low: b[0], high: b[1] } : { low: c.monthly_low_usd, high: c.monthly_high_usd }; };
@@ -216,9 +230,14 @@ export async function generateResult({ task, trade, teamSize, answers, paid, key
   for (let attempt = 1; attempt <= 3; attempt++) {
     const { system, user: user0 } = buildPrompt({ task, trade, teamSize, answers, paid, rows, priorFailures: failures });
     const user = lastRaw && failures.length ? `${user0}\n\nYOUR PREVIOUS DRAFT (edit it minimally: fix only the rejected items, keep every other field word for word, keep the same number of steps and secondary leaks):\n${lastRaw}` : user0;
-    const raw = await (fetchImpl ? fetchImpl(system, user, paid) : callModel(system, user, paid, key)); lastRaw = raw;
-    let parsed; try { parsed = parseJson(raw); } catch (e) { failures = ['S output was not valid JSON']; attempts.push({ attempt, failures }); continue; }
-    parsed.tier_paid = !!paid; parsed.version = '0.2'; normalizeTools(parsed, teamSize);
+    let raw = null, parsed = null, transportErr = null;
+    for (let t = 0; t < 3 && parsed === null; t++) {
+      try { raw = await (fetchImpl ? fetchImpl(system, user, paid) : callModel(system, user, paid, key)); parsed = parseJson(raw); }
+      catch (e) { transportErr = e; parsed = null; if (t < 2) await new Promise((res) => setTimeout(res, 800 * (t + 1))); }
+    }
+    if (parsed === null) { failures = [`S transport/parse failure after 3 tries: ${transportErr && transportErr.message}`]; attempts.push({ attempt, failures }); continue; }
+    lastRaw = raw;
+    parsed.tier_paid = !!paid; parsed.version = '0.2'; normalizeTools(parsed, teamSize); structuralBasis(parsed); proseHygiene(parsed);
     failures = validateResult(parsed, depth); attempts.push({ attempt, failures, draft: parsed });
     if (!failures.length) { result = parsed; break; }
   }
