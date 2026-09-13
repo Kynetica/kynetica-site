@@ -232,7 +232,12 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "nobody home",
 "no-show",
-"drove out for nothing"
+"drove out for nothing",
+"no-shows",
+"no shows",
+"nobody's home",
+"drive out",
+"not home"
 ],
 "automation_category": "appointment_reminder_sms",
 "tools_owner_likely_has": [
@@ -352,7 +357,8 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "wrong part",
 "redo the invoice",
-"part number"
+"part number",
+"parts typed"
 ],
 "automation_category": "price_book_parts_on_job_form",
 "tools_owner_likely_has": [
@@ -391,7 +397,13 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "forgot to follow up",
 "quote went cold",
-"never heard back"
+"never heard back",
+"quotes I write",
+"notebook",
+"never follow up",
+"quote sits",
+"quotes go quiet",
+"forget to follow up"
 ],
 "automation_category": "quote_follow_up_sequence",
 "tools_owner_likely_has": [
@@ -430,7 +442,12 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "photos on his phone",
 "send me the pictures",
-"before and after"
+"before and after",
+"before-and-after photos",
+"photos live on",
+"photos on the techs",
+"pictures on their phones",
+"send the photos"
 ],
 "automation_category": "photo_to_job_record",
 "tools_owner_likely_has": [
@@ -470,7 +487,13 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "forgot to bill",
 "extra work",
-"he said it was fine"
+"he said it was fine",
+"extras",
+"another outlet",
+"agreed on site",
+"get forgotten",
+"change order",
+"add-on we agreed"
 ],
 "automation_category": "change_order_capture_form",
 "tools_owner_likely_has": [
@@ -558,7 +581,12 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "check",
 "drive to the bank",
-"deposit"
+"deposit",
+"collect checks",
+"checks on site",
+"bank twice",
+"cash on site",
+"take a check"
 ],
 "automation_category": "card_or_ach_on_site",
 "tools_owner_likely_has": [
@@ -598,7 +626,10 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "deposit",
 "half up front",
-"did they pay the deposit"
+"did they pay the deposit",
+"deposits",
+"can't remember who paid",
+"who paid the deposit"
 ],
 "automation_category": "deposit_request_with_link",
 "tools_owner_likely_has": [
@@ -841,7 +872,11 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "serial number",
 "model number",
-"wrote it down wrong"
+"wrote it down wrong",
+"model and serial",
+"off the unit",
+"data plate",
+"write the model"
 ],
 "automation_category": "equipment_record_fields_on_job_form",
 "tools_owner_likely_has": [
@@ -879,7 +914,13 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "burst pipe",
 "3am",
-"emergency line"
+"emergency line",
+"emergency calls at 2am",
+"2am",
+"who rolls",
+"on call",
+"after-hours call",
+"middle of the night"
 ],
 "automation_category": "after_hours_triage_form_and_rotation",
 "tools_owner_likely_has": [
@@ -1159,7 +1200,10 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "waiting on insurance",
 "depreciation check",
-"final payment"
+"final payment",
+"insurance for final payment",
+"milestone",
+"lose track of who owes"
 ],
 "automation_category": "milestone_payment_tracking",
 "tools_owner_likely_has": [
@@ -1202,7 +1246,12 @@ export const FIX_LIBRARY = [
 "reschedule for rain",
 "text each",
 "their houses",
-"every morning i text"
+"every morning i text",
+"mow routes",
+"routes every week",
+"rebuilding the routes",
+"when it rains",
+"route for three crews"
 ],
 "automation_category": "recurring_job_templates_and_route_order",
 "tools_owner_likely_has": [
@@ -1281,7 +1330,11 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "time sheet",
 "crew hours",
-"payroll Friday"
+"payroll Friday",
+"paper sheets",
+"key them into payroll",
+"payroll Saturday",
+"timesheets"
 ],
 "automation_category": "mobile_clock_in_to_payroll",
 "tools_owner_likely_has": [
@@ -1472,7 +1525,11 @@ export const FIX_LIBRARY = [
 "signal_words": [
 "what time are you coming",
 "on my way",
-"eta calls"
+"eta calls",
+"what time we're coming",
+"are you coming",
+"eta",
+"when will you be here"
 ],
 "automation_category": "on_my_way_sms",
 "tools_owner_likely_has": [
