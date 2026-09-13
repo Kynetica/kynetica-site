@@ -200,7 +200,7 @@ export function structuralBasis(r) {
 }
 export function proseHygiene(r) {
   const firstTool = (r.fix_this_week?.tools || []).map((t) => t.name).find((nm) => toolIdsIn(nm).size);
-  const fix = (txt) => { let t = String(txt ?? ''); t = t.replace(/\b(?:your |the )?(?:login|log-in|logins)\b/gi, 'account').replace(/\bpasswords?\b/gi, 'account access'); if (firstTool) t = t.replace(/\b(?:the|your) (?:phone )?(?:app|software|platform|system)\b/gi, firstTool).replace(/\b(?:the|your|a) (?:scheduling|invoicing|accounting|booking|texting|dispatch|field[- ]service) (?:tool|software|app|platform|system)\b/gi, firstTool); return t; };
+  const fix = (txt) => { let t = String(txt ?? ''); t = t.replace(/\b(?:your |the )?(?:login|log-in|log in|logins|log-ins)\b/gi, 'account').replace(/\blogged in\b/gi, 'signed in to the account').replace(/\bpasswords?\b/gi, 'account access'); if (firstTool) t = t.replace(/\b(?:the|your) (?:phone )?(?:app|software|platform|system)\b/gi, firstTool).replace(/\b(?:the|your|a) (?:scheduling|invoicing|accounting|booking|texting|dispatch|field[- ]service) (?:tool|software|app|platform|system)\b/gi, firstTool); return t; };
   if (r.biggest_leak) for (const k of ['where', 'why_it_costs']) if (k in r.biggest_leak) r.biggest_leak[k] = fix(r.biggest_leak[k]);
   if (r.fix_this_week) { for (const k of ['what', 'removes_step']) if (k in r.fix_this_week) r.fix_this_week[k] = fix(r.fix_this_week[k]); r.fix_this_week.manual_steps_remaining = (r.fix_this_week.manual_steps_remaining || []).map(fix); }
   if (r.breakdown) { for (const s of r.breakdown.steps || []) for (const k of ['today', 'automate']) if (s[k]) s[k] = fix(s[k]); for (const x of r.breakdown.secondary_leaks || []) if (x.sentence) x.sentence = fix(x.sentence); }
