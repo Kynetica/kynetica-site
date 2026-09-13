@@ -6,6 +6,21 @@
       "source": "/leak-finder",
       "destination": "/assess",
       "permanent": true
+    },
+    {
+      "source": "/cohort",
+      "destination": "/assess",
+      "permanent": true
+    },
+    {
+      "source": "/sample",
+      "destination": "/assess",
+      "permanent": true
+    },
+    {
+      "source": "/agencies-qa",
+      "destination": "/assess",
+      "permanent": true
     }
   ],
   "headers": [
