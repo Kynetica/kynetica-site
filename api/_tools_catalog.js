@@ -14,7 +14,9 @@ export const TOOLS = [
 "verified": true,
 "band_small": "49-49",
 "band_mid": "49-199",
-"band_large": "199-399"
+"band_large": "199-399",
+"invite_template": "Invite info@kynetica.one as a user in Jobber (admin); removed when the job is done.",
+"why_short": "cheapest full platform with job form, price book, invoice on completion, reminders and QuickBooks Online sync in one app"
 },
 {
 "tool_id": "T-HCP",
@@ -30,7 +32,9 @@ export const TOOLS = [
 "verified": true,
 "band_small": "59-79",
 "band_mid": "149-189",
-"band_large": "299-329"
+"band_large": "299-329",
+"invite_template": "Invite info@kynetica.one as an office user in Housecall Pro (admin); removed when the job is done.",
+"why_short": "strongest online booking and customer texting of the field-service platforms; QuickBooks Online sync on Essentials and up"
 },
 {
 "tool_id": "T-ST",
@@ -46,7 +50,9 @@ export const TOOLS = [
 "verified": false,
 "band_small": "0-0",
 "band_mid": "0-0",
-"band_large": "0-0"
+"band_large": "0-0",
+"invite_template": "Invite info@kynetica.one as a user in ServiceTitan (admin); removed when the job is done.",
+"why_short": "deepest dispatch and price book tooling; quote-based and built for 10 or more techs"
 },
 {
 "tool_id": "T-QBO",
@@ -62,7 +68,9 @@ export const TOOLS = [
 "verified": true,
 "band_small": "38-85",
 "band_mid": "85-140",
-"band_large": "140-340"
+"band_large": "140-340",
+"invite_template": "Invite info@kynetica.one as an accountant user in QuickBooks Online; removed when the job is done.",
+"why_short": "already in most shops; mobile invoicing, reminders, statements and pay links are settings inside the account"
 },
 {
 "tool_id": "T-SQI",
@@ -78,7 +86,9 @@ export const TOOLS = [
 "verified": true,
 "band_small": "0-0",
 "band_mid": "0-49",
-"band_large": "49-49"
+"band_large": "49-49",
+"invite_template": "Invite info@kynetica.one as a team member in Square (admin); removed when the job is done.",
+"why_short": "free tier sends unlimited invoices and estimates from the phone; five-minute setup"
 },
 {
 "tool_id": "T-QUO",
@@ -94,7 +104,9 @@ export const TOOLS = [
 "verified": true,
 "band_small": "15-23",
 "band_mid": "15-35",
-"band_large": "23-35"
+"band_large": "23-35",
+"invite_template": "Invite info@kynetica.one as a user in Quo (admin); removed when the job is done.",
+"why_short": "one business number with auto-replies and missed-call text-back built in"
 },
 {
 "tool_id": "T-NICEJOB",
@@ -110,7 +122,9 @@ export const TOOLS = [
 "verified": true,
 "band_small": "75-75",
 "band_mid": "75-125",
-"band_large": "125-125"
+"band_large": "125-125",
+"invite_template": "Invite info@kynetica.one as a user in NiceJob (admin); removed when the job is done.",
+"why_short": "automatic review requests on job close with follow-ups; works with Jobber and Housecall Pro"
 },
 {
 "tool_id": "T-CCAM",
@@ -126,7 +140,9 @@ export const TOOLS = [
 "verified": true,
 "band_small": "63-63",
 "band_mid": "63-121",
-"band_large": "121-237"
+"band_large": "121-237",
+"invite_template": "Invite info@kynetica.one as a user in CompanyCam (admin); removed when the job is done.",
+"why_short": "time-stamped job photos shared with office and customer; works with Jobber and Housecall Pro"
 },
 {
 "tool_id": "T-QBT",
@@ -142,7 +158,9 @@ export const TOOLS = [
 "verified": false,
 "band_small": "0-0",
 "band_mid": "0-0",
-"band_large": "0-0"
+"band_large": "0-0",
+"invite_template": "Invite info@kynetica.one as an admin in QuickBooks Time; removed when the job is done.",
+"why_short": "mobile clock-in with GPS and approvals straight into QuickBooks payroll"
 },
 {
 "tool_id": "T-GWS",
@@ -158,7 +176,9 @@ export const TOOLS = [
 "verified": false,
 "band_small": "0-0",
 "band_mid": "0-0",
-"band_large": "0-0"
+"band_large": "0-0",
+"invite_template": "Share the Google Drive folder and calendar with info@kynetica.one (editor); removed when the job is done.",
+"why_short": "a mobile intake form, shared job sheet and shared calendar on the Gmail account you already have"
 },
 {
 "tool_id": "T-STRIPE",
@@ -174,7 +194,9 @@ export const TOOLS = [
 "verified": false,
 "band_small": "0-0",
 "band_mid": "0-0",
-"band_large": "0-0"
+"band_large": "0-0",
+"invite_template": "Invite info@kynetica.one to your Stripe account (developer role); removed when the job is done.",
+"why_short": "payment links in minutes with no monthly fee"
 },
 {
 "tool_id": "T-PDFFILL",
@@ -190,6 +212,8 @@ export const TOOLS = [
 "verified": true,
 "band_small": "0-0",
 "band_mid": "0-0",
-"band_large": "0-0"
+"band_large": "0-0",
+"invite_template": "Send the blank PDF form and one filled example by reply to the delivery email.",
+"why_short": "a hosted form fills the vendor PDF from job data; built and hosted by Kynetica"
 }
 ];

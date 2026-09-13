@@ -50,7 +50,7 @@ export function answersNarrative(answers) {
 }
 
 // ---------- validator (mirror of engine/validator.py, depth free|breakdown) ----------
-const NOT_YET = [/\bnot yet\b/i, /\bcan(?:'|no)t build\b/i, /\bnot granted\b/i, /\bneeds? (?:your|the owner'?s?) (?:real )?(?:count|number|numbers|figure|volume|rate|input)\b/i, /\bfrom (?:the )?owner\b/i, /\bneeds? [a-z /]{0,25} from (?:you|the owner)\b/i, /\buntil (?:you|the owner) (?:tell|give|send|confirm)s?\b/i];
+const NOT_YET = [/\b(?:can(?:no|')t|cannot|unable to|not able to) (?:[a-z]+ ){0,3}(?:yet|this one|for you)\b/i, /\bnot yet (?:able|available|possible|buildable|something I)\b/i, /^not yet\b/i, /\bcan(?:'|no)t build\b/i, /\bnot granted\b/i, /\bneeds? (?:your|the owner'?s?) (?:real )?(?:count|number|numbers|figure|volume|rate|input)\b/i, /\bfrom (?:the )?owner\b/i, /\bneeds? [a-z /]{0,25} from (?:you|the owner)\b/i, /\buntil (?:you|the owner) (?:tell|give|send|confirm)s?\b/i];
 const UNNAMED_TOOL = [/\b(?:your|the|a|an) (?:scheduling|booking|invoicing|accounting|field[- ]service|texting|messaging|phone|payment|time[- ]tracking|photo) (?:software|app|tool|platform|system|provider)(?: you (?:already )?(?:pay for|use|own|have))?\b(?! \((?:jobber|housecall|servicetitan|quickbooks|square|quo|nicejob|companycam|google|stripe)[^)]*\))/i, /\bbusiness texting app\b/i, /\ba connector\b(?! \(|,? (?:jobber|zapier))/i, /\bshared spreadsheet\b(?! \(google)/i, /\bmobile form app\b/i, /\bthe phone app\b(?! \((?:jobber|housecall|quickbooks))/i, /\b(?:the|your) app\b(?! \((?:jobber|housecall|quickbooks))/i, /\bsoftware (?:you |they )?already pay for\b(?!, (?:jobber|housecall|quickbooks))/i];
 const RAW_EVIDENCE = [/(?:^|[\s(;])(?:task|answer q\d|site|assumption):\s/im, /\bEvidence:\s/i];
 const BOILERPLATE = [/https?:\/\/[^\s)]+/i, /payback in (?:about )?0 weeks/i, /\$0 one-time,? \$0 a month/i, /\$0 a year in cost/i, /about 0 weeks/i];
@@ -95,7 +95,7 @@ export function validateResult(r, depth) {
   if (!(r.fix_library_ids || []).length && r.leak_category !== 'unknown') f.push('S fix_library_ids empty');
   for (const name of ['hours_per_week', 'setup_effort_hours']) { const d = est[name] || {}; if (typeof d.low !== 'number' || typeof d.high !== 'number') { f.push(`R5 ${name} missing`); continue; } if (d.high < d.low || d.high <= 0) f.push(`R5 ${name} bad range`); }
   if (est.label !== 'estimate until you correct it') f.push('R5 label');
-  if (!/\b(?:jobs?|tickets?|calls?|quotes?|invoices?|customers?|corrections?) (?:a|per) (?:day|week|month)\b/i.test(String(est.basis || ''))) f.push("R5 basis does not state the count it assumed (e.g. 'about 40 jobs a week')");
+  if (!/\b(?:about |roughly |around )?\d+(?:\.\d+)?\s+[a-z][a-z -]{2,40}? (?:a|per|each) (?:day|week|month|year)\b/i.test(String(est.basis || ''))) f.push("R5 basis does not state the count it assumed with its unit (e.g. 'about 40 jobs a week', 'about 5 quote texts a week')");
   const tn = nouns(r.task_restated), ln = nouns(bl.where), fn = nouns(fixText);
   if (tn.size && ln.size && !inter(tn, ln).size) f.push('C leak shares no nouns with the task');
   const taskCore = String(r.task_restated).replace(/^You told me the task eating your week is\s*/i, '').trim().replace(/\.$/, '').toLowerCase();
@@ -105,13 +105,15 @@ export function validateResult(r, depth) {
   if (depth === 'free' && r.breakdown) f.push('C free result carries a breakdown');
   if (depth === 'breakdown') {
     const b = r.breakdown; if (!b) { f.push('S breakdown required'); return f; }
-    const steps = b.steps || []; if (steps.length < 3) f.push('C fewer than 3 steps');
+    const steps = b.steps || []; if (steps.length < 2) f.push('C fewer than 2 steps');
+    if (!steps.some((s) => s.keep_manual === false)) f.push('C no step is automated');
     for (const s of steps) {
-      if (s.keep_manual === true && s.automate) f.push(`C step '${s.name}' both manual and automated`);
+      if (s.keep_manual === true && s.automate && !String(s.automate).toLowerCase().startsWith('stays manual')) f.push(`C step '${s.name}' both manual and automated (a manual step's note must start 'Stays manual')`);
       if (s.keep_manual === false) { if (!s.automate) f.push(`C step '${s.name}' automated with no how`); checkTools(s.tools || [], `step '${s.name}'`, f, true); }
     }
     const cats = (b.secondary_leaks || []).map((x) => x.leak_category);
-    if (cats.length !== 2) f.push('C need exactly 2 secondary leaks');
+    if (cats.length > 2) f.push('C more than 2 secondary leaks');
+    if (cats.length === 0 && !(r.cannot_see || []).length) f.push('C no secondary leaks and nothing in cannot_see; say what the answers did not show');
     if (cats.includes(r.leak_category) || (cats.length === 2 && cats[0] === cats[1])) f.push('C secondary leaks repeat');
     if (!b.monthly_total_usd || typeof b.monthly_total_usd.high !== 'number') f.push('R2 breakdown needs monthly_total_usd for the named tools');
   }
@@ -133,15 +135,15 @@ export function buildPrompt({ task, trade, teamSize, answers, paid, rows, priorF
 "fix_library_ids":["FL-xxx"],
 "biggest_leak":{"where":"<the exact step(s) in THEIR process where the time leaks, their nouns, 1-3 sentences>","why_it_costs":"<1-2 sentences>"},
 "fix_this_week":{"what":"<ONE real automation fix they can set up this week, naming the tool: what it replaces and what stops happening. 2-4 sentences.>","automation_category":"<from the row>","tools":[{"name":"<EXACT name from TOOLS>","why":"<why this one for this shop, one sentence>"${paid ? ',"monthly_cost_usd":{"low":n,"high":n}' : ''}}],"removes_step":"<the step that no longer happens>","manual_steps_remaining":["<what stays human>"]},
-"estimates":{"hours_per_week":{"low":n,"high":n},"setup_effort_hours":{"low":n,"high":n},"basis":"<state the count you assumed: 'I assumed about 40 jobs a week and four minutes a ticket'>","label":"estimate until you correct it"},
+"estimates":{"hours_per_week":{"low":n,"high":n},"setup_effort_hours":{"low":n,"high":n},"basis":"<state the count you assumed WITH ITS UNIT: 'I assumed about 40 jobs a week and four minutes a ticket' or 'about 5 quote texts a week and 30 minutes each'>","label":"estimate until you correct it"},
 "cannot_see":["<inputs you did not have>"]${paid ? `,
 "breakdown":{"steps":[{"name":"<step>","today":"<how it happens now>","automate":"<how, naming the tool>" or null,"keep_manual":true|false,"tools":[{"name":"<EXACT TOOLS name>","monthly_cost_usd":{"low":n,"high":n},"why":"<one sentence>"}],"setup_hours":{"low":n,"high":n}} x 3 to 8 in the order the steps happen],
-"secondary_leaks":[{"leak_category":"<different from the main one>","sentence":"<one sentence tied to a specific answer, naming the tool that closes it>"},{"leak_category":"<a third, different category>","sentence":"<one sentence>"}],
+"secondary_leaks":[<0 to 2 items, ONLY when a specific answer shows the leak; never invent> {"leak_category":"<different from the main one>","sentence":"<one sentence tied to a specific answer, naming the tool that closes it>"}],
 "monthly_total_usd":{"low":n,"high":n}}` : ''},
 "sign_off":"Daniel Kane, Kynetica (AI)"}
 
 Rules that never bend:
-- Never write 'the app', 'the phone app', 'the software' on its own: write the tool's name (Jobber, QuickBooks Online, Quo) every time.
+- breakdown.steps: the task's real steps in order, 2 to 6. A step that stays manual has keep_manual true and automate null (or a note starting 'Stays manual'). At least one step is automated.\n- Never write 'the app', 'the phone app', 'the software' on its own: write the tool's name (Jobber, QuickBooks Online, Quo) every time.
 - Sentences of 32 words or fewer. Never mention a login, password or credentials; if access comes up, it is an invite (accountant access in QuickBooks Online, a user in Jobber) removed when done.
 - Use THEIR nouns. Paper tickets stay paper tickets; QuickBooks stays QuickBooks. But biggest_leak.where is NOT a repeat of the task: it names the exact step or hand-off where the time goes ("the hand-off from the paper ticket to the QuickBooks screen at night, where part numbers get re-read and re-typed"). Write about the owner in second person: "your wife", never "my wife".
 - NAME the tool, from TOOLS only, and say why this one. Never "scheduling software", "invoicing tool", "business texting app", "a connector", "shared spreadsheet", "the app" on their own. If they already pay for QuickBooks Online, prefer what is inside their login first; if they are a paper office with 3 or more people (paper tickets, whiteboard, re-typing at night, same info typed into several places), the fix is moving to Jobber (Housecall Pro if online booking matters; never ServiceTitan under 10 techs) with QuickBooks Online sync, and you say it covers the re-typing, the parts and the invoicing in one move.
