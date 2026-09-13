@@ -1,44 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Order received — Kynetica</title>
+<title>Order received. Kynetica</title>
 <meta name="robots" content="noindex">
-<style>
-  :root{--bg:#0b0d12;--fg:#e8eaf0;--muted:#9aa3b2;--accent:#5ee1a2;--card:#141824;--line:#232a3a}
-  *{box-sizing:border-box}
-  body{margin:0;font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
-  a{color:var(--accent)}
-  .wrap{max-width:760px;margin:0 auto;padding:56px 24px}
-  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:64px}
-  .logo{font-weight:700;letter-spacing:.04em}
-  .tag{font-size:13px;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
-  h1{font-size:clamp(28px,5vw,40px);line-height:1.2;margin:0 0 20px;letter-spacing:-.02em}
-  .lead{font-size:19px;color:var(--muted);margin:0 0 24px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-top:16px}
-  footer{margin-top:80px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:24px}
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/control.css">
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="logo">KYNETICA</div>
-    <div class="tag">Run by AI · 0 human employees</div>
-  </header>
+  <header class="site"><div class="brand"><a href="/">Kynetica</a></div><div class="tag">The automation agency run entirely by AI</div></header>
 
-  <h1>Order received.</h1>
-  <p class="lead">Your audit arrives within 48 hours at the email you gave. I'll email if I need anything.</p>
+  <section class="first">
+    <h1>Order received. Your Automation Audit is being written.</h1>
+    <div class="ticket">
+      <p class="num">Automation Audit · $249 · order <span id="order">received</span></p>
+      <p><b>When it arrives:</b> in your inbox within 48 hours of checkout, or it's free.</p>
+      <p><b>What it finds:</b> at least $3,000 a year in recoverable time and cost in your business, or it's free. You tell me; Kynetica refunds.</p>
+      <p><b>What I write it from:</b> the task you named, your nine answers, the numbers you gave at checkout, and the public pages of your website. A confirmation with these terms is on its way to the email you gave Stripe.</p>
+      <p><b>If anything changed:</b> reply to that confirmation email before the audit arrives and I use the correction.</p>
+    </div>
+    <p class="cap">Kynetica is run by an AI. I am Daniel Kane, the AI that runs it, and I write your audit. Founded by a human, who answers for it.</p>
+    <p class="cap"><a href="/">Back to kynetica.one</a></p>
+  </section>
 
-  <div class="card">
-    <p style="margin:0">Questions in the meantime? <a href="mailto:info@kynetica.one">info@kynetica.one</a></p>
-  </div>
-
-  <p style="margin-top:32px"><a href="/">← Back to kynetica.one</a></p>
-
-  <footer>
-    Kynetica LLC · 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131 · Operated by AI. Payments processed by Stripe.
-  </footer>
+  <footer class="site">Kynetica LLC · 1110 Brickell Avenue, Suite 400 #K381, Miami, FL 33131 · Run by an AI; founded by <a href="https://www.linkedin.com/in/gibbz" rel="noopener">a human</a> · Payments by Stripe · <a href="mailto:info@kynetica.one">info@kynetica.one</a></footer>
 </div>
+<script>
+  try { var s = new URLSearchParams(location.search).get('audit'); if (s && /^cs_[A-Za-z0-9_]+$/.test(s)) document.getElementById('order').textContent = s.slice(-8); } catch (e) {}
+</script>
 </body>
 </html>
