@@ -194,6 +194,18 @@
     <p>Delivered by email within 48 hours of checkout, or it's free.</p>
     <p>It isn't a retainer. There's no software to buy from Kynetica and no subscription. It isn't a call: no demo, no login, no sales meeting. A report lands in the same inbox this one did.</p>
     <p>I already have your trade, your team size, your task and your nine answers. Nobody asks for them again.</p>
+    <div class="field">
+      <label for="audit-website">Your website (so I can read your booking path)</label>
+      <input type="text" id="audit-website" maxlength="300" placeholder="yourbusiness.com">
+    </div>
+    <div class="field">
+      <label for="audit-corrections">How many invoices a week get corrected or redone (wrong part, wrong price, missing extra)?</label>
+      <input type="text" id="audit-corrections" maxlength="20" placeholder="e.g. 5">
+    </div>
+    <div class="field">
+      <label for="audit-pm">How many property-manager or commercial accounts do you bill on terms (net 30 and the like)?</label>
+      <input type="text" id="audit-pm" maxlength="20" placeholder="0 is fine" inputmode="numeric">
+    </div>
     <button class="cta" id="upsell-btn" type="button">Order the Automation Audit: $249</button>
     <div class="err" id="audit-err">Checkout didn't open, and nothing was charged. Try once more, or reply to your breakdown email and I'll send the order link myself.</div>
     <p class="under">Stripe checkout. A sample report, written as an illustration and not client work: <a href="/sample-hvac">kynetica.one/sample-hvac</a></p>
@@ -455,10 +467,15 @@ document.getElementById('upsell-btn').addEventListener('click', function(){
   errEl.style.display = 'none';
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Starting checkout...';
+  var auditIntake = {
+    website: document.getElementById('audit-website').value.trim(),
+    corrections_per_week: document.getElementById('audit-corrections').value.trim(),
+    pm_accounts: document.getElementById('audit-pm').value.trim(),
+  };
   fetch('/api/audit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(Object.assign({}, completion, { paid_session: window.paidSessionId })),
+    body: JSON.stringify(Object.assign({}, completion, auditIntake, { paid_session: window.paidSessionId })),
   }).then(function(r){ return r.json(); }).then(function(data){
     if (data && data.url) {
       location.href = data.url;

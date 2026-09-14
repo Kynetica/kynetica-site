@@ -45,6 +45,37 @@ async function verifyPaidSession(sessionId) {
   return verify.valid;
 }
 
+// Stripe Checkout Sessions cap custom_fields at 3 (hard limit). Operator
+// ruling 09-11 ("every 'needs X from owner' becomes an order-form intake
+// question") named six fields total: jobs_per_week, office_hourly_rate,
+// software go here (on the Stripe session itself); website,
+// corrections_per_week, pm_accounts are collected earlier on the /assess
+// pre-checkout step (see assess.html) and threaded through in `record`.
+// All six end up in the session's signed metadata either way.
+function auditCustomFields() {
+  return [
+    {
+      key: 'jobs_per_week',
+      label: { type: 'custom', custom: 'Jobs your crew completes in a normal week' },
+      type: 'numeric',
+      optional: true,
+    },
+    {
+      key: 'office_hourly_rate',
+      label: { type: 'custom', custom: 'What an hour of office time is worth to you ($)' },
+      type: 'numeric',
+      optional: true,
+    },
+    {
+      key: 'software',
+      label: { type: 'custom', custom: 'Software today for scheduling, invoicing, books' },
+      type: 'text',
+      text: { maximum_length: 200 },
+      optional: true,
+    },
+  ];
+}
+
 async function createAuditCheckoutSession(record, paidSessionId, base = 'https://kynetica.one') {
   const metadata = signedMetadata(record);
   const params = {
@@ -54,6 +85,7 @@ async function createAuditCheckoutSession(record, paidSessionId, base = 'https:/
     success_url: `${base}/thanks?audit={CHECKOUT_SESSION_ID}`,
     cancel_url: `${base}/assess?unlock=${encodeURIComponent(paidSessionId)}`,
     client_reference_id: record.completion_id,
+    custom_fields: auditCustomFields(),
     metadata,
   };
   return stripePost('checkout/sessions', params);
@@ -119,9 +151,19 @@ export default async function handler(req, res) {
     if (/^utm_/.test(k)) utm[k] = clean(utmRaw[k], 200);
   }
 
+  // Pre-checkout intake collected on /assess before this endpoint is hit
+  // (operator ruling 09-11): website, corrections_per_week, pm_accounts.
+  // These don't fit Stripe's 3-custom_field limit alongside
+  // jobs_per_week/office_hourly_rate/software, so they travel in signed
+  // metadata instead, same as every other completion field.
+  const website = clean(body.website, 300);
+  const corrections_per_week = clean(body.corrections_per_week, 20);
+  const pm_accounts = clean(body.pm_accounts, 200);
+
   const record = {
     completion_id, score, tier: body.tier || tierFor(score),
     task, trade, teamSize, email, answers, utm,
+    website, corrections_per_week, pm_accounts,
   };
 
   try {

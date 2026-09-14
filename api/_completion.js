@@ -361,7 +361,7 @@ function signFields(fields) {
 // Builds the compact field set shared by Stripe metadata and the signed
 // email-link token. Values are strings; caller re-parses answers/utm JSON.
 export function buildPayloadFields(record) {
-  return {
+  const fields = {
     completion_id: clean(record.completion_id, 40),
     score: String(record.score),
     tier: clean(record.tier, 40),
@@ -372,6 +372,18 @@ export function buildPayloadFields(record) {
     answers: JSON.stringify(record.answers || []),
     utm: JSON.stringify(record.utm || {}).slice(0, 300),
   };
+  // $249 audit pre-checkout intake (operator ruling 09-11: "every 'needs X
+  // from owner' becomes an order-form intake question"), collected on
+  // /assess before the visitor reaches Stripe (see api/audit.js). Only
+  // populated on audit-checkout records; empty string on free/$7 records,
+  // which does not change their own signature (verify recomputes over
+  // whatever keys are actually present in a given session's metadata).
+  if (record.website !== undefined || record.corrections_per_week !== undefined || record.pm_accounts !== undefined) {
+    fields.website = clean(record.website, 300);
+    fields.corrections_per_week = clean(record.corrections_per_week, 20);
+    fields.pm_accounts = clean(record.pm_accounts, 200);
+  }
+  return fields;
 }
 
 // Returns metadata object ready to hand to Stripe (all string values,
@@ -403,6 +415,9 @@ export function verifyAndReconstruct(metadata) {
       task: fields.task,
       answers,
       utm,
+      website: fields.website,
+      corrections_per_week: fields.corrections_per_week,
+      pm_accounts: fields.pm_accounts,
     },
   };
 }
